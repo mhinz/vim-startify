@@ -11,8 +11,8 @@ let g:loaded_startify = 1
 " Init {{{1
 let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir', '~/.vim/session')))
 
-command! -nargs=0 -bar Lsave call startify#save_session()
-command! -nargs=0 -bar Lload call startify#load_session()
+command! -nargs=? -bar SSave call startify#save_session(<args>)
+command! -nargs=? -bar SLoad call startify#load_session(<args>)
 
 augroup startify
   autocmd!
