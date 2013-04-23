@@ -15,9 +15,6 @@ let s:padlen = 3
 command! -nargs=0 -bar Lsave call startify#save_session()
 command! -nargs=0 -bar Lload call startify#load_session()
 
-nnoremap <silent> <leader>rr :Lload<cr>
-nnoremap <silent> <leader>rs :Lsave<cr>
-
 augroup startify
   autocmd!
   autocmd VimEnter *
