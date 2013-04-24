@@ -46,7 +46,8 @@ Startify basically provides two things:
       :SLoad    load a session
       :SSave    save a session
 
-The default settings are pretty sane, so it should work without configuration.
+The default settings are pretty sane, so it should work without any
+configuration.
 
 
 ==============================================================================
