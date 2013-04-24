@@ -26,7 +26,10 @@ command! -nargs=? -bar -complete=customlist,startify#get_session_names SLoad cal
 " Function: s:start {{{1
 function! s:start() abort
   setfiletype startify
-  setlocal nonumber norelativenumber nobuflisted buftype=nofile
+  setlocal nonumber nobuflisted buftype=nofile
+  if v:version >= 703
+    setlocal norelativenumber
+  endif
 
   call append('$', ['   startify>', '', '   [e]  <empty buffer>'])
   let cnt = 0
