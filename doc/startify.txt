@@ -98,6 +98,16 @@ A list of files to bookmark. Those files will always be shown at the bottom of
 the start screen.
 
 
+============-
+
+    let g:startify_unlisted_buffer = 1
+
+Some bad plugins like minibufexpl break, when there is no listed buffer.
+People can set this variable to 0, to work around that. As a consequence the
+start screen buffer won't be removed, even after triggering an action from the
+start screen.
+
+
 ==============================================================================
 4. Commands                                                  *startify-commands*
 

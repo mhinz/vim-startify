@@ -26,9 +26,12 @@ command! -nargs=? -bar -complete=customlist,startify#get_session_names SLoad cal
 " Function: s:start {{{1
 function! s:start() abort
   setfiletype startify
-  setlocal nonumber nobuflisted buftype=nofile
+  setlocal nonumber buftype=nofile
   if v:version >= 703
     setlocal norelativenumber
+  endif
+  if get(g:, 'startify_unlisted_buffer', 1)
+    setlocal nobuflisted
   endif
 
   call append('$', ['   startify>', '', '   [e]  <empty buffer>'])
