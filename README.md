@@ -5,7 +5,7 @@ Startify basically provides two things:
 
 _1)_ If you start Vim without giving any filenames to it (or pipe stuff to it so
    it reads from STDIN), startify will show a small but pretty start screen
-   which shows recently used files and sessions by default.
+   which shows recently used files (using viminfo) and sessions by default.
 
    Additionally, you can define bookmarks, thus entries for files that always
    should be available in the start screen.
