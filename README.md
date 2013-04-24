@@ -41,7 +41,7 @@ If you have no preferred installation method, I suggest using tpope's pathogen:
 1. mkdir -p ~/.vim/autoload && cd ~/.vim/autoload
 1. ln -s ../bundle/vim-pathogen/autoload/pathogen.vim
 
-Afterwards installing Sy is as easy as pie:
+Afterwards installing Startify is as easy as pie:
 
 2. git clone https://github.com/mhinz/vim-startify ~/.vim/bundle/vim-startify
 2. start Vim
