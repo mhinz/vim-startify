@@ -26,18 +26,18 @@ augroup END
 " Function: s:start {{{1
 function! s:start() abort
   setfiletype startify
-
   setlocal nonumber norelativenumber nobuflisted buftype=nofile
 
-  let cnt = 0
-
   call append('$', ['   startify>', '', '   [e]  <empty buffer>'])
+  let cnt = 0
 
   if get(g:, 'startify_show_files', 1) && !empty(v:oldfiles)
     let numfiles = get(g:, 'startify_show_files_number', 10)
     call append('$', '')
     for fname in v:oldfiles
-      if !filereadable(expand(fname)) || (fname =~# $VIMRUNTIME .'/doc') || (fname =~# 'bundle/.*/doc')
+      if !filereadable(expand(fname))
+            \ || (expand(fname) =~# $VIMRUNTIME .'/doc')
+            \ || (fname =~# 'bundle/.*/doc')
         continue
       endif
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
