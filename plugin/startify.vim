@@ -29,12 +29,12 @@ function! s:start() abort
 
   setlocal nonumber norelativenumber nobuflisted buftype=nofile
 
-  let numfiles = get(g:, 'startify_show_files_number', 10)
   let cnt = 0
 
   call append('$', ['   startify>', '', '   [e]  <empty buffer>'])
 
   if get(g:, 'startify_show_files', 1) && !empty(v:oldfiles)
+    let numfiles = get(g:, 'startify_show_files_number', 10)
     call append('$', '')
     for fname in v:oldfiles
       if !filereadable(expand(fname)) || (fname =~# $VIMRUNTIME .'/doc') || (fname =~# 'bundle/.*/doc')

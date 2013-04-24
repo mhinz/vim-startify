@@ -1,0 +1,116 @@
+*startify.txt*                        Showing recently used files like a boss.
+*startify*
+
+
+                __                    __           ___
+               /\ \__                /\ \__  __  /'___\
+           ____\ \ ,_\    __     _ __\ \ ,_\/\_\/\ \__/  __  __
+          /',__\\ \ \/  /'__`\  /\`'__\ \ \/\/\ \ \ ,__\/\ \/\ \
+         /\__, `\\ \ \_/\ \L\.\_\ \ \/ \ \ \_\ \ \ \ \_/\ \ \_\ \
+         \/\____/ \ \__\ \__/.\_\\ \_\  \ \__\\ \_\ \_\  \/`____ \
+          \/___/   \/__/\/__/\/_/ \/_/   \/__/ \/_/\/_/   `/___/> \
+                                                             /\___/
+                                                             \/__/
+
+
+==============================================================================
+CONTENTS                                                     *startify-contents*
+
+    1.Intro..........................................|startify-intro|
+    2.Usage..........................................|startify-usage|
+    3.Options........................................|startify-options|
+    4.Commands.......................................|startify-commands|
+    5.Author.........................................|startify-author|
+    6.License........................................|startify-license|
+
+
+==============================================================================
+1. Intro                                                        *startify-intro*
+
+Startify is a zero-conf plugin which shows recently used files and sessions
+that were saved to a certain directory.
+
+
+==============================================================================
+2. Usage                                                        *startify-usage*
+
+Startify basically provides two things:
+
+1) If you start Vim without giving any filenames to it (or pipe stuff to it so
+   it reads from STDIN), startify will show a small but pretty start screen
+   which shows recently used files and sessions by default.
+
+2) It eases handling of loading and saving sessions by only working with a
+   certain directory. Two commands are used for convenience:
+
+      :SLoad    load a session
+      :SSave    save a session
+
+The default settings are pretty sane, so it should work without configuration.
+
+
+==============================================================================
+3. Options                                                    *startify-options*
+
+Put these variables into your vimrc. The shown assignments are also the
+default values.
+
+============-
+
+    let g:startify_session_dir = '~/.vim/session'
+
+The directory to save/load sessions to/from.
+
+
+============-
+
+    let g:startify_show_sessions = 1
+
+List saved sessions in g:startify_session_dir.
+
+
+============-
+
+    let g:startify_show_files = 1
+
+List recently used files using viminfo.
+
+
+============-
+
+    let g:startify_show_files_number = 10
+
+The amount of files to list.
+
+
+==============================================================================
+4. Commands                                                  *startify-commands*
+
+There are only two commands for handling sessions:
+
+    :SLoad    load a session
+    :SSave    save a session
+
+
+==============================================================================
+5. About the author                                            *startify-author*
+
+My nick on Freenode IRC is mhi^.
+
+For latest developments: https://github.com/mhinz
+
+If you use any of my plugins, star it on github. This is a great way of
+getting feedback! Same for issues or feature requests.
+
+Thank you for flying mhi airlines. Get the Vim on!
+
+
+==============================================================================
+6. Licence                                                    *startify-license*
+
+Copyright © Marco Hinz. Distributed under the same terms as Vim itself.
+
+See |license|.
+
+
+vim: tw=78
