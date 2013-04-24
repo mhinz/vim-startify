@@ -1,7 +1,7 @@
 " Plugin:      https://github.com/mhinz/vim-startify
 " Description: Start screen displaying recently used stuff.
 " Maintainer:  Marco Hinz <http://github.com/mhinz>
-" Version:     1.0
+" Version:     1.1
 
 if exists('g:autoloaded_startify') || &cp
   finish
