@@ -11,9 +11,6 @@ let g:loaded_startify = 1
 " Init {{{1
 let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir', '~/.vim/session')))
 
-command! -nargs=? -bar SSave call startify#save_session(<f-args>)
-command! -nargs=? -bar SLoad call startify#load_session(<f-args>)
-
 augroup startify
   autocmd!
   autocmd VimEnter *
@@ -22,6 +19,14 @@ augroup startify
         \   call cursor(6, 5) |
         \endif
 augroup END
+
+command! -nargs=? -bar -complete=customlist,s:get_session_names SSave call startify#save_session(<f-args>)
+command! -nargs=? -bar -complete=customlist,s:get_session_names SLoad call startify#load_session(<f-args>)
+
+" Function: s:get_session_names {{{1
+function! s:get_session_names(lead, ...) abort
+  return map(split(globpath(g:startify_session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
+endfunction
 
 " Function: s:start {{{1
 function! s:start() abort

@@ -109,6 +109,9 @@ There are only two commands for handling sessions:
 These take either 0 or 1 argument. If you don't specify the session name as an
 argument, they will just ask for it.
 
+You can use <c-u> and <tab> for argument completion. Providing only a part of
+the session name works, too.
+
 
 ==============================================================================
 5. About the author                                            *startify-author*
