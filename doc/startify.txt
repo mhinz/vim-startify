@@ -106,6 +106,9 @@ There are only two commands for handling sessions:
     :SLoad    load a session
     :SSave    save a session
 
+These take either 0 or 1 argument. If you don't specify the session name as an
+argument, they will just ask for it.
+
 
 ==============================================================================
 5. About the author                                            *startify-author*
