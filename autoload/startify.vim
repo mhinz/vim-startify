@@ -17,6 +17,10 @@ function! startify#get_session_names_as_string(lead, ...) abort
 endfunction
 
 function! startify#save_session(...) abort
+  if !isdirectory(g:startify_session_dir)
+    echo 'The session directory does not exist: '. g:startify_session_dir
+    return
+  endif
   let spath = g:startify_session_dir .'/'. (exists('a:1')
         \ ? a:1
         \ : input('Save under this session name: ', '', 'custom,startify#get_session_names_as_string'))
@@ -34,6 +38,10 @@ function! startify#save_session(...) abort
 endfunction
 
 function! startify#load_session(...) abort
+  if !isdirectory(g:startify_session_dir)
+    echo 'The session directory does not exist: '. g:startify_session_dir
+    return
+  endif
   let spath = g:startify_session_dir .'/'. (exists('a:1')
         \ ? a:1
         \ : input('Load this session: ', '', 'custom,startify#get_session_names_as_string'))
