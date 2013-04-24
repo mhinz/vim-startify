@@ -20,13 +20,8 @@ augroup startify
         \endif
 augroup END
 
-command! -nargs=? -bar -complete=customlist,s:get_session_names SSave call startify#save_session(<f-args>)
-command! -nargs=? -bar -complete=customlist,s:get_session_names SLoad call startify#load_session(<f-args>)
-
-" Function: s:get_session_names {{{1
-function! s:get_session_names(lead, ...) abort
-  return map(split(globpath(g:startify_session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
-endfunction
+command! -nargs=? -bar -complete=customlist,startify#get_session_names SSave call startify#save_session(<f-args>)
+command! -nargs=? -bar -complete=customlist,startify#get_session_names SLoad call startify#load_session(<f-args>)
 
 " Function: s:start {{{1
 function! s:start() abort

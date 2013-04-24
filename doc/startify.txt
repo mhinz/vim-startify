@@ -109,8 +109,8 @@ There are only two commands for handling sessions:
 These take either 0 or 1 argument. If you don't specify the session name as an
 argument, they will just ask for it.
 
-You can use <c-u> and <tab> for argument completion. Providing only a part of
-the session name works, too.
+Providing only a part of the session name works too, if you complete the
+argument with either <c-u> or <tab> afterwards.
 
 
 ==============================================================================
