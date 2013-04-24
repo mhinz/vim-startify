@@ -3,14 +3,14 @@ vim-startify
 
 Startify basically provides two things:
 
-1) If you start Vim without giving any filenames to it (or pipe stuff to it so
+_1)_ If you start Vim without giving any filenames to it (or pipe stuff to it so
    it reads from STDIN), startify will show a small but pretty start screen
    which shows recently used files and sessions by default.
 
    You can either navigate to a certain menu entry or you just key in whatever
    is written between the square brackets on that line.
 
-2) It eases handling of loading and saving sessions by only working with a
+_2)_ It eases handling of loading and saving sessions by only working with a
    certain directory. Two commands are used for convenience:
 
       :SLoad    load a session
