@@ -7,6 +7,9 @@ _1)_ If you start Vim without giving any filenames to it (or pipe stuff to it so
    it reads from STDIN), startify will show a small but pretty start screen
    which shows recently used files and sessions by default.
 
+   Additionally, you can define bookmarks, thus entries for files that always
+   should be available in the start screen.
+
    You can either navigate to a certain menu entry or you just key in whatever
    is written between the square brackets on that line.
 

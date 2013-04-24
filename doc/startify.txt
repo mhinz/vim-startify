@@ -40,6 +40,9 @@ Startify basically provides two things:
    it reads from STDIN), startify will show a small but pretty start screen
    which shows recently used files and sessions by default.
 
+   Additionally, you can define bookmarks, thus entries for files that always
+   should be available in the start screen.
+
    You can either navigate to a certain menu entry or you just key in whatever
    is written between the square brackets on that line.
 
@@ -85,6 +88,14 @@ List recently used files using viminfo.
     let g:startify_show_files_number = 10
 
 The amount of files to list.
+
+
+============-
+
+    let g:startify_bookmarks = [ '~/.vimrc' ]
+
+A list of files to bookmark. Those files will always be shown at the bottom of
+the start screen.
 
 
 ==============================================================================

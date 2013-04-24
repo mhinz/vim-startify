@@ -58,6 +58,19 @@ function! s:start() abort
       call append('$', '   ['. idx .']'. repeat(' ', 3 - strlen(string(idx))) . fnamemodify(sfiles[i], ':t:r'))
       execute 'nnoremap <buffer> '. idx .' :source '. sfiles[i] .'<cr>'
     endfor
+    let cnt = idx
+  endif
+
+  if exists('g:startify_bookmarks')
+    call append('$', '')
+    for fname in g:startify_bookmarks
+      if !filereadable(expand(fname))
+        continue
+      endif
+      let cnt += 1
+      call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
+      execute 'nnoremap <buffer> '. cnt .' :edit '. fname .'<cr>'
+    endfor
   endif
 
   call append('$', ['', '   [q]  quit'])
