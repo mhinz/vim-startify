@@ -28,8 +28,8 @@ CONTENTS                                                     *startify-contents*
 ==============================================================================
 1. Intro                                                        *startify-intro*
 
-Startify is a zero-conf plugin which shows recently used files and sessions
-that were saved to a certain directory.
+Startify is a zero-conf plugin which shows recently used files, bookmarks and
+sessions that were saved to a certain directory.
 
 
 ==============================================================================
@@ -138,10 +138,16 @@ Open the startify buffer.
 "I don't want the start screen to use cursorline!"
 --------------------------------------------------
 
-Startify sets its own filetype 'startify'. Thus one could set buffer-local
+Startify sets its own filetype "startify". Thus one could set buffer-local
 options like this:
 
     autocmd FileType startify setlocal nocursorline
+
+
+"Last recently used files don't seem to get updated at :Startify!"
+-----------------------------------------------------------
+
+It's because Vim loads the list from viminfo only once, at startup.
 
 
 ==============================================================================
