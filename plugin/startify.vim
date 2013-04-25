@@ -33,6 +33,10 @@ function! s:start() abort
   if get(g:, 'startify_unlisted_buffer', 1)
     setlocal nobuflisted
   endif
+  if exists('+shellslash')
+    let old_ssl = &shellslash
+    set noshellslash
+  endif
 
   call append('$', ['   startify>', '', '   [e]  <empty buffer>'])
   let cnt = 0
@@ -91,6 +95,9 @@ function! s:start() abort
   autocmd startify CursorMoved <buffer> call cursor(line('.') < 4 ? 4 : 0, 5)
   autocmd startify BufLeave <buffer> autocmd! startify *
 
+  if exists('old_ssl')
+    let &shellslash = old_ssl
+  endif
   call cursor(6, 5)
 endfunction
 
