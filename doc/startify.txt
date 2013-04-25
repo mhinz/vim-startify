@@ -44,8 +44,13 @@ Startify basically provides two things:
    Additionally, you can define bookmarks, thus entries for files that always
    should be available in the start screen.
 
-   You can either navigate to a certain menu entry or you just key in whatever
-   is written between the square brackets on that line.
+   You can either navigate to a certain menu entry and hit enter or you just
+   key in whatever is written between the square brackets on that line.
+
+   Per default the startify buffer gets closed automatically, if an entry was
+   selected.
+
+   You can reopen the screen via :Startify.
 
 2) It eases handling of loading and saving sessions by only working with a
    certain directory. Two commands are used for convenience:
@@ -112,8 +117,6 @@ start screen.
 ==============================================================================
 4. Commands                                                  *startify-commands*
 
-There are only two commands for handling sessions:
-
     :SLoad    load a session
     :SSave    save a session
 
@@ -122,6 +125,11 @@ argument, they will just ask for it.
 
 Providing only a part of the session name works too, if you complete the
 argument with either <c-d> or <tab> afterwards.
+
+
+    :Startify
+
+Open the startify buffer.
 
 
 ==============================================================================

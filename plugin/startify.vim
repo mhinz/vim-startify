@@ -16,12 +16,12 @@ augroup startify
   autocmd VimEnter *
         \ if !argc() && (line2byte('$') == -1) |
         \   call s:start() |
-        \   call cursor(6, 5) |
-        \endif
+        \ endif
 augroup END
 
 command! -nargs=? -bar -complete=customlist,startify#get_session_names SSave call startify#save_session(<f-args>)
 command! -nargs=? -bar -complete=customlist,startify#get_session_names SLoad call startify#load_session(<f-args>)
+command! -nargs=0 -bar Startify enew | call s:start()
 
 " Function: s:start {{{1
 function! s:start() abort
@@ -90,6 +90,8 @@ function! s:start() abort
   autocmd! startify *
   autocmd startify CursorMoved <buffer> call cursor(line('.') < 4 ? 4 : 0, 5)
   autocmd startify BufLeave <buffer> autocmd! startify *
+
+  call cursor(6, 5)
 endfunction
 
 " vim: et sw=2 sts=2
