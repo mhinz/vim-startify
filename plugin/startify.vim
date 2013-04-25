@@ -33,25 +33,22 @@ function! s:start() abort
   if get(g:, 'startify_unlisted_buffer', 1)
     setlocal nobuflisted
   endif
-  if exists('+shellslash')
-    let old_ssl = &shellslash
-    set noshellslash
-  endif
 
   call append('$', ['   startify>', '', '   [e]  <empty buffer>'])
   let cnt = 0
+  let sep = startify#get_sep()
 
   if get(g:, 'startify_show_files', 1) && !empty(v:oldfiles)
     let numfiles = get(g:, 'startify_show_files_number', 10)
     call append('$', '')
     for fname in v:oldfiles
       if !filereadable(expand(fname))
-            \ || (expand(fname) =~# $VIMRUNTIME .'/doc')
-            \ || (fname =~# 'bundle/.*/doc')
+            \ || (expand(fname) =~# $VIMRUNTIME . sep .'doc')
+            \ || (fname =~# 'bundle'. sep .'.*'. sep .'doc')
         continue
       endif
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
-      execute 'nnoremap <buffer> '. cnt .' :edit '. fnameescape(fname) .'<cr>'
+      execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .'<cr>'
       let cnt += 1
       if cnt == numfiles
         break
@@ -66,7 +63,7 @@ function! s:start() abort
     for i in range(len(sfiles))
       let idx = i + cnt
       call append('$', '   ['. idx .']'. repeat(' ', 3 - strlen(string(idx))) . fnamemodify(sfiles[i], ':t:r'))
-      execute 'nnoremap <buffer> '. idx .' :source '. fnameescape(sfiles[i]) .'<cr>'
+      execute 'nnoremap <buffer> '. idx .' :source '. startify#escape(sfiles[i]) .'<cr>'
     endfor
     let cnt = idx
   endif
@@ -79,7 +76,7 @@ function! s:start() abort
       endif
       let cnt += 1
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
-      execute 'nnoremap <buffer> '. cnt .' :edit '. fnameescape(fname) .'<cr>'
+      execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .'<cr>'
     endfor
   endif
 
@@ -95,9 +92,6 @@ function! s:start() abort
   autocmd startify CursorMoved <buffer> call cursor(line('.') < 4 ? 4 : 0, 5)
   autocmd startify BufLeave <buffer> autocmd! startify *
 
-  if exists('old_ssl')
-    let &shellslash = old_ssl
-  endif
   call cursor(6, 5)
 endfunction
 

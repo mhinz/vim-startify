@@ -16,6 +16,14 @@ function! startify#get_session_names_as_string(lead, ...) abort
   return join(map(split(globpath(g:startify_session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")'), "\n")
 endfunction
 
+function! startify#escape(path) abort
+  return !exists('+shellslash') || &shellslash ? a:path : escape(a:path, '\')
+endfunction
+
+function! startify#get_sep() abort
+  return !exists('+shellslash') || &shellslash ? '/' : '\'
+endfunction
+
 function! startify#save_session(...) abort
   if !isdirectory(g:startify_session_dir)
     echo 'The session directory does not exist: '. g:startify_session_dir
