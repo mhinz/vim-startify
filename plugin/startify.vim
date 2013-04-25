@@ -51,7 +51,7 @@ function! s:start() abort
         continue
       endif
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
-      execute 'nnoremap <buffer> '. cnt .' :edit '. fname .'<cr>'
+      execute 'nnoremap <buffer> '. cnt .' :edit '. fnameescape(fname) .'<cr>'
       let cnt += 1
       if cnt == numfiles
         break
@@ -66,7 +66,7 @@ function! s:start() abort
     for i in range(len(sfiles))
       let idx = i + cnt
       call append('$', '   ['. idx .']'. repeat(' ', 3 - strlen(string(idx))) . fnamemodify(sfiles[i], ':t:r'))
-      execute 'nnoremap <buffer> '. idx .' :source '. sfiles[i] .'<cr>'
+      execute 'nnoremap <buffer> '. idx .' :source '. fnameescape(sfiles[i]) .'<cr>'
     endfor
     let cnt = idx
   endif
@@ -79,7 +79,7 @@ function! s:start() abort
       endif
       let cnt += 1
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
-      execute 'nnoremap <buffer> '. cnt .' :edit '. fname .'<cr>'
+      execute 'nnoremap <buffer> '. cnt .' :edit '. fnameescape(fname) .'<cr>'
     endfor
   endif
 
