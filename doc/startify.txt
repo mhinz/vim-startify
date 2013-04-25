@@ -74,6 +74,8 @@ default values.
 
 The directory to save/load sessions to/from.
 
+The default for Windows systems is '$HOME\vimfiles\session'.
+
 
 ============-
 
@@ -102,6 +104,18 @@ The amount of files to list.
 
 A list of files to bookmark. Those files will always be shown at the bottom of
 the start screen.
+
+============-
+
+    let g:startify_skiplist = []
+
+A list of Vim regular expressions to filter recently used files.
+
+Example:   let g:startify_skiplist = [
+             \ 'COMMIT_EDITMSG',
+             \ $VIMRUNTIME .'/doc',
+             \ 'bundle/.*/doc'
+             \ ]
 
 
 ============-

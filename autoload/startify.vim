@@ -24,6 +24,14 @@ function! startify#get_sep() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
+function! startify#process_skiplist(arg) abort
+  for regexp in g:startify_skiplist
+    if a:arg =~# regexp
+      return 1
+    endif
+  endfor
+endfunction
+
 function! startify#save_session(...) abort
   if !isdirectory(g:startify_session_dir)
     echo 'The session directory does not exist: '. g:startify_session_dir

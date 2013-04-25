@@ -43,9 +43,8 @@ function! s:start() abort
     let numfiles = get(g:, 'startify_show_files_number', 10)
     call append('$', '')
     for fname in v:oldfiles
-      if !filereadable(expand(fname))
-            \ || (expand(fname) =~# $VIMRUNTIME . sep .'doc')
-            \ || (fname =~# 'bundle'. sep .'.*'. sep .'doc')
+      let expfname = expand(fname)
+      if !filereadable(expfname) || (exists('g:startify_skiplist') && startify#process_skiplist(expfname))
         continue
       endif
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
