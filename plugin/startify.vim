@@ -89,10 +89,27 @@ function! s:start() abort
   nnoremap <buffer><silent> <cr> :normal <c-r><c-w><cr>
 
   autocmd! startify *
-  autocmd startify CursorMoved <buffer> call cursor(line('.') < 4 ? 4 : 0, 5)
+  autocmd startify CursorMoved <buffer> call s:set_cursor()
   autocmd startify BufLeave <buffer> autocmd! startify *
 
   call cursor(6, 5)
+endfunction
+
+" Function: s:set_cursor {{{1
+function! s:set_cursor() abort
+  let s:line_old = exists('s:line_new') ? s:line_new : 5
+  let s:line_new = line('.')
+  if empty(getline('.'))
+    if s:line_new > s:line_old
+      call cursor(s:line_new + 1, 5) " going down
+      let s:line_new += 1
+    else
+      call cursor((s:line_new < 4 ? 4 : s:line_new - 1), 5) " going up
+      let s:line_new -= 1
+    endif
+  else
+    call cursor((s:line_new < 4 ? 4 : 0), 5) " hold cursor in column
+  endif
 endfunction
 
 " vim: et sw=2 sts=2
