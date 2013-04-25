@@ -86,7 +86,7 @@ function! s:start() abort
 
   nnoremap <buffer> q :quit<cr>
   nnoremap <buffer><silent> e :enew<cr>
-  nnoremap <buffer><silent> <cr> :execute 'normal '. <c-r><c-w><cr>
+  nnoremap <buffer><silent> <cr> :normal <c-r><c-w><cr>
 
   autocmd! startify *
   autocmd startify CursorMoved <buffer> call cursor(line('.') < 4 ? 4 : 0, 5)
