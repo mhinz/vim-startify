@@ -20,8 +20,9 @@ CONTENTS                                                     *startify-contents*
     2.Usage..........................................|startify-usage|
     3.Options........................................|startify-options|
     4.Commands.......................................|startify-commands|
-    5.Author.........................................|startify-author|
-    6.License........................................|startify-license|
+    5.FAQ............................................|startify-faq|
+    6.Author.........................................|startify-author|
+    7.License........................................|startify-license|
 
 
 ==============================================================================
@@ -124,7 +125,19 @@ argument with either <c-d> or <tab> afterwards.
 
 
 ==============================================================================
-5. About the author                                            *startify-author*
+5. FAQ                                                            *startify-faq*
+
+"I don't want the start screen to use cursorline!"
+--------------------------------------------------
+
+Startify sets its own filetype 'startify'. Thus one could set buffer-local
+options like this:
+
+    autocmd FileType startify setlocal nocursorline
+
+
+==============================================================================
+6. About the author                                            *startify-author*
 
 My nick on Freenode IRC is mhi^.
 
@@ -137,7 +150,7 @@ Thank you for flying mhi airlines. Get the Vim on!
 
 
 ==============================================================================
-6. Licence                                                    *startify-license*
+7. Licence                                                    *startify-license*
 
 Copyright © Marco Hinz. Distributed under the same terms as Vim itself.
 
