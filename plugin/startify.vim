@@ -99,13 +99,13 @@ endfunction
 function! s:set_cursor() abort
   let s:line_old = exists('s:line_new') ? s:line_new : 5
   let s:line_new = line('.')
-  if empty(getline('.'))
+  if empty(getline(s:line_new))
     if s:line_new > s:line_old
-      call cursor(s:line_new + 1, 5) " going down
       let s:line_new += 1
+      call cursor(s:line_new, 5) " going down
     else
-      call cursor((s:line_new < 4 ? 4 : s:line_new - 1), 5) " going up
       let s:line_new -= 1
+      call cursor((s:line_new < 4 ? 4 : s:line_new), 5) " going up
     endif
   else
     call cursor((s:line_new < 4 ? 4 : 0), 5) " hold cursor in column
