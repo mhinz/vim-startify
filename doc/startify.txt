@@ -120,7 +120,7 @@ These take either 0 or 1 argument. If you don't specify the session name as an
 argument, they will just ask for it.
 
 Providing only a part of the session name works too, if you complete the
-argument with either <c-u> or <tab> afterwards.
+argument with either <c-d> or <tab> afterwards.
 
 
 ==============================================================================
