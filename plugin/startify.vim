@@ -9,7 +9,8 @@ endif
 let g:loaded_startify = 1
 
 " Init {{{1
-let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir', '~/.vim/session')))
+let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir',
+      \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
 augroup startify
   autocmd!
