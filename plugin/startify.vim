@@ -90,7 +90,7 @@ function! s:start() abort
 
   autocmd! startify *
   autocmd startify CursorMoved <buffer> call s:set_cursor()
-  autocmd startify BufLeave <buffer> autocmd! startify *
+  autocmd startify BufDelete <buffer> autocmd! startify *
 
   call cursor(6, 5)
 endfunction
