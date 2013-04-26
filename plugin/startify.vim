@@ -14,10 +14,7 @@ let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir',
 
 augroup startify
   autocmd!
-  autocmd VimEnter *
-        \ if !argc() && (line2byte('$') == -1) && empty(v:servername) |
-        \   call s:start() |
-        \ endif
+  autocmd VimEnter * if !argc() && (line2byte('$') == -1) | call s:start() | endif
 augroup END
 
 command! -nargs=? -bar -complete=customlist,startify#get_session_names SSave call startify#save_session(<f-args>)
