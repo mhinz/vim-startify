@@ -120,6 +120,16 @@ Example:   let g:startify_skiplist = [
 
 ============-
 
+    let g:startify_skiplist_server = []
+
+Do not create the startify buffer, if this is a Vim server instance with a
+name contained in this list.
+
+Example:   let g:startify_skiplist_server = [ 'GVIM' ]
+
+
+============-
+
     let g:startify_unlisted_buffer = 1
 
 Some bad plugins like minibufexpl break, when there is no listed buffer.

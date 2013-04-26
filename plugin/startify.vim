@@ -23,7 +23,13 @@ command! -nargs=0 -bar Startify enew | call s:insane_in_the_membrane()
 
 " Function: s:insane_in_the_membrane {{{1
 function! s:insane_in_the_membrane() abort
-  setfiletype startify
+  if !empty(v:servername) && exists('g:startify_skiplist_server')
+    for servname in g:startify_skiplist_server
+      if servname == v:servername
+        return
+      endif
+    endfor
+  endif
   setlocal nonumber buftype=nofile
   if v:version >= 703
     setlocal norelativenumber
@@ -31,11 +37,8 @@ function! s:insane_in_the_membrane() abort
   if get(g:, 'startify_unlisted_buffer', 1)
     setlocal nobuflisted
   endif
-  call s:genesis()
-endfunction
+  setfiletype startify
 
-" Function: s:genesis {{{1
-function! s:genesis() abort
   call append('$', ['   startify>', '', '   [e]  <empty buffer>'])
   let cnt = 0
   let sep = startify#get_sep()
