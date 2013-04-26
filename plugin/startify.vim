@@ -14,15 +14,15 @@ let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir',
 
 augroup startify
   autocmd!
-  autocmd VimEnter * if !argc() && (line2byte('$') == -1) | call s:start() | endif
+  autocmd VimEnter * if !argc() && (line2byte('$') == -1) | call s:insane_in_the_membrane() | endif
 augroup END
 
 command! -nargs=? -bar -complete=customlist,startify#get_session_names SSave call startify#save_session(<f-args>)
 command! -nargs=? -bar -complete=customlist,startify#get_session_names SLoad call startify#load_session(<f-args>)
-command! -nargs=0 -bar Startify enew | call s:start()
+command! -nargs=0 -bar Startify enew | call s:insane_in_the_membrane()
 
-" Function: s:start {{{1
-function! s:start() abort
+" Function: s:insane_in_the_membrane {{{1
+function! s:insane_in_the_membrane() abort
   setfiletype startify
   setlocal nonumber buftype=nofile
   if v:version >= 703
@@ -31,7 +31,11 @@ function! s:start() abort
   if get(g:, 'startify_unlisted_buffer', 1)
     setlocal nobuflisted
   endif
+  call s:genesis()
+endfunction
 
+" Function: s:genesis {{{1
+function! s:genesis() abort
   call append('$', ['   startify>', '', '   [e]  <empty buffer>'])
   let cnt = 0
   let sep = startify#get_sep()
