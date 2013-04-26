@@ -177,7 +177,7 @@ It's because Vim loads the list from viminfo only once, at startup.
 "I use OSX and iTerm2 and have broken colors!"
 ----------------------------------------------
 
-Nothing this plugin could do about. Try playing round with 'sessionoptions'.
+Nothing this plugin could do about. Try playing around with 'sessionoptions'.
 Some people swear it works for them with these settings:
 
     set sessionoptions=blank,curdir,folds,help,tabpages,winpos
