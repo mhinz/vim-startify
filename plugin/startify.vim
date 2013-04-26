@@ -30,7 +30,7 @@ function! s:insane_in_the_membrane() abort
       endif
     endfor
   endif
-  setlocal nonumber buftype=nofile
+  setlocal nonumber noswapfile buftype=nofile bufhidden=wipe
   if v:version >= 703
     setlocal norelativenumber
   endif
@@ -94,7 +94,7 @@ function! s:insane_in_the_membrane() abort
 
   autocmd! startify *
   autocmd startify CursorMoved <buffer> call s:set_cursor()
-  autocmd startify BufDelete <buffer> autocmd! startify *
+  autocmd startify BufWipeout <buffer> autocmd! startify *
 
   call cursor(6, 5)
 endfunction
