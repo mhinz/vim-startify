@@ -157,7 +157,7 @@ Open the startify buffer.
 
 
 ==============================================================================
-5. FAQ                                                            *startify-faq*
+5. FAQ (Or: Typical rants)                                        *startify-faq*
 
 "I don't want the start screen to use cursorline!"
 --------------------------------------------------
@@ -174,8 +174,8 @@ options like this:
 It's because Vim loads the list from viminfo only once, at startup.
 
 
-"I use OSX and iTerm2 and have broken colors!"
-----------------------------------------------
+"I use iTerm2 and have broken colors when using sessions!"
+----------------------------------------------------------
 
 Nothing this plugin could do about. Try playing around with 'sessionoptions'.
 Some people swear it works for them with these settings:
