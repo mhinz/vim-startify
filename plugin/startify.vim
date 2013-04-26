@@ -30,7 +30,7 @@ function! s:insane_in_the_membrane() abort
       endif
     endfor
   endif
-  setlocal nonumber noswapfile buftype=nofile bufhidden=wipe
+  setlocal nonumber noswapfile bufhidden=wipe
   if v:version >= 703
     setlocal norelativenumber
   endif
@@ -86,7 +86,7 @@ function! s:insane_in_the_membrane() abort
 
   call append('$', ['', '   [q]  quit'])
 
-  setlocal nomodifiable
+  setlocal nomodifiable nomodified
 
   nnoremap <buffer> q :quit<cr>
   nnoremap <buffer><silent> e :enew<cr>
