@@ -17,7 +17,7 @@ function! startify#get_session_names_as_string(lead, ...) abort
 endfunction
 
 function! startify#escape(path) abort
-  return !exists('+shellslash') || &shellslash ? a:path : escape(a:path, '\')
+  return !exists('+shellslash') || &shellslash ? fnameescape(a:path) : escape(a:path, '\')
 endfunction
 
 function! startify#get_sep() abort
