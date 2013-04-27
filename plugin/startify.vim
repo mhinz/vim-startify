@@ -52,7 +52,7 @@ function! s:insane_in_the_membrane() abort
         continue
       endif
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
-      execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .'<cr>'
+      execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .' <bar> lcd %:h<cr>'
       let cnt += 1
       if cnt == numfiles
         break
@@ -80,7 +80,7 @@ function! s:insane_in_the_membrane() abort
       endif
       let cnt += 1
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
-      execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .'<cr>'
+      execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .' <bar> lcd %:h<cr>'
     endfor
   endif
 
