@@ -88,10 +88,15 @@ function! s:insane_in_the_membrane() abort
 
   setlocal nomodifiable nomodified
 
-  nnoremap <buffer> q :quit<cr>
   nnoremap <buffer><silent> e :enew<cr>
   nnoremap <buffer><silent> <cr> :normal <c-r><c-w><cr>
   nnoremap <buffer><silent> <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
+  nnoremap <buffer> q
+        \ :if len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) > 1 <bar>
+        \   bd <bar>
+        \ else <bar>
+        \   quit <bar>
+        \ endif<cr>
 
   if exists('g:startify_empty_buffer_key')
     execute 'nnoremap <buffer><silent> '. g:startify_empty_buffer_key .' :enew<cr>'
