@@ -39,7 +39,7 @@ function! s:insane_in_the_membrane() abort
   endif
   setfiletype startify
 
-  call append('$', ['   startify>', '', '   [e]  <empty buffer>'])
+  call append('$', '   [e]  <empty buffer>')
   let cnt = 0
   let sep = startify#get_sep()
 

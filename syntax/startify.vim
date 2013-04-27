@@ -7,9 +7,6 @@ if exists("b:current_syntax")
   finish
 endif
 
-syntax     match  startifyStartify   /startify>/
-highlight  link   startifyStartify   Function
-
 syntax     match  startifyDelimiter  /\[\|\]/
 highlight  link   startifyDelimiter  Delimiter
 
