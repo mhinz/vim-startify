@@ -91,7 +91,7 @@ function! s:insane_in_the_membrane() abort
   nnoremap <buffer> q :quit<cr>
   nnoremap <buffer><silent> e :enew<cr>
   nnoremap <buffer><silent> <cr> :normal <c-r><c-w><cr>
-  nnoremap <buffer><silent> <LeftRelease> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
+  nnoremap <buffer><silent> <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
 
   if exists('g:startify_empty_buffer_key')
     execute 'nnoremap <buffer><silent> '. g:startify_empty_buffer_key .' :enew<cr>'
