@@ -92,6 +92,10 @@ function! s:insane_in_the_membrane() abort
   nnoremap <buffer><silent> e :enew<cr>
   nnoremap <buffer><silent> <cr> :normal <c-r><c-w><cr>
 
+  if exists('g:startify_empty_buffer_key')
+    execute 'nnoremap <buffer><silent> '. g:startify_empty_buffer_key .' :enew<cr>'
+  endif
+
   autocmd! startify *
   autocmd startify CursorMoved <buffer> call s:set_cursor()
   autocmd startify BufWipeout <buffer> autocmd! startify *

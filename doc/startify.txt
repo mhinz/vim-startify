@@ -70,6 +70,15 @@ default values.
 
 ============-
 
+    let g:startify_empty_buffer_key = ''
+
+This creates an additional, hidden mapping for the empty buffer.
+
+Example: let g:startify_empty_buffer_key = 'o'
+
+
+============-
+
     let g:startify_session_dir = '~/.vim/session'
 
 The directory to save/load sessions to/from.
@@ -100,10 +109,12 @@ The amount of files to list.
 
 ============-
 
-    let g:startify_bookmarks = [ '~/.vimrc' ]
+    let g:startify_bookmarks = []
 
 A list of files to bookmark. Those files will always be shown at the bottom of
 the start screen.
+
+Example: let g:startify_bookmarks = [ '~/.vimrc' ]
 
 ============-
 
@@ -111,11 +122,11 @@ the start screen.
 
 A list of Vim regular expressions to filter recently used files.
 
-Example:   let g:startify_skiplist = [
-             \ 'COMMIT_EDITMSG',
-             \ $VIMRUNTIME .'/doc',
-             \ 'bundle/.*/doc'
-             \ ]
+Example: let g:startify_skiplist = [
+           \ 'COMMIT_EDITMSG',
+           \ $VIMRUNTIME .'/doc',
+           \ 'bundle/.*/doc'
+           \ ]
 
 
 ============-
@@ -125,7 +136,7 @@ Example:   let g:startify_skiplist = [
 Do not create the startify buffer, if this is a Vim server instance with a
 name contained in this list.
 
-Example:   let g:startify_skiplist_server = [ 'GVIM' ]
+Example: let g:startify_skiplist_server = [ 'GVIM' ]
 
 
 ============-
