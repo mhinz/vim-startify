@@ -100,7 +100,7 @@ function! s:insane_in_the_membrane() abort
   autocmd startify CursorMoved <buffer> call s:set_cursor()
   autocmd startify BufWipeout <buffer> autocmd! startify *
 
-  call cursor(6, 5)
+  call cursor(4, 5)
 endfunction
 
 " Function: s:set_cursor {{{1
@@ -113,10 +113,10 @@ function! s:set_cursor() abort
       call cursor(s:line_new, 5) " going down
     else
       let s:line_new -= 1
-      call cursor((s:line_new < 4 ? 4 : s:line_new), 5) " going up
+      call cursor((s:line_new < 2 ? 2 : s:line_new), 5) " going up
     endif
   else
-    call cursor((s:line_new < 4 ? 4 : 0), 5) " hold cursor in column
+    call cursor((s:line_new < 2 ? 2 : 0), 5) " hold cursor in column
   endif
 endfunction
 
