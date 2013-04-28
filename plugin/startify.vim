@@ -15,7 +15,7 @@ let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir',
 augroup startify
   autocmd!
   autocmd VimEnter *
-        \ if !argc() && (line2byte('$') == -1) && (v:progname == 'vim' || v:progname == 'gvim') |
+        \ if !argc() && (line2byte('$') == -1) && (v:progname =~? '^vim' || v:progname =~? '^gvim') |
         \   call s:insane_in_the_membrane() |
         \ endif
 augroup END
