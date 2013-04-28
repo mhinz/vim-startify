@@ -10,7 +10,7 @@ endif
 syntax     match  startifyDelimiter  /\[\|\]/
 highlight  link   startifyDelimiter  Delimiter
 
-syntax     match  startifyNumber     /\v\[[eq[:digit:]]+\]/hs=s+1,he=e-1 contains=startifyDelimiter
+syntax     match  startifyNumber     /\v\[[iq[:digit:]]+\]/hs=s+1,he=e-1 contains=startifyDelimiter
 highlight  link   startifyNumber     Number
 
 let b:current_syntax = 'startify'

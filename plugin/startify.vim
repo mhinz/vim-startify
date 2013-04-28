@@ -42,7 +42,7 @@ function! s:insane_in_the_membrane() abort
   endif
   setfiletype startify
 
-  call append('$', '   [e]  <empty buffer>')
+  call append('$', '   [i]  <empty buffer>')
   let cnt = 0
   let sep = startify#get_sep()
 
@@ -91,7 +91,7 @@ function! s:insane_in_the_membrane() abort
 
   setlocal nomodifiable nomodified
 
-  nnoremap <buffer><silent> e :enew<cr>
+  nnoremap <buffer><silent> i :enew<cr>
   nnoremap <buffer> <cr> :normal <c-r><c-w><cr>
   nnoremap <buffer> <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer> q
