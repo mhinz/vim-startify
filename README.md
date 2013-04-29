@@ -19,13 +19,17 @@ _2)_ It eases handling of loading and saving sessions by only working with a
       :SLoad    load a session
       :SSave    save a session
 
-NOTE: Both commands can also take session names directly as an argument. You can
+_NOTE_: Both commands can also take session names directly as an argument. You can
 also make use of completion via `<c-u>` and `<tab>`.
 
 The default settings are pretty sane, so it should work without any
 configuration.
 
 ![Example:startify in action](https://github.com/mhinz/vim-startify/raw/master/startify.png)
+
+_NOTE_: The colors shown in the screenshot are not the default. If you want to
+tune the default colors, you can overwrite the highlight groups used by startify
+in your vimrc. Have a look at `:h startify-colors`, after installing the plugin.
 
 Feedback, please!
 -----------------
