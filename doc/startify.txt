@@ -183,11 +183,12 @@ Open the startify buffer.
 You can overwrite the highlight groups used by startify. The plugins defines
 these groups:
 
-    startifyBracket         [,]
-    startifyNumber          the numbers between []
-    startifyPath            the path to a file
-    startifySlash           slashes in paths
-    startifySpecial         <empty buffer>,<quit>
+    StartifyBracket         [,]
+    StartifyFile            the actual file
+    StartifyNumber          the numbers between []
+    StartifyPath            the path to a file
+    StartifySlash           slashes in paths
+    StartifySpecial         <empty buffer>,<quit>
 
 Example: (my terminal emulator supports 256 colors)
 

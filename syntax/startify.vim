@@ -12,6 +12,7 @@ let s:sep = startify#get_sep()
 syntax  match  StartifySpecial  /\V<empty buffer>\|<quit>/
 syntax  match  StartifyBracket  /\[\|\]/
 syntax  match  StartifyNumber   /\v\[[eq[:digit:]]+\]/hs=s+1,he=e-1 contains=StartifyBracket
+syntax  match  StartifyFile     /.*/ contains=StartifyBracket,StartifyNumber,StartifyPath,StartifySpecial
 
 execute 'syntax match StartifySlash /\'. s:sep .'/'
 execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash'
