@@ -46,12 +46,15 @@ Startify basically provides two things:
    should be available in the start screen.
 
    You can either navigate to a certain menu entry and hit enter or you just
-   key in whatever is written between the square brackets on that line.
+   key in whatever is written between the square brackets on that line. You
+   can even double-click anywhere on the line now.
 
    Per default the startify buffer gets closed automatically, if an entry was
    selected.
 
    You can reopen the screen via :Startify.
+
+   If you want to open an empty buffer, hit either 'e' or 'i'. Quit via 'q'.
 
 2) It eases handling of loading and saving sessions by only working with a
    certain directory. Two commands are used for convenience:
@@ -153,7 +156,7 @@ start screen.
 
     let g:startify_enable_special = 1
 
-Don't show [i] and [q].
+Don't show <empty buffer> and <quit>.
 
 
 ==============================================================================
