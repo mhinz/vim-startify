@@ -28,13 +28,13 @@ command! -nargs=0 -bar Startify enew | call s:insane_in_the_membrane()
 function! s:insane_in_the_membrane() abort
   if !empty(v:servername) && exists('g:startify_skiplist_server')
     for servname in g:startify_skiplist_server
-      if servname == v:servername
+      if (servname == v:servername)
         return
       endif
     endfor
   endif
   setlocal nonumber noswapfile bufhidden=wipe
-  if v:version >= 703
+  if (v:version >= 703)
     setlocal norelativenumber
   endif
   if get(g:, 'startify_unlisted_buffer', 1)
@@ -57,13 +57,13 @@ function! s:insane_in_the_membrane() abort
     endif
     for fname in v:oldfiles
       let expfname = expand(fname)
-      if !filereadable(expfname) || (exists('g:startify_skiplist') && startify#process_skiplist(expfname))
+      if !filereadable(expfname) || (exists('g:startify_skiplist') && startify#is_in_skiplist(expfname))
         continue
       endif
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
       execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .' <bar> lcd %:h<cr>'
       let cnt += 1
-      if cnt == numfiles
+      if (cnt == numfiles)
         break
       endif
     endfor
@@ -103,7 +103,7 @@ function! s:insane_in_the_membrane() abort
   nnoremap <buffer> <cr> :normal <c-r><c-w><cr>
   nnoremap <buffer> <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer> q
-        \ :if len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) > 1 <bar>
+        \ :if (len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) > 1) <bar>
         \   bd <bar>
         \ else <bar>
         \   quit <bar>
@@ -125,7 +125,7 @@ function! s:set_cursor() abort
   let s:line_old = exists('s:line_new') ? s:line_new : 5
   let s:line_new = line('.')
   if empty(getline(s:line_new))
-    if s:line_new > s:line_old
+    if (s:line_new > s:line_old)
       let s:line_new += 1
       call cursor(s:line_new, 5) " going down
     else

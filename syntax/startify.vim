@@ -9,9 +9,9 @@ endif
 
 let s:sep = startify#get_sep()
 
-syntax  match  StartifySpecial   /\V<empty buffer>\|<quit>/
+syntax  match  StartifySpecial  /\V<empty buffer>\|<quit>/
 syntax  match  StartifyBracket  /\[\|\]/
-syntax  match  StartifyNumber    /\v\[[iq[:digit:]]+\]/hs=s+1,he=e-1 contains=StartifyBracket
+syntax  match  StartifyNumber   /\v\[[iq[:digit:]]+\]/hs=s+1,he=e-1 contains=StartifyBracket
 
 execute 'syntax match StartifySlash /\'. s:sep .'/'
 execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash'
