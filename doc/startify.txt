@@ -20,9 +20,10 @@ CONTENTS                                                     *startify-contents*
     2.Usage..........................................|startify-usage|
     3.Options........................................|startify-options|
     4.Commands.......................................|startify-commands|
-    5.FAQ............................................|startify-faq|
-    6.Author.........................................|startify-author|
-    7.License........................................|startify-license|
+    5.Colors.........................................|startify-colors|
+    6.FAQ............................................|startify-faq|
+    7.Author.........................................|startify-author|
+    8.License........................................|startify-license|
 
 
 ==============================================================================
@@ -168,7 +169,27 @@ Open the startify buffer.
 
 
 ==============================================================================
-5. FAQ (Or: Typical rants)                                        *startify-faq*
+5. Colors                                                      *startify-colors*
+
+You can overwrite the highlight groups used by startify. The plugins defines
+these groups:
+
+    startifyBracket         [,]
+    startifyNumber          the numbers between []
+    startifyPath            the path to a file
+    startifySlash           slashes in paths
+    startifySpecial         <empty buffer>,<quit>
+
+Example: (my terminal emulator supports 256 colors)
+
+    hi StartifyBracket ctermfg=240
+    hi StartifyNumber  ctermfg=215
+    hi StartifyPath    ctermfg=245
+    hi StartifySlash   ctermfg=240
+
+
+==============================================================================
+6. FAQ (Or: Typical rants)                                        *startify-faq*
 
 "I don't want the start screen to use cursorline!"
 --------------------------------------------------
@@ -195,7 +216,7 @@ Some people swear it works for them with these settings:
 
 
 ==============================================================================
-6. About the author                                            *startify-author*
+7. About the author                                            *startify-author*
 
 My nick on Freenode IRC is mhi^.
 
@@ -208,7 +229,7 @@ Thank you for flying mhi airlines. Get the Vim on!
 
 
 ==============================================================================
-7. Licence                                                    *startify-license*
+8. License                                                    *startify-license*
 
 Copyright © Marco Hinz. Distributed under the same terms as Vim itself.
 

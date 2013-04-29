@@ -7,11 +7,17 @@ if exists("b:current_syntax")
   finish
 endif
 
-syntax     match  startifyDelimiter  /\[\|\]/
-highlight  link   startifyDelimiter  Delimiter
+let s:sep = startify#get_sep()
 
-syntax     match  startifyNumber     /\v\[[iq[:digit:]]+\]/hs=s+1,he=e-1 contains=startifyDelimiter
-highlight  link   startifyNumber     Number
+syntax  match  StartifySpecial   /\V<empty buffer>\|<quit>/
+syntax  match  StartifyBracket  /\[\|\]/
+syntax  match  StartifyNumber    /\v\[[iq[:digit:]]+\]/hs=s+1,he=e-1 contains=StartifyBracket
+
+execute 'syntax match StartifySlash /\'. s:sep .'/'
+execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash'
+
+highlight  link  StartifyBracket  Delimiter
+highlight  link  StartifyNumber   Number
 
 let b:current_syntax = 'startify'
 

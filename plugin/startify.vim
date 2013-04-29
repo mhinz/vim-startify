@@ -87,7 +87,7 @@ function! s:insane_in_the_membrane() abort
     endfor
   endif
 
-  call append('$', ['', '   [q]  quit'])
+  call append('$', ['', '   [q]  <quit>'])
 
   setlocal nomodifiable nomodified
 
