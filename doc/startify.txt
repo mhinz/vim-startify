@@ -149,6 +149,12 @@ People can set this variable to 0, to work around that. As a consequence the
 start screen buffer won't be removed, even after triggering an action from the
 start screen.
 
+============-
+
+    let g:startify_enable_special = 1
+
+Don't show [i] and [q].
+
 
 ==============================================================================
 4. Commands                                                  *startify-commands*

@@ -42,13 +42,19 @@ function! s:insane_in_the_membrane() abort
   endif
   setfiletype startify
 
-  call append('$', '   [i]  <empty buffer>')
-  let cnt = 0
+  let special = get(g:, 'startify_enable_special', 1)
   let sep = startify#get_sep()
+  let cnt = 0
+
+  if special
+    call append('$', '   [i]  <empty buffer>')
+  endif
 
   if get(g:, 'startify_show_files', 1) && !empty(v:oldfiles)
     let numfiles = get(g:, 'startify_show_files_number', 10)
-    call append('$', '')
+    if special
+      call append('$', '')
+    endif
     for fname in v:oldfiles
       let expfname = expand(fname)
       if !filereadable(expfname) || (exists('g:startify_skiplist') && startify#process_skiplist(expfname))
@@ -87,7 +93,9 @@ function! s:insane_in_the_membrane() abort
     endfor
   endif
 
-  call append('$', ['', '   [q]  <quit>'])
+  if special
+    call append('$', ['', '   [q]  <quit>'])
+  endif
 
   setlocal nomodifiable nomodified
 
@@ -109,7 +117,7 @@ function! s:insane_in_the_membrane() abort
   autocmd startify CursorMoved <buffer> call s:set_cursor()
   autocmd startify BufWipeout <buffer> autocmd! startify *
 
-  call cursor(4, 5)
+  call cursor(special ? 4 : 2, 5)
 endfunction
 
 " Function: s:set_cursor {{{1
