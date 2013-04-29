@@ -54,7 +54,8 @@ Startify basically provides two things:
 
    You can reopen the screen via :Startify.
 
-   If you want to open an empty buffer, hit either 'e' or 'i'. Quit via 'q'.
+   Moreover, 'e' creates an empty buffer, 'i' creates an empty buffers and
+   jumps into insert mode, 'q' quits.
 
 2) It eases handling of loading and saving sessions by only working with a
    certain directory. Two commands are used for convenience:

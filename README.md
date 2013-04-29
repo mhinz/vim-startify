@@ -19,7 +19,8 @@ _1)_ If you start Vim without giving any filenames to it (or pipe stuff to it so
 
    You can reopen the screen via :Startify.
 
-   If you want to open an empty buffer, hit either 'e' or 'i'. Quit via 'q'.
+   Moreover, 'e' creates an empty buffer, 'i' creates an empty buffers and
+   jumps into insert mode, 'q' quits.
 
 _2)_ It eases handling of loading and saving sessions by only working with a
    certain directory. Two commands are used for convenience:

@@ -100,7 +100,7 @@ function! s:insane_in_the_membrane() abort
   setlocal nomodifiable nomodified
 
   nnoremap <buffer><silent> e :enew<cr>
-  nnoremap <buffer><silent> i :enew<cr>
+  nnoremap <buffer><silent> i :enew <bar> startinsert<cr>
   nnoremap <buffer> <cr> :normal <c-r><c-w><cr>
   nnoremap <buffer> <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer> q
