@@ -30,6 +30,7 @@ configuration.
 _NOTE_: The colors shown in the screenshot are not the default. If you want to
 tune the default colors, you can overwrite the highlight groups used by startify
 in your vimrc. Have a look at `:h startify-colors`, after installing the plugin.
+Moreover, g:startify_enable_special is set to 0.
 
 Feedback, please!
 -----------------
