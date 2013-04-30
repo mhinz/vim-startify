@@ -125,7 +125,7 @@ endfunction
 function! s:get_index_as_string(idx) abort
   if exists('g:startify_custom_indices')
     let listlen = len(g:startify_custom_indices)
-      return (a:idx < listlen) ? g:startify_custom_indices[a:idx] : string(a:idx - listlen)
+    return (a:idx < listlen) ? g:startify_custom_indices[a:idx] : string(a:idx - listlen)
   else
     return string(a:idx)
   endif
