@@ -84,9 +84,6 @@ function! s:insane_in_the_membrane() abort
   if exists('g:startify_bookmarks')
     call append('$', '')
     for fname in g:startify_bookmarks
-      if !filereadable(expand(fname))
-        continue
-      endif
       let cnt += 1
       call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
       execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .' <bar> lcd %:h<cr>'
