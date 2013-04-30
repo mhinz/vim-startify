@@ -146,6 +146,34 @@ Example: let g:startify_skiplist_server = [ 'GVIM' ]
 
 ============-
 
+    let g:startify_custom_indices = []
+
+Use any list of strings as custom indices instead of increasing numbers. If
+there are more paths to fill in the startify buffer than actual items in the
+custom list, the rest will be filled up using the default numbering scheme
+starting from 0.
+
+NOTE: There is no sanitizing going on, so you should know what you do!
+
+E.g. you don't want to use duplicates. Same for 'e', 'i', 'q'. Actually you
+can use them, but they would be overwritten by mappings for creating the empty
+buffer and quitting. You may want to keep 'j' and 'k', too.
+
+Example: let g:startify_custom_indices = ['a','s','d','f']
+
+This would result in:
+
+    [a]  /last/recently/used/file1
+    [s]  /last/recently/used/file2
+    [d]  /last/recently/used/file3
+    [f]  /last/recently/used/file4
+    [0]  /last/recently/used/file5
+    [1]  /last/recently/used/file6
+    etc.
+
+
+============-
+
     let g:startify_unlisted_buffer = 1
 
 Some bad plugins like minibufexpl break, when there is no listed buffer.

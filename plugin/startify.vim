@@ -60,8 +60,9 @@ function! s:insane_in_the_membrane() abort
       if !filereadable(expfname) || (exists('g:startify_skiplist') && startify#is_in_skiplist(expfname))
         continue
       endif
-      call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
-      execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .' <bar> lcd %:h<cr>'
+      let index = s:get_index_as_string(cnt)
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+      execute 'nnoremap <buffer> '. index .' :edit '. startify#escape(fname) .' <bar> lcd %:h<cr>'
       let cnt += 1
       if (cnt == numfiles)
         break
@@ -74,9 +75,10 @@ function! s:insane_in_the_membrane() abort
   if get(g:, 'startify_show_sessions', 1) && !empty(sfiles)
     call append('$', '')
     for i in range(len(sfiles))
-      let idx = i + cnt
-      call append('$', '   ['. idx .']'. repeat(' ', 3 - strlen(string(idx))) . fnamemodify(sfiles[i], ':t:r'))
-      execute 'nnoremap <buffer> '. idx .' :source '. startify#escape(sfiles[i]) .'<cr>'
+      let idx = (i + cnt)
+      let index = s:get_index_as_string(idx)
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
+      execute 'nnoremap <buffer> '. index .' :source '. startify#escape(sfiles[i]) .'<cr>'
     endfor
     let cnt = idx
   endif
@@ -85,8 +87,9 @@ function! s:insane_in_the_membrane() abort
     call append('$', '')
     for fname in g:startify_bookmarks
       let cnt += 1
-      call append('$', '   ['. cnt .']'. repeat(' ', 3 - strlen(string(cnt))) . fname)
-      execute 'nnoremap <buffer> '. cnt .' :edit '. startify#escape(fname) .' <bar> lcd %:h<cr>'
+      let index = s:get_index_as_string(cnt)
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+      execute 'nnoremap <buffer> '. index .' :edit '. startify#escape(fname) .' <bar> lcd %:h<cr>'
     endfor
   endif
 
@@ -116,6 +119,16 @@ function! s:insane_in_the_membrane() abort
   autocmd startify BufWipeout <buffer> autocmd! startify *
 
   call cursor(special ? 4 : 2, 5)
+endfunction
+
+" Function: s:get_index_as_string {{{1
+function! s:get_index_as_string(idx) abort
+  if exists('g:startify_custom_indices')
+    let listlen = len(g:startify_custom_indices)
+      return (a:idx < listlen) ? g:startify_custom_indices[a:idx] : string(a:idx - listlen)
+  else
+    return string(a:idx)
+  endif
 endfunction
 
 " Function: s:set_cursor {{{1
