@@ -20,7 +20,7 @@ function! startify#escape(path) abort
   return !exists('+shellslash') || &shellslash ? fnameescape(a:path) : escape(a:path, '\')
 endfunction
 
-function! startify#get_sep() abort
+function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
@@ -47,7 +47,7 @@ function! startify#save_session(...) abort
       return
     endif
   endif
-  let spath = g:startify_session_dir . startify#get_sep() . (exists('a:1')
+  let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
         \ : input('Save under this session name: ', '', 'custom,startify#get_session_names_as_string'))
         \ | redraw
@@ -68,7 +68,7 @@ function! startify#load_session(...) abort
     echo 'The session directory does not exist: '. g:startify_session_dir
     return
   endif
-  let spath = g:startify_session_dir . startify#get_sep() . (exists('a:1')
+  let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
         \ : input('Load this session: ', '', 'custom,startify#get_session_names_as_string'))
         \ | redraw

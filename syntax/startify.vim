@@ -7,7 +7,7 @@ if exists("b:current_syntax")
   finish
 endif
 
-let s:sep = startify#get_sep()
+let s:sep = startify#get_separator()
 
 syntax  match  StartifySpecial  /\V<empty buffer>\|<quit>/
 syntax  match  StartifyBracket  /\[\|\]/

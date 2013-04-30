@@ -43,7 +43,7 @@ function! s:insane_in_the_membrane() abort
   setfiletype startify
 
   let special = get(g:, 'startify_enable_special', 1)
-  let sep = startify#get_sep()
+  let sep = startify#get_separator()
   let cnt = 0
 
   if special
