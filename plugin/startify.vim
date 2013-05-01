@@ -12,8 +12,13 @@ let g:loaded_startify = 1
 let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
-if exists('g:startify_bookmarks') && exists('g:startify_skiplist')
-  call extend(g:startify_skiplist, map(['~/.vimrc'], 'expand(v:val)'))
+if exists('g:startify_bookmarks')
+  let exclude = map(copy(g:startify_bookmarks), 'expand(v:val)')
+  if exists('g:startify_skiplist')
+    call extend(g:startify_skiplist, exclude)
+  else
+    let g:startify_skiplist = exclude
+  endif
 endif
 
 augroup startify
