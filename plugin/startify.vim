@@ -12,6 +12,10 @@ let g:loaded_startify = 1
 let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
+if exists('g:startify_bookmarks') && exists('g:startify_skiplist')
+  call extend(g:startify_skiplist, map(['~/.vimrc'], 'expand(v:val)'))
+endif
+
 augroup startify
   autocmd!
   autocmd VimEnter *
