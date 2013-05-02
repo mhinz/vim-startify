@@ -36,8 +36,7 @@ function! startify#delete_session(...) abort
   if !isdirectory(g:startify_session_dir)
     echo 'The session directory does not exist: '. g:startify_session_dir
     return
-  endif
-  if strlen(startify#get_session_names_as_string('')) == 0
+  elseif empty(startify#get_session_names_as_string(''))
     echo 'There are no sessions...'
     return
   endif
@@ -91,6 +90,9 @@ endfunction
 function! startify#load_session(...) abort
   if !isdirectory(g:startify_session_dir)
     echo 'The session directory does not exist: '. g:startify_session_dir
+    return
+  elseif empty(startify#get_session_names_as_string(''))
+    echo 'There are no sessions...'
     return
   endif
   let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
