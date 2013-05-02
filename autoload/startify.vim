@@ -37,6 +37,10 @@ function! startify#delete_session(...) abort
     echo 'The session directory does not exist: '. g:startify_session_dir
     return
   endif
+  if empty(startify#get_session_names_as_string(''))
+    echo 'There are no sessions...'
+    return
+  endif
   let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
         \ : input('Delete this session: ', '', 'custom,startify#get_session_names_as_string'))
