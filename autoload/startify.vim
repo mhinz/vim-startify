@@ -8,22 +8,27 @@ if exists('g:autoloaded_startify') || &cp
 endif
 let g:autoloaded_startify = 1
 
+" Function: startify#get_session_names {{{1
 function! startify#get_session_names(lead, ...) abort
   return map(split(globpath(g:startify_session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
 endfunction
 
+" Function: startify#get_session_names_as_string {{{1
 function! startify#get_session_names_as_string(lead, ...) abort
   return join(map(split(globpath(g:startify_session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")'), "\n")
 endfunction
 
+" Function: startify#escape {{{1
 function! startify#escape(path) abort
   return !exists('+shellslash') || &shellslash ? fnameescape(a:path) : escape(a:path, '\')
 endfunction
 
+" Function: startify#get_separator {{{1
 function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
+" Function: startify#is_in_skiplist {{{1
 function! startify#is_in_skiplist(arg) abort
   for regexp in g:startify_skiplist
     if (a:arg =~# regexp)
@@ -32,6 +37,7 @@ function! startify#is_in_skiplist(arg) abort
   endfor
 endfunction
 
+" Function: startify#delete_session {{{1
 function! startify#delete_session(...) abort
   if !isdirectory(g:startify_session_dir)
     echo 'The session directory does not exist: '. g:startify_session_dir
@@ -56,6 +62,7 @@ function! startify#delete_session(...) abort
   endif
 endfunction
 
+" Function: startify#save_session {{{1
 function! startify#save_session(...) abort
   if !isdirectory(g:startify_session_dir)
     if exists('*mkdir')
@@ -87,6 +94,7 @@ function! startify#save_session(...) abort
   endif
 endfunction
 
+" Function: startify#load_session {{{1
 function! startify#load_session(...) abort
   if !isdirectory(g:startify_session_dir)
     echo 'The session directory does not exist: '. g:startify_session_dir
