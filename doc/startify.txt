@@ -62,6 +62,7 @@ Startify basically provides two things:
 
       :SLoad    load a session
       :SSave    save a session
+      :SDelete  delete a session
 
 The default settings are pretty sane, so it should work without any
 configuration.
@@ -189,6 +190,7 @@ Don't show <empty buffer> and <quit>.
 
     :SLoad    load a session
     :SSave    save a session
+    :SDelete  delete a session
 
 These take either 0 or 1 argument. If you don't specify the session name as an
 argument, they will just ask for it.

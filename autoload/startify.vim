@@ -32,6 +32,27 @@ function! startify#is_in_skiplist(arg) abort
   endfor
 endfunction
 
+function! startify#delete_session(...) abort
+  if !isdirectory(g:startify_session_dir)
+    echo 'The session directory does not exist: '. g:startify_session_dir
+    return
+  endif
+  let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
+        \ ? a:1
+        \ : input('Delete this session: ', '', 'custom,startify#get_session_names_as_string'))
+        \ | redraw
+  echo 'Really delete '. spath .'? [y/n]' | redraw
+  if (nr2char(getchar()) == 'y')
+    if delete(spath) == 0
+      echo 'Deleted session '. spath .'!'
+    else
+      echo 'Deletion failed!'
+    endif
+  else
+    echo 'Deletion aborted!'
+  endif
+endfunction
+
 function! startify#save_session(...) abort
   if !isdirectory(g:startify_session_dir)
     if exists('*mkdir')
