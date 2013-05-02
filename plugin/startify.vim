@@ -108,11 +108,14 @@ function! s:insane_in_the_membrane() abort
 
   setlocal nomodifiable nomodified
 
-  nnoremap <buffer><silent> e :enew<cr>
-  nnoremap <buffer><silent> i :enew <bar> startinsert<cr>
-  nnoremap <buffer> <cr> :normal <c-r><c-w><cr>
-  nnoremap <buffer> <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
-  nnoremap <buffer> q
+  nnoremap <buffer><silent> e       :enew<cr>
+  nnoremap <buffer><silent> i       :enew <bar> startinsert<cr>
+  nnoremap <buffer>         <space> :call <SID>set_mark('B')<cr>
+  nnoremap <buffer>         s       :call <SID>set_mark('S')<cr>
+  nnoremap <buffer>         v       :call <SID>set_mark('V')<cr>
+  nnoremap <buffer>         <cr>    :call <SID>open_buffers(expand('<cword>'))<cr>
+  nnoremap <buffer>         <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
+  nnoremap <buffer>         q
         \ :if (len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) > 1) <bar>
         \   bd <bar>
         \ else <bar>
@@ -124,10 +127,60 @@ function! s:insane_in_the_membrane() abort
   endif
 
   autocmd! startify *
-  autocmd startify CursorMoved <buffer> call s:set_cursor()
-  autocmd startify BufWipeout <buffer> autocmd! startify *
+  autocmd  startify CursorMoved <buffer> call s:set_cursor()
+  autocmd  startify BufLeave    <buffer> try | wincmd c | catch | autocmd! startify *
 
   call cursor(special ? 4 : 2, 5)
+endfunction
+
+" Function: s:open_buffers {{{1
+function! s:open_buffers(cword) abort
+  if exists('s:marked') && !empty(s:marked)
+    for i in range(len(s:marked))
+      for val in values(s:marked)
+        if val[0] == i
+          if val[3] == 'S'
+            execute 'split '. val[2]
+          elseif val[3] == 'V'
+            execute 'vsplit '. val[2]
+          else
+            execute 'edit '. val[2]
+          endif
+          continue
+        endif
+      endfor
+    endfor
+  else
+    execute 'normal '. a:cword
+  endif
+endfunction
+
+" Function: s:set_mark {{{1
+"
+" Markers are saved in the s:marked dict using the follow format:
+"   - s:marked[0]: ID (for sorting)
+"   - s:marked[1]: what the brackets contained before
+"   - s:marked[2]: the actual path
+"   - s:marked[3]: type (buffer, split, vsplit)
+"
+function! s:set_mark(type) abort
+  if !exists('s:marked')
+    let s:marked  = {}
+    let s:nmarked = 0
+  endif
+  " matches[1]: content between brackets
+  " matches[2]: path
+  let matches = matchlist(getline('.'), '\v\[(.*)\]\s+(.*)')
+  setlocal modifiable
+  if matches[1] =~ 'B\|S\|V'
+    let s:nmarked -= 1
+    execute 'normal! ci]'. remove(s:marked, line('.'))[1]
+  else
+    let s:marked[line('.')] = [s:nmarked, matches[1], matches[2], a:type]
+    let s:nmarked += 1
+    execute 'normal! ci]'. repeat(a:type, len(matches[1]))
+  endif
+  setlocal nomodifiable nomodified
 endfunction
 
 " Function: s:get_index_as_string {{{1

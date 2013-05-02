@@ -9,16 +9,16 @@ endif
 
 let s:sep = startify#get_separator()
 
-syntax  match  StartifySpecial  /\V<empty buffer>\|<quit>/
-syntax  match  StartifyBracket  /\[\|\]/
-syntax  match  StartifyNumber   /\v\[.+\]/hs=s+1,he=e-1 contains=StartifyBracket
-syntax  match  StartifyFile     /.*/ contains=StartifyBracket,StartifyNumber,StartifyPath,StartifySpecial
+syntax match StartifySpecial /\V<empty buffer>\|<quit>/
+syntax match StartifyBracket /\[\|\]/
+syntax match StartifyNumber  /\[[^BSV]\+\]/hs=s+1,he=e-1 contains=StartifyBracket
+syntax match StartifyFile    /.*/ contains=StartifyBracket,StartifyNumber,StartifyPath,StartifySpecial
 
 execute 'syntax match StartifySlash /\'. s:sep .'/'
 execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash'
 
-highlight  link  StartifyBracket  Delimiter
-highlight  link  StartifyNumber   Number
+highlight link StartifyBracket Delimiter
+highlight link StartifyNumber  Number
 
 let b:current_syntax = 'startify'
 
