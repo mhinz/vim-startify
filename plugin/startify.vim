@@ -46,9 +46,6 @@ function! s:insane_in_the_membrane() abort
   if (v:version >= 703)
     setlocal norelativenumber
   endif
-  if get(g:, 'startify_unlisted_buffer', 1)
-    setlocal nobuflisted
-  endif
   setfiletype startify
 
   let special = get(g:, 'startify_enable_special', 1)
