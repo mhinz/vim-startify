@@ -169,7 +169,7 @@ function! s:set_mark(type) abort
   " matches[1]: content between brackets
   " matches[2]: path
   let matches = matchlist(getline('.'), '\v\[(.*)\]\s+(.*)')
-  if matches[2] =~ '\V<empty buffer>\|<quit>'
+  if matches[2] =~ '\V<empty buffer>\|<quit>' || matches[2] =~ '^\w\+$'
     return
   endif
   setlocal modifiable
