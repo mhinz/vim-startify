@@ -23,7 +23,7 @@ _1)_ If you start Vim without giving any filenames to it (or pipe stuff to it so
    jumps into insert mode, 'q' quits.
 
 _2)_ It eases handling of loading and saving sessions by only working with a
-   certain directory. Two commands are used for convenience:
+   certain directory. These commands are used for convenience:
 
       :SLoad    load a session
       :SSave    save a session

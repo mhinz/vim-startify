@@ -58,7 +58,7 @@ Startify basically provides two things:
    jumps into insert mode, 'q' quits.
 
 2) It eases handling of loading and saving sessions by only working with a
-   certain directory. Two commands are used for convenience:
+   certain directory. These commands are used for convenience:
 
       :SLoad    load a session
       :SSave    save a session
