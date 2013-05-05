@@ -126,7 +126,7 @@ function! s:insane_in_the_membrane() abort
 
   autocmd! startify *
   autocmd  startify CursorMoved <buffer> call s:set_cursor()
-  autocmd  startify BufLeave    <buffer> try | wincmd c | catch /E444/ | endtry | autocmd! startify *
+  autocmd  startify BufLeave    <buffer> autocmd! startify *
 
   call cursor(special ? 4 : 2, 5)
 endfunction
