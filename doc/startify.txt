@@ -207,7 +207,7 @@ Open the startify buffer.
 ==============================================================================
 5. Colors                                                      *startify-colors*
 
-You can overwrite the highlight groups used by startify. The plugins defines
+You can overwrite the highlight groups used by startify. The plugin defines
 these groups:
 
     StartifyBracket         [,]
