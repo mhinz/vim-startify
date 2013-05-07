@@ -85,7 +85,7 @@ function! s:insane_in_the_membrane() abort
       let idx = (i + cnt)
       let index = s:get_index_as_string(idx)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
-      execute 'nnoremap <buffer> '. index .' :source '. startify#escape(sfiles[i]) .'<cr>'
+      execute 'nnoremap <buffer> '. index .' :bd <bar> tabnew +source\ '. startify#escape(sfiles[i]) .' <bar> if (line2byte("$") == -1) <bar> close <bar> endif<cr>'
     endfor
     let cnt = idx
   endif
@@ -108,9 +108,9 @@ function! s:insane_in_the_membrane() abort
 
   nnoremap <buffer><silent> e       :enew<cr>
   nnoremap <buffer><silent> i       :enew <bar> startinsert<cr>
-  nnoremap <buffer>         <space> :call <SID>set_mark('B')<cr>
-  nnoremap <buffer>         s       :call <SID>set_mark('S')<cr>
-  nnoremap <buffer>         v       :call <SID>set_mark('V')<cr>
+  nnoremap <buffer><silent> <space> :call <SID>set_mark('B')<cr>
+  nnoremap <buffer><silent> s       :call <SID>set_mark('S')<cr>
+  nnoremap <buffer><silent> v       :call <SID>set_mark('V')<cr>
   nnoremap <buffer>         <cr>    :call <SID>open_buffers(expand('<cword>'))<cr>
   nnoremap <buffer>         <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer>         q
