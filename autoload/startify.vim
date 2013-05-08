@@ -37,6 +37,16 @@ function! startify#is_in_skiplist(arg) abort
   endfor
 endfunction
 
+" Function: startify#is_bookmark {{{1
+function! startify#is_bookmark(arg) abort
+  "for foo in filter(map(copy(g:startify_bookmarks), 'resolve(fnamemodify(v:val, ":p"))'), '!isdirectory(v:val)')
+  for foo in map(filter(copy(g:startify_bookmarks), '!isdirectory(v:val)'), 'resolve(fnamemodify(v:val, ":p"))')
+    if foo == a:arg
+      return 1
+    endif
+  endfor
+endfunction
+
 " Function: startify#delete_session {{{1
 function! startify#delete_session(...) abort
   if !isdirectory(g:startify_session_dir)

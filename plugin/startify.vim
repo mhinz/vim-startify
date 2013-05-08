@@ -12,15 +12,6 @@ let g:loaded_startify = 1
 let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
-if exists('g:startify_bookmarks')
-  let exclude = map(copy(g:startify_bookmarks), 'expand(v:val)')
-  if exists('g:startify_skiplist')
-    call extend(g:startify_skiplist, exclude)
-  else
-    let g:startify_skiplist = exclude
-  endif
-endif
-
 augroup startify
   autocmd!
   autocmd VimEnter *
@@ -58,15 +49,21 @@ function! s:insane_in_the_membrane() abort
   endif
 
   if get(g:, 'startify_show_files', 1) && !empty(v:oldfiles)
+    let entries = {}
     let numfiles = get(g:, 'startify_show_files_number', 10)
     if special
       call append('$', '')
     endif
     for fname in v:oldfiles
-      let expfname = expand(fname)
-      if !filereadable(expfname) || (exists('g:startify_skiplist') && startify#is_in_skiplist(expfname))
+      let expfname = resolve(fnamemodify(fname, ':p'))
+      " filter duplicates, bookmarks and entries from the skiplist
+      if has_key(entries, expfname) ||
+            \ !filereadable(expfname) ||
+            \ (exists('g:startify_skiplist')  && startify#is_in_skiplist(expfname)) ||
+            \ (exists('g:startify_bookmarks') && startify#is_bookmark(expfname))
         continue
       endif
+      let entries[expfname] = 1
       let index = s:get_index_as_string(cnt)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
       execute 'nnoremap <buffer> '. index .' :edit '. startify#escape(fname) .' <bar> lcd %:h<cr>'
