@@ -11,12 +11,16 @@ mind:
       merging into master)
     - it's always a good idea to have a look at 'git log' to get an idea how to
       format its own commits
+    - if you have questions about a certain patch or feature requests, just open
+      a Github issue
 
 Examples
 --------
 
+```
 Bad:  "fixed loop to start from 0 instead of 1"
 Good: "Avoid off-by-one issue in skiplist loop"
 
 Bad:  "fixed typo"
 Good: "Docs: typo"
+```
