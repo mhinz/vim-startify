@@ -20,9 +20,10 @@ CONTENTS                                                     *startify-contents*
     2.Usage..........................................|startify-usage|
     3.Options........................................|startify-options|
     4.Commands.......................................|startify-commands|
-    5.FAQ............................................|startify-faq|
-    6.Author.........................................|startify-author|
-    7.License........................................|startify-license|
+    5.Colors.........................................|startify-colors|
+    6.FAQ............................................|startify-faq|
+    7.Author.........................................|startify-author|
+    8.License........................................|startify-license|
 
 
 ==============================================================================
@@ -45,18 +46,23 @@ Startify basically provides two things:
    should be available in the start screen.
 
    You can either navigate to a certain menu entry and hit enter or you just
-   key in whatever is written between the square brackets on that line.
+   key in whatever is written between the square brackets on that line. You
+   can even double-click anywhere on the line now.
 
    Per default the startify buffer gets closed automatically, if an entry was
    selected.
 
    You can reopen the screen via :Startify.
 
+   Moreover, 'e' creates an empty buffer, 'i' creates an empty buffers and
+   jumps into insert mode, 'q' quits.
+
 2) It eases handling of loading and saving sessions by only working with a
-   certain directory. Two commands are used for convenience:
+   certain directory. These commands are used for convenience:
 
       :SLoad    load a session
       :SSave    save a session
+      :SDelete  delete a session
 
 The default settings are pretty sane, so it should work without any
 configuration.
@@ -141,12 +147,42 @@ Example: let g:startify_skiplist_server = [ 'GVIM' ]
 
 ============-
 
-    let g:startify_unlisted_buffer = 1
+    let g:startify_custom_indices = []
 
-Some bad plugins like minibufexpl break, when there is no listed buffer.
-People can set this variable to 0, to work around that. As a consequence the
-start screen buffer won't be removed, even after triggering an action from the
-start screen.
+Use any list of strings as indices instead of increasing numbers. If there are
+more startify entries than actual items in the custom list, the remaining
+entries will be filled using the default numbering scheme starting from 0.
+
+Thus you can create your own indexing scheme that fits your keyboard layout.
+You don't want to leave the home row, do you?!
+
+Example: let g:startify_custom_indices = ['a','s','d','f']
+
+This would result in:
+
+    [a]  /last/recently/used/file1
+    [s]  /last/recently/used/file2
+    [d]  /last/recently/used/file3
+    [f]  /last/recently/used/file4
+    [0]  /last/recently/used/file5
+    [1]  /last/recently/used/file6
+    etc.
+
+NOTE: There is no sanitizing going on, so you should know what you're doing!
+
+Best practices:
+
+- do not use 'e', 'i' or 'q' (they will be overwritten anyway)
+- do not use duplicates (previous mappings will be overwritten)
+- do not uses empty strings (creates unreachable entries)
+- (you might want to keep 'j' and 'k' for navigation)
+
+
+============-
+
+    let g:startify_enable_special = 1
+
+Don't show <empty buffer> and <quit>.
 
 
 ==============================================================================
@@ -154,6 +190,7 @@ start screen.
 
     :SLoad    load a session
     :SSave    save a session
+    :SDelete  delete a session
 
 These take either 0 or 1 argument. If you don't specify the session name as an
 argument, they will just ask for it.
@@ -168,7 +205,28 @@ Open the startify buffer.
 
 
 ==============================================================================
-5. FAQ (Or: Typical rants)                                        *startify-faq*
+5. Colors                                                      *startify-colors*
+
+You can overwrite the highlight groups used by startify. The plugin defines
+these groups:
+
+    StartifyBracket         [,]
+    StartifyFile            the actual file
+    StartifyNumber          the numbers between []
+    StartifyPath            the path to a file
+    StartifySlash           slashes in paths
+    StartifySpecial         <empty buffer>,<quit>
+
+Example: (my terminal emulator supports 256 colors)
+
+    hi StartifyBracket ctermfg=240
+    hi StartifyNumber  ctermfg=215
+    hi StartifyPath    ctermfg=245
+    hi StartifySlash   ctermfg=240
+
+
+==============================================================================
+6. FAQ (Or: Typical rants)                                        *startify-faq*
 
 "I don't want the start screen to use cursorline!"
 --------------------------------------------------
@@ -195,7 +253,7 @@ Some people swear it works for them with these settings:
 
 
 ==============================================================================
-6. About the author                                            *startify-author*
+7. About the author                                            *startify-author*
 
 My nick on Freenode IRC is mhi^.
 
@@ -208,7 +266,7 @@ Thank you for flying mhi airlines. Get the Vim on!
 
 
 ==============================================================================
-7. Licence                                                    *startify-license*
+8. License                                                    *startify-license*
 
 Copyright © Marco Hinz. Distributed under the same terms as Vim itself.
 

@@ -11,21 +11,36 @@ _1)_ If you start Vim without giving any filenames to it (or pipe stuff to it so
    should be available in the start screen.
 
    You can either navigate to a certain menu entry or you just key in whatever
-   is written between the square brackets on that line.
+   is written between the square brackets on that line. You can even
+   double-click anywhere on the line now.
+
+   Per default the startify buffer gets closed automatically, if an entry was
+   selected.
+
+   You can reopen the screen via :Startify.
+
+   Moreover, 'e' creates an empty buffer, 'i' creates an empty buffers and
+   jumps into insert mode, 'q' quits.
 
 _2)_ It eases handling of loading and saving sessions by only working with a
-   certain directory. Two commands are used for convenience:
+   certain directory. These commands are used for convenience:
 
       :SLoad    load a session
       :SSave    save a session
+      :SDelete  delete a session
 
-NOTE: Both commands can also take session names directly as an argument. You can
+_NOTE_: Both commands can also take session names directly as an argument. You can
 also make use of completion via `<c-u>` and `<tab>`.
 
 The default settings are pretty sane, so it should work without any
 configuration.
 
 ![Example:startify in action](https://github.com/mhinz/vim-startify/raw/master/startify.png)
+
+_NOTE_: The colors shown in the screenshot are not the default. If you want to
+tune the default colors, you can overwrite the highlight groups used by startify
+in your vimrc. Have a look at `:h startify-colors`, after installing the plugin.
+Moreover, g:startify_enable_special is set to 0.
 
 Feedback, please!
 -----------------
