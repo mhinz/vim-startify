@@ -92,6 +92,7 @@ function! startify#save_session(...) abort
         \ ? a:1
         \ : input('Save under this session name: ', '', 'custom,startify#get_session_names_as_string'))
         \ | redraw
+  let spath = startify#escape(spath)
   if !filereadable(spath)
     execute 'mksession '. spath | echo 'Session saved under: '. spath
     return
@@ -118,7 +119,7 @@ function! startify#load_session(...) abort
         \ : input('Load this session: ', '', 'custom,startify#get_session_names_as_string'))
         \ | redraw
   if filereadable(spath)
-    execute 'source '. spath
+    execute 'source '. startify#escape(spath)
   else
     echo 'No such file: '. spath
   endif
