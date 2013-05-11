@@ -8,6 +8,9 @@ if exists('g:autoloaded_startify') || &cp
 endif
 let g:autoloaded_startify = 1
 
+" Last loaded/saved session name:
+let g:current_startify_session = ''
+
 " Function: startify#get_session_names {{{1
 function! startify#get_session_names(lead, ...) abort
   return map(split(globpath(g:startify_session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
@@ -90,15 +93,17 @@ function! startify#save_session(...) abort
   endif
   let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
-        \ : input('Save under this session name: ', '', 'custom,startify#get_session_names_as_string'))
+        \ : input('Save under this session name: ', g:current_startify_session, 'custom,startify#get_session_names_as_string'))
         \ | redraw
   let spath = startify#escape(spath)
   if !filereadable(spath)
+    let g:current_startify_session = fnamemodify(spath, ':t:r')
     execute 'mksession '. spath | echo 'Session saved under: '. spath
     return
   endif
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
   if nr2char(getchar()) == 'y'
+    let g:current_startify_session = fnamemodify(spath, ':t:r')
     execute 'mksession! '. spath | echo 'Session saved under: '. spath
   else
     echo 'Did NOT save the session!'
@@ -119,6 +124,7 @@ function! startify#load_session(...) abort
         \ : input('Load this session: ', '', 'custom,startify#get_session_names_as_string'))
         \ | redraw
   if filereadable(spath)
+    let g:current_startify_session = fnamemodify(spath, ':t:r')
     execute 'source '. startify#escape(spath)
   else
     echo 'No such file: '. spath
