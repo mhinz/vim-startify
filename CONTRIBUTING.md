@@ -7,10 +7,11 @@ mind:
     - the short commit message shouldn't be longer than 50 characters
     - the short commit message should start with an uppercase character
     - use the imperative for the short commit message
+    - don't finish the short commit message with a '.'
     - don't use github-specific syntax to close an issue (I'll do that, when
       merging into master)
     - it's always a good idea to have a look at 'git log' to get an idea how to
-      format its own commits
+      format one's own commits
     - if you have questions about a certain patch or feature requests, just open
       a Github issue
 
