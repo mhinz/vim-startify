@@ -58,7 +58,7 @@ function! startify#delete_session(...) abort
   endif
   let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
-        \ : input('Delete this session: ', '', 'custom,startify#get_session_names_as_string'))
+        \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#get_session_names_as_string'))
         \ | redraw
   echo 'Really delete '. spath .'? [y/n]' | redraw
   if (nr2char(getchar()) == 'y')
@@ -90,7 +90,7 @@ function! startify#save_session(...) abort
   endif
   let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
-        \ : input('Save under this session name: ', '', 'custom,startify#get_session_names_as_string'))
+        \ : input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#get_session_names_as_string'))
         \ | redraw
   let spath = startify#escape(spath)
   if !filereadable(spath)
@@ -116,7 +116,7 @@ function! startify#load_session(...) abort
   endif
   let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
-        \ : input('Load this session: ', '', 'custom,startify#get_session_names_as_string'))
+        \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#get_session_names_as_string'))
         \ | redraw
   if filereadable(spath)
     execute 'source '. startify#escape(spath)
