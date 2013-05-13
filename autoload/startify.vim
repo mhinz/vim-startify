@@ -114,6 +114,11 @@ function! startify#insane_in_the_membrane() abort
   call cursor(special ? 4 : 2, 5)
 endfunction
 
+" Function: startify#get_separator {{{1
+function! startify#get_separator() abort
+  return !exists('+shellslash') || &shellslash ? '/' : '\'
+endfunction
+
 " Function: s:get_session_names {{{1
 function! s:get_session_names(lead, ...) abort
   return map(split(globpath(s:session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
@@ -127,11 +132,6 @@ endfunction
 " Function: s:escape {{{1
 function! s:escape(path) abort
   return !exists('+shellslash') || &shellslash ? fnameescape(a:path) : escape(a:path, '\')
-endfunction
-
-" Function: startify#get_separator {{{1
-function! startify#get_separator() abort
-  return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
 " Function: s:is_in_skiplist {{{1
@@ -151,28 +151,6 @@ function! s:is_bookmark(arg) abort
       return 1
     endif
   endfor
-endfunction
-
-" Function: s:open_buffers {{{1
-function! s:open_buffers(cword) abort
-  if exists('s:marked') && !empty(s:marked)
-    for i in range(len(s:marked))
-      for val in values(s:marked)
-        if val[0] == i
-          if val[3] == 'S'
-            execute 'split '. val[2]
-          elseif val[3] == 'V'
-            execute 'vsplit '. val[2]
-          else
-            execute 'edit '. val[2]
-          endif
-          continue
-        endif
-      endfor
-    endfor
-  else
-    execute 'normal '. a:cword
-  endif
 endfunction
 
 " Function: s:delete_session {{{1
@@ -250,6 +228,28 @@ function! s:load_session(...) abort
     execute 'source '. s:escape(spath)
   else
     echo 'No such file: '. spath
+  endif
+endfunction
+
+" Function: s:open_buffers {{{1
+function! s:open_buffers(cword) abort
+  if exists('s:marked') && !empty(s:marked)
+    for i in range(len(s:marked))
+      for val in values(s:marked)
+        if val[0] == i
+          if val[3] == 'S'
+            execute 'split '. val[2]
+          elseif val[3] == 'V'
+            execute 'vsplit '. val[2]
+          else
+            execute 'edit '. val[2]
+          endif
+          continue
+        endif
+      endfor
+    endfor
+  else
+    execute 'normal '. a:cword
   endif
 endfunction
 
