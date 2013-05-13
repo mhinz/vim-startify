@@ -8,9 +8,6 @@ if exists('g:loaded_startify') || &cp
 endif
 let g:loaded_startify = 1
 
-let g:startify_session_dir = resolve(expand(get(g:, 'startify_session_dir',
-      \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
-
 augroup startify
   autocmd!
   autocmd VimEnter *

@@ -8,6 +8,9 @@ if exists('g:autoloaded_startify') || &cp
 endif
 let g:autoloaded_startify = 1
 
+let s:session_dir = resolve(expand(get(g:, 'startify_session_dir',
+      \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
+
 " Function: startify#insane_in_the_membrane {{{1
 function! startify#insane_in_the_membrane() abort
   if !empty(v:servername) && exists('g:startify_skiplist_server')
@@ -57,7 +60,7 @@ function! startify#insane_in_the_membrane() abort
     endfor
   endif
 
-  let sfiles = split(globpath(g:startify_session_dir, '*'), '\n')
+  let sfiles = split(globpath(s:session_dir, '*'), '\n')
 
   if get(g:, 'startify_show_sessions', 1) && !empty(sfiles)
     call append('$', '')
@@ -113,12 +116,12 @@ endfunction
 
 " Function: startify#get_session_names {{{1
 function! startify#get_session_names(lead, ...) abort
-  return map(split(globpath(g:startify_session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
+  return map(split(globpath(s:session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
 endfunction
 
 " Function: startify#get_session_names_as_string {{{1
 function! startify#get_session_names_as_string(lead, ...) abort
-  return join(map(split(globpath(g:startify_session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")'), "\n")
+  return join(map(split(globpath(s:session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")'), "\n")
 endfunction
 
 " Function: startify#escape {{{1
@@ -174,14 +177,14 @@ endfunction
 
 " Function: startify#delete_session {{{1
 function! startify#delete_session(...) abort
-  if !isdirectory(g:startify_session_dir)
-    echo 'The session directory does not exist: '. g:startify_session_dir
+  if !isdirectory(s:session_dir)
+    echo 'The session directory does not exist: '. s:session_dir
     return
   elseif empty(startify#get_session_names_as_string(''))
     echo 'There are no sessions...'
     return
   endif
-  let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
+  let spath = s:session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
         \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#get_session_names_as_string'))
         \ | redraw
@@ -199,21 +202,21 @@ endfunction
 
 " Function: startify#save_session {{{1
 function! startify#save_session(...) abort
-  if !isdirectory(g:startify_session_dir)
+  if !isdirectory(s:session_dir)
     if exists('*mkdir')
-      echo 'The session directory does not exist: '. g:startify_session_dir .'. Create it?  [y/n]' | redraw
+      echo 'The session directory does not exist: '. s:session_dir .'. Create it?  [y/n]' | redraw
       if (nr2char(getchar()) == 'y')
-        call mkdir(g:startify_session_dir, 'p')
+        call mkdir(s:session_dir, 'p')
       else
         echo
         return
       endif
     else
-      echo 'The session directory does not exist: '. g:startify_session_dir
+      echo 'The session directory does not exist: '. s:session_dir
       return
     endif
   endif
-  let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
+  let spath = s:session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
         \ : input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#get_session_names_as_string'))
         \ | redraw
@@ -232,14 +235,14 @@ endfunction
 
 " Function: startify#load_session {{{1
 function! startify#load_session(...) abort
-  if !isdirectory(g:startify_session_dir)
-    echo 'The session directory does not exist: '. g:startify_session_dir
+  if !isdirectory(s:session_dir)
+    echo 'The session directory does not exist: '. s:session_dir
     return
   elseif empty(startify#get_session_names_as_string(''))
     echo 'There are no sessions...'
     return
   endif
-  let spath = g:startify_session_dir . startify#get_separator() . (exists('a:1')
+  let spath = s:session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
         \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#get_session_names_as_string'))
         \ | redraw
