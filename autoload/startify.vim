@@ -131,7 +131,8 @@ endfunction
 
 " Function: s:escape {{{1
 function! s:escape(path) abort
-  return !exists('+shellslash') || &shellslash ? fnameescape(a:path) : escape(a:path, '\')
+  let path = join(split(a:path, ' '), '\ ') " being nice and courteous of people who have folders with spaces
+  return !exists('+shellslash') || &shellslash ? fnameescape(l:path) : escape(a:path, '\ ')
 endfunction
 
 " Function: s:is_in_skiplist {{{1
@@ -179,7 +180,7 @@ function! s:delete_session(...) abort
 endfunction
 
 " Function: s:save_session {{{1
-function! s:save_session(...) abort
+function! startify#save_session(...) abort
   if !isdirectory(s:session_dir)
     if exists('*mkdir')
       echo 'The session directory does not exist: '. s:session_dir .'. Create it?  [y/n]' | redraw
@@ -212,7 +213,7 @@ function! s:save_session(...) abort
 endfunction
 
 " Function: s:load_session {{{1
-function! s:load_session(...) abort
+function! startify#load_session(...) abort
   if !isdirectory(s:session_dir)
     echo 'The session directory does not exist: '. s:session_dir
     return
