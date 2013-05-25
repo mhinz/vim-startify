@@ -155,13 +155,14 @@ function! startify#session_save(...) abort
       return
     endif
   endif
+  let spath = s:session_dir . startify#get_separator()
   if exists('a:1')
-    let spath = s:session_dir . startify#get_separator() . a:1
+    let spath .= a:1
   else
-    let i = input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
+    let spath .= input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
     redraw
-    if empty(i)
-      echo 'You gave an invalid name!'
+    if empty(spath)
+      echo 'You gave an empty name!'
       return
     endif
   endif
