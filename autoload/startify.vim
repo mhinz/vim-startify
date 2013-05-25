@@ -68,7 +68,7 @@ function! startify#insane_in_the_membrane() abort
       let idx = (i + cnt)
       let index = s:get_index_as_string(idx)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
-      execute 'nnoremap <buffer> '. index .' :bd <bar> tabnew +source\ '. s:escape(sfiles[i]) .' <bar> if (line2byte("$") == -1) <bar> close <bar> endif<cr>'
+      execute 'nnoremap <buffer> '. index .' :bd <bar> tabnew +source\ '. s:escape(s:fix_spaces(sfiles[i])) .' <bar> if (line2byte("$") == -1) <bar> close <bar> endif<cr>'
     endfor
     let cnt = idx
   endif
@@ -131,8 +131,11 @@ endfunction
 
 " Function: s:escape {{{1
 function! s:escape(path) abort
-  let path = join(split(a:path, ' '), '\ ') " being nice and courteous of people who have folders with spaces
-  return !exists('+shellslash') || &shellslash ? fnameescape(l:path) : escape(a:path, '\ ')
+  return !exists('+shellslash') || &shellslash ? fnameescape(a:path) : escape(a:path, '\ ')
+endfunction
+
+function! s:fix_spaces(path) abort
+  return join(split(a:path, ' '), '\ ') " being nice and courteous of people who have folders with spaces 
 endfunction
 
 " Function: s:is_in_skiplist {{{1
