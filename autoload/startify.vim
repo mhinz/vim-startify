@@ -68,7 +68,7 @@ function! startify#insane_in_the_membrane() abort
       let idx = (i + cnt)
       let index = s:get_index_as_string(idx)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
-      execute 'nnoremap <buffer> '. index .' :bd <bar> tabnew +source\ '. s:escape(sfiles[i]) .' <bar> if (line2byte("$") == -1) <bar> close <bar> endif<cr>'
+      execute 'nnoremap <buffer> '. index .' :source '. s:escape(sfiles[i]) .'<cr>'
     endfor
     let cnt = idx
   endif
