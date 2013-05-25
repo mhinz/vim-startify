@@ -119,8 +119,8 @@ function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
-" Function: s:get_session_names {{{1
-function! s:get_session_names(lead, ...) abort
+" Function: startify#get_session_names {{{1
+function! startify#get_session_names(lead, ...) abort
   return map(split(globpath(s:session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
 endfunction
 
@@ -153,8 +153,8 @@ function! s:is_bookmark(arg) abort
   endfor
 endfunction
 
-" Function: s:delete_session {{{1
-function! s:delete_session(...) abort
+" Function: startify#delete_session {{{1
+function! startify#delete_session(...) abort
   if !isdirectory(s:session_dir)
     echo 'The session directory does not exist: '. s:session_dir
     return
@@ -178,8 +178,8 @@ function! s:delete_session(...) abort
   endif
 endfunction
 
-" Function: s:save_session {{{1
-function! s:save_session(...) abort
+" Function: startify#save_session {{{1
+function! startify#save_session(...) abort
   if !isdirectory(s:session_dir)
     if exists('*mkdir')
       echo 'The session directory does not exist: '. s:session_dir .'. Create it?  [y/n]' | redraw
@@ -211,8 +211,8 @@ function! s:save_session(...) abort
   endif
 endfunction
 
-" Function: s:load_session {{{1
-function! s:load_session(...) abort
+" Function: startify#load_session {{{1
+function! startify#load_session(...) abort
   if !isdirectory(s:session_dir)
     echo 'The session directory does not exist: '. s:session_dir
     return
