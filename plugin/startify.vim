@@ -16,9 +16,9 @@ augroup startify
         \ endif
 augroup END
 
-command! -nargs=? -bar -complete=customlist,startify#get_session_names SSave   call startify#save_session(<f-args>)
-command! -nargs=? -bar -complete=customlist,startify#get_session_names SLoad   call startify#load_session(<f-args>)
-command! -nargs=? -bar -complete=customlist,startify#get_session_names SDelete call startify#delete_session(<f-args>)
+command! -nargs=? -bar -complete=customlist,startify#session_list SSave   call startify#session_save(<f-args>)
+command! -nargs=? -bar -complete=customlist,startify#session_list SLoad   call startify#session_load(<f-args>)
+command! -nargs=? -bar -complete=customlist,startify#session_list SDelete call startify#session_delete(<f-args>)
 command! -nargs=0 -bar Startify enew | call startify#insane_in_the_membrane()
 
 " vim: et sw=2 sts=2

@@ -114,19 +114,97 @@ function! startify#insane_in_the_membrane() abort
   call cursor(special ? 4 : 2, 5)
 endfunction
 
-" Function: startify#get_separator {{{1
-function! startify#get_separator() abort
-  return !exists('+shellslash') || &shellslash ? '/' : '\'
+" Function: startify#session_delete {{{1
+function! startify#session_delete(...) abort
+  if !isdirectory(s:session_dir)
+    echo 'The session directory does not exist: '. s:session_dir
+    return
+  elseif empty(startify#session_list_as_string(''))
+    echo 'There are no sessions...'
+    return
+  endif
+  let spath = s:session_dir . startify#get_separator() . (exists('a:1')
+        \ ? a:1
+        \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
+        \ | redraw
+  echo 'Really delete '. spath .'? [y/n]' | redraw
+  if (nr2char(getchar()) == 'y')
+    if delete(spath) == 0
+      echo 'Deleted session '. spath .'!'
+    else
+      echo 'Deletion failed!'
+    endif
+  else
+    echo 'Deletion aborted!'
+  endif
 endfunction
 
-" Function: startify#get_session_names {{{1
-function! startify#get_session_names(lead, ...) abort
+" Function: startify#session_save {{{1
+function! startify#session_save(...) abort
+  if !isdirectory(s:session_dir)
+    if exists('*mkdir')
+      echo 'The session directory does not exist: '. s:session_dir .'. Create it?  [y/n]' | redraw
+      if (nr2char(getchar()) == 'y')
+        call mkdir(s:session_dir, 'p')
+      else
+        echo
+        return
+      endif
+    else
+      echo 'The session directory does not exist: '. s:session_dir
+      return
+    endif
+  endif
+  let spath = s:session_dir . startify#get_separator() . (exists('a:1')
+        \ ? a:1
+        \ : input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
+        \ | redraw
+  let spath = s:escape(spath)
+  if !filereadable(spath)
+    execute 'mksession '. spath | echo 'Session saved under: '. spath
+    return
+  endif
+  echo 'Session already exists. Overwrite?  [y/n]' | redraw
+  if nr2char(getchar()) == 'y'
+    execute 'mksession! '. spath | echo 'Session saved under: '. spath
+  else
+    echo 'Did NOT save the session!'
+  endif
+endfunction
+
+" Function: startify#session_load {{{1
+function! startify#session_load(...) abort
+  if !isdirectory(s:session_dir)
+    echo 'The session directory does not exist: '. s:session_dir
+    return
+  elseif empty(startify#session_list_as_string(''))
+    echo 'There are no sessions...'
+    return
+  endif
+  let spath = s:session_dir . startify#get_separator() . (exists('a:1')
+        \ ? a:1
+        \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
+        \ | redraw
+  if filereadable(spath)
+    execute 'source '. s:escape(spath)
+  else
+    echo 'No such file: '. spath
+  endif
+endfunction
+
+" Function: startify#session_list {{{1
+function! startify#session_list(lead, ...) abort
   return map(split(globpath(s:session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
 endfunction
 
-" Function: s:get_session_names_as_string {{{1
-function! s:get_session_names_as_string(lead, ...) abort
+" Function: startify#session_list_as_string {{{1
+function! startify#session_list_as_string(lead, ...) abort
   return join(map(split(globpath(s:session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")'), "\n")
+endfunction
+
+" Function: startify#get_separator {{{1
+function! startify#get_separator() abort
+  return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
 " Function: s:escape {{{1
@@ -151,84 +229,6 @@ function! s:is_bookmark(arg) abort
       return 1
     endif
   endfor
-endfunction
-
-" Function: startify#delete_session {{{1
-function! startify#delete_session(...) abort
-  if !isdirectory(s:session_dir)
-    echo 'The session directory does not exist: '. s:session_dir
-    return
-  elseif empty(s:get_session_names_as_string(''))
-    echo 'There are no sessions...'
-    return
-  endif
-  let spath = s:session_dir . startify#get_separator() . (exists('a:1')
-        \ ? a:1
-        \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,s:get_session_names_as_string'))
-        \ | redraw
-  echo 'Really delete '. spath .'? [y/n]' | redraw
-  if (nr2char(getchar()) == 'y')
-    if delete(spath) == 0
-      echo 'Deleted session '. spath .'!'
-    else
-      echo 'Deletion failed!'
-    endif
-  else
-    echo 'Deletion aborted!'
-  endif
-endfunction
-
-" Function: startify#save_session {{{1
-function! startify#save_session(...) abort
-  if !isdirectory(s:session_dir)
-    if exists('*mkdir')
-      echo 'The session directory does not exist: '. s:session_dir .'. Create it?  [y/n]' | redraw
-      if (nr2char(getchar()) == 'y')
-        call mkdir(s:session_dir, 'p')
-      else
-        echo
-        return
-      endif
-    else
-      echo 'The session directory does not exist: '. s:session_dir
-      return
-    endif
-  endif
-  let spath = s:session_dir . startify#get_separator() . (exists('a:1')
-        \ ? a:1
-        \ : input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,s:get_session_names_as_string'))
-        \ | redraw
-  let spath = s:escape(spath)
-  if !filereadable(spath)
-    execute 'mksession '. spath | echo 'Session saved under: '. spath
-    return
-  endif
-  echo 'Session already exists. Overwrite?  [y/n]' | redraw
-  if nr2char(getchar()) == 'y'
-    execute 'mksession! '. spath | echo 'Session saved under: '. spath
-  else
-    echo 'Did NOT save the session!'
-  endif
-endfunction
-
-" Function: startify#load_session {{{1
-function! startify#load_session(...) abort
-  if !isdirectory(s:session_dir)
-    echo 'The session directory does not exist: '. s:session_dir
-    return
-  elseif empty(s:get_session_names_as_string(''))
-    echo 'There are no sessions...'
-    return
-  endif
-  let spath = s:session_dir . startify#get_separator() . (exists('a:1')
-        \ ? a:1
-        \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,s:get_session_names_as_string'))
-        \ | redraw
-  if filereadable(spath)
-    execute 'source '. s:escape(spath)
-  else
-    echo 'No such file: '. spath
-  endif
 endfunction
 
 " Function: s:open_buffers {{{1
