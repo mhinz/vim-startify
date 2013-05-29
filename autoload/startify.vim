@@ -155,18 +155,17 @@ function! startify#session_save(...) abort
       return
     endif
   endif
-  let spath = s:session_dir . startify#get_separator()
   if exists('a:1')
-    let spath .= a:1
+    let sname = a:1
   else
-    let spath .= input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
+    let sname = input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
     redraw
-    if empty(spath)
+    if empty(sname)
       echo 'You gave an empty name!'
       return
     endif
   endif
-  let spath = s:escape(spath)
+  let spath = s:escape(s:session_dir . startify#get_separator() . sname)
   if !filereadable(spath)
     execute 'mksession '. spath | echo 'Session saved under: '. spath
     return
