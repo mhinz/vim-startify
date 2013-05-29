@@ -29,8 +29,8 @@ _2)_ It eases handling of loading and saving sessions by only working with a
       :SSave    save a session
       :SDelete  delete a session
 
-_NOTE_: Both commands can also take session names directly as an argument. You can
-also make use of completion via `<c-u>` and `<tab>`.
+_NOTE_: These commands can also take session names directly as an argument. You can
+also make use of completion via `<c-d>` and `<tab>`.
 
 The default settings are pretty sane, so it should work without any
 configuration.
