@@ -159,21 +159,22 @@ function! startify#session_save(...) abort
   if exists('a:1')
     let spath .= a:1
   else
-    let spath .= input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
+    let sfilename = input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
     redraw
-    if empty(spath)
+    if empty(sfilename)
       echo 'You gave an empty name!'
       return
     endif
   endif
-  let spath = s:escape(spath)
+  let spath .= sfilename
+  let spath_escaped = s:escape(spath)
   if !filereadable(spath)
-    execute 'mksession '. spath | echo 'Session saved under: '. spath
+    execute 'mksession '. spath_escaped | echo 'Session saved under: '. spath_escaped
     return
   endif
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
   if nr2char(getchar()) == 'y'
-    execute 'mksession! '. spath | echo 'Session saved under: '. spath
+    execute 'mksession! '. spath_escaped | echo 'Session saved under: '. spath_escaped
   else
     echo 'Did NOT save the session!'
   endif
