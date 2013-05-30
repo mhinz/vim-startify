@@ -200,12 +200,12 @@ endfunction
 
 " Function: startify#session_list {{{1
 function! startify#session_list(lead, ...) abort
-  return map(split(globpath(s:session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")')
+  return map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")')
 endfunction
 
 " Function: startify#session_list_as_string {{{1
 function! startify#session_list_as_string(lead, ...) abort
-  return join(map(split(globpath(s:session_dir, '*'.a:lead.'*', '\n')), 'fnamemodify(v:val, ":t")'), "\n")
+  return join(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), "\n")
 endfunction
 
 " Function: startify#get_separator {{{1
