@@ -165,14 +165,14 @@ function! startify#session_save(...) abort
       return
     endif
   endif
-  let spath = s:escape(s:session_dir . startify#get_separator() . sname)
+  let spath = s:session_dir . startify#get_separator() . sname
   if !filereadable(spath)
-    execute 'mksession '. spath | echo 'Session saved under: '. spath
+    execute 'mksession '. s:escape(spath) | echo 'Session saved under: '. spath
     return
   endif
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
   if nr2char(getchar()) == 'y'
-    execute 'mksession! '. spath | echo 'Session saved under: '. spath
+    execute 'mksession! '. s:escape(spath) | echo 'Session saved under: '. spath
   else
     echo 'Did NOT save the session!'
   endif
