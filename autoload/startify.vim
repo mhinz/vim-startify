@@ -110,6 +110,7 @@ function! startify#insane_in_the_membrane() abort
   autocmd! startify *
   autocmd  startify CursorMoved <buffer> call s:set_cursor()
   autocmd  startify BufLeave    <buffer> autocmd! startify *
+  autocmd  startify WinLeave    <buffer> bd
 
   call cursor(special ? 4 : 2, 5)
 endfunction
