@@ -29,7 +29,7 @@ CONTENTS                                                     *startify-contents*
 ==============================================================================
 1. Intro                                                        *startify-intro*
 
-Startify is a zero-conf plugin which shows recently used files, bookmarks and
+Startify is a plugin that shows recently used files, bookmarks and
 sessions that were saved to a certain directory.
 
 
@@ -49,13 +49,17 @@ Startify basically provides two things:
    key in whatever is written between the square brackets on that line. You
    can even double-click anywhere on the line now.
 
-   Per default the startify buffer gets closed automatically, if an entry was
-   selected.
-
-   You can reopen the screen via :Startify.
-
-   Moreover, 'e' creates an empty buffer, 'i' creates an empty buffers and
+   In addtion, 'e' creates an empty buffer, 'i' creates an empty buffers and
    jumps into insert mode, 'q' quits.
+
+   Moreover, you can open several files at one go. Navigate to an entry and
+   hit either 'b' (open in same window), 's' (open in split) or 'v' (open in
+   vertical split). You can do that for multiple entries. You can also mix
+   them. The order of the selections will be remembered. Afterwards execute
+   these actions via <cr>.
+
+   When the selection is finished, Startify will close automatically. You can
+   reopen the screen via :Startify.
 
 2) It eases handling of loading and saving sessions by only working with a
    certain directory. These commands are used for convenience:

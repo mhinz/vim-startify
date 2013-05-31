@@ -10,17 +10,21 @@ _1)_ If you start Vim without giving any filenames to it (or pipe stuff to it so
    Additionally, you can define bookmarks, thus entries for files that always
    should be available in the start screen.
 
-   You can either navigate to a certain menu entry or you just key in whatever
-   is written between the square brackets on that line. You can even
-   double-click anywhere on the line now.
+   You can either navigate to a certain menu entry and hit enter or you just
+   key in whatever is written between the square brackets on that line. You
+   can even double-click anywhere on the line now.
 
-   Per default the startify buffer gets closed automatically, if an entry was
-   selected.
+   In addtion, `e` creates an empty buffer, `i` creates an empty buffers and
+   jumps into insert mode, `q` quits.
 
-   You can reopen the screen via :Startify.
+   Moreover, you can open several files at one go. Navigate to an entry and
+   hit either `b` (open in same window), `s` (open in split) or `v` (open in
+   vertical split). You can do that for multiple entries. You can also mix
+   them. The order of the selections will be remembered. Afterwards execute
+   these actions via `<cr>`.
 
-   Moreover, 'e' creates an empty buffer, 'i' creates an empty buffers and
-   jumps into insert mode, 'q' quits.
+   When the selection is finished, Startify will close automatically. You can
+   reopen the screen via :Startify.
 
 _2)_ It eases handling of loading and saving sessions by only working with a
    certain directory. These commands are used for convenience:
