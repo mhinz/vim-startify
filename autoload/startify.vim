@@ -91,7 +91,7 @@ function! startify#insane_in_the_membrane() abort
 
   nnoremap <buffer><silent> e       :enew<cr>
   nnoremap <buffer><silent> i       :enew <bar> startinsert<cr>
-  nnoremap <buffer><silent> <space> :call <SID>set_mark('B')<cr>
+  nnoremap <buffer><silent> b       :call <SID>set_mark('B')<cr>
   nnoremap <buffer><silent> s       :call <SID>set_mark('S')<cr>
   nnoremap <buffer><silent> v       :call <SID>set_mark('V')<cr>
   nnoremap <buffer>         <cr>    :call <SID>open_buffers(expand('<cword>'))<cr>
