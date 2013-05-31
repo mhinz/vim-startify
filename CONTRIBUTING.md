@@ -4,6 +4,7 @@ CONTRIBUTING
 If you intend to contribute to this project, please keep some simple rules in
 mind:
 
+    - one commit per feature/fix
     - the short commit message shouldn't be longer than 50 characters
     - the short commit message should start with an uppercase character
     - use the imperative for the short commit message
