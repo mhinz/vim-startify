@@ -43,10 +43,10 @@ function! startify#insane_in_the_membrane() abort
     for fname in v:oldfiles
       let expfname = resolve(fnamemodify(fname, ':p'))
       " filter duplicates, bookmarks and entries from the skiplist
-      if has_key(entries, expfname) ||
-            \ !filereadable(expfname) ||
-            \ (exists('g:startify_skiplist')  && s:is_in_skiplist(expfname)) ||
-            \ (exists('g:startify_bookmarks') && s:is_bookmark(expfname))
+      if has_key(entries, expfname)
+            \ || !filereadable(expfname)
+            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(expfname))
+            \ || (exists('g:startify_bookmarks') && s:is_bookmark(expfname))
         continue
       endif
       let entries[expfname] = 1
@@ -260,6 +260,16 @@ function! s:open_buffers(cword) abort
   endif
 endfunction
 
+" Function: s:get_index_as_string {{{1
+function! s:get_index_as_string(idx) abort
+  if exists('g:startify_custom_indices')
+    let listlen = len(g:startify_custom_indices)
+    return (a:idx < listlen) ? g:startify_custom_indices[a:idx] : string(a:idx - listlen)
+  else
+    return string(a:idx)
+  endif
+endfunction
+
 " Function: s:set_mark {{{1
 "
 " Markers are saved in the s:marked dict using the follow format:
@@ -289,16 +299,6 @@ function! s:set_mark(type) abort
     execute 'normal! ci]'. repeat(a:type, len(matches[1]))
   endif
   setlocal nomodifiable nomodified
-endfunction
-
-" Function: s:get_index_as_string {{{1
-function! s:get_index_as_string(idx) abort
-  if exists('g:startify_custom_indices')
-    let listlen = len(g:startify_custom_indices)
-    return (a:idx < listlen) ? g:startify_custom_indices[a:idx] : string(a:idx - listlen)
-  else
-    return string(a:idx)
-  endif
 endfunction
 
 " Function: s:set_cursor {{{1
