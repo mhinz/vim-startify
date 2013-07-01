@@ -52,7 +52,7 @@ function! startify#insane_in_the_membrane() abort
       let entries[expfname] = 1
       let index = s:get_index_as_string(cnt)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer> '. index .' :edit '. s:escape(fname) .' <bar> lcd %:h<cr>'
+      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) .' <bar> lcd %:h<cr>'
       let cnt += 1
       if (cnt == numfiles)
         break
@@ -68,7 +68,7 @@ function! startify#insane_in_the_membrane() abort
       let idx = (i + cnt)
       let index = s:get_index_as_string(idx)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
-      execute 'nnoremap <buffer> '. index .' :source '. s:escape(sfiles[i]) .'<cr>'
+      execute 'nnoremap <buffer> '. index .' :source '. fnameescape(sfiles[i]) .'<cr>'
     endfor
     let cnt = idx
   endif
@@ -79,7 +79,7 @@ function! startify#insane_in_the_membrane() abort
       let cnt += 1
       let index = s:get_index_as_string(cnt)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer> '. index .' :edit '. s:escape(fname) .' <bar> lcd %:h<cr>'
+      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) .' <bar> lcd %:h<cr>'
     endfor
   endif
 
@@ -168,12 +168,12 @@ function! startify#session_save(...) abort
   endif
   let spath = s:session_dir . startify#get_separator() . sname
   if !filereadable(spath)
-    execute 'mksession '. s:escape(spath) | echo 'Session saved under: '. spath
+    execute 'mksession '. fnameescape(spath) | echo 'Session saved under: '. spath
     return
   endif
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
   if nr2char(getchar()) == 'y'
-    execute 'mksession! '. s:escape(spath) | echo 'Session saved under: '. spath
+    execute 'mksession! '. fnameescape(spath) | echo 'Session saved under: '. spath
   else
     echo 'Did NOT save the session!'
   endif
@@ -193,7 +193,7 @@ function! startify#session_load(...) abort
         \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
         \ | redraw
   if filereadable(spath)
-    execute 'source '. s:escape(spath)
+    execute 'source '. fnameescape(spath)
   else
     echo 'No such file: '. spath
   endif
@@ -214,10 +214,6 @@ function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
-" Function: s:escape {{{1
-function! s:escape(path) abort
-  return !exists('+shellslash') || &shellslash ? fnameescape(a:path) : escape(a:path, '\')
-endfunction
 
 " Function: s:is_in_skiplist {{{1
 function! s:is_in_skiplist(arg) abort
