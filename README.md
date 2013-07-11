@@ -26,6 +26,8 @@ __1)__ If you start Vim without giving any filenames to it (or pipe stuff to it 
    When the selection is finished, Startify will close automatically. You can
    reopen the screen via `:Startify.`
 
+   And you can define your own custom ascii art header now!
+
 __2)__ It eases handling of loading and saving sessions by only working with a
    certain directory. These commands are used for convenience:
 

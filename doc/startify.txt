@@ -61,6 +61,8 @@ Startify basically provides two things:
    When the selection is finished, Startify will close automatically. You can
    reopen the screen via :Startify.
 
+   And you can define your own custom ascii art header now!
+
 2) It eases handling of loading and saving sessions by only working with a
    certain directory. These commands are used for convenience:
 
@@ -189,6 +191,29 @@ Best practices:
 Don't show <empty buffer> and <quit>.
 
 
+============-
+
+    let g:startify_custom_header = ''
+
+This is a list of single-quoted strings to be shown before everything else.
+Every string will be written on its own line.
+
+NOTE: If a string contains ', you have to quote it with another '.
+
+Example:
+
+    let g:startify_custom_header = [
+                \ '   __      ___            ______ ____   ',
+                \ '   \ \    / (_)           |____  |___ \ ',
+                \ '    \ \  / / _ _ __ ___       / /  __) |',
+                \ '     \ \/ / | | ''_ ` _ \     / /  |__ <',
+                \ '      \  /  | | | | | | |   / /   ___) |',
+                \ '       \/   |_|_| |_| |_|  /_(_) |____/ ',
+                \ '',
+                \ '',
+                \ ]
+
+
 ==============================================================================
 4. Commands                                                  *startify-commands*
 
@@ -216,6 +241,7 @@ these groups:
 
     StartifyBracket         [,]
     StartifyFile            the actual file
+    StartifyHeader          the custom header
     StartifyNumber          the numbers between []
     StartifyPath            the path to a file
     StartifySlash           slashes in paths
@@ -224,6 +250,7 @@ these groups:
 Example: (my terminal emulator supports 256 colors)
 
     hi StartifyBracket ctermfg=240
+    hi StartifyHeader  ctermfg=203
     hi StartifyNumber  ctermfg=215
     hi StartifyPath    ctermfg=245
     hi StartifySlash   ctermfg=240
