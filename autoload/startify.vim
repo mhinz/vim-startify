@@ -26,6 +26,14 @@ function! startify#insane_in_the_membrane() abort
   endif
   setfiletype startify
 
+  let s:offset_header = 0
+
+  if exists('g:startify_custom_header')
+    call append('$', g:startify_custom_header)
+    call append('$', '')
+    let s:offset_header += len(g:startify_custom_header)
+  endif
+
   let special = get(g:, 'startify_enable_special', 1)
   let sep = startify#get_separator()
   let cnt = 0
@@ -112,7 +120,7 @@ function! startify#insane_in_the_membrane() abort
   autocmd  startify BufLeave    <buffer> autocmd! startify *
   autocmd  startify WinLeave    <buffer> bd
 
-  call cursor(special ? 4 : 2, 5)
+  call cursor((special ? 4 : 2) + s:offset_header, 5)
 endfunction
 
 " Function: startify#session_delete {{{1
@@ -214,7 +222,6 @@ function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
-
 " Function: s:is_in_skiplist {{{1
 function! s:is_in_skiplist(arg) abort
   for regexp in g:startify_skiplist
@@ -301,16 +308,17 @@ endfunction
 function! s:set_cursor() abort
   let s:line_old = exists('s:line_new') ? s:line_new : 5
   let s:line_new = line('.')
+  let offset     = s:offset_header + 3
   if empty(getline(s:line_new))
     if (s:line_new > s:line_old)
       let s:line_new += 1
       call cursor(s:line_new, 5) " going down
     else
       let s:line_new -= 1
-      call cursor((s:line_new < 2 ? 2 : s:line_new), 5) " going up
+      call cursor((s:line_new < offset ? offset : s:line_new), 5) " going up
     endif
   else
-    call cursor((s:line_new < 2 ? 2 : 0), 5) " hold cursor in column
+    call cursor((s:line_new < offset ? offset : 0), 5) " hold cursor in column
   endif
 endfunction
 
