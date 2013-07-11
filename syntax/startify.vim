@@ -17,6 +17,11 @@ syntax match StartifyFile    /.*/ contains=StartifyBracket,StartifyNumber,Starti
 execute 'syntax match StartifySlash /\'. s:sep .'/'
 execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash'
 
+if exists('g:startify_custom_header')
+  execute 'syntax region StartifyHeader start=/\%1l/ end=/\%'. (len(g:startify_custom_header) + 1) .'l/'
+endif
+
+highlight link StartifyHeader  Normal
 highlight link StartifyBracket Delimiter
 highlight link StartifyNumber  Number
 
