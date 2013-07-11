@@ -20,7 +20,7 @@ function! startify#insane_in_the_membrane() abort
       endif
     endfor
   endif
-  setlocal nonumber noswapfile bufhidden=wipe
+  setlocal nonumber noswapfile nolist bufhidden=wipe
   if (v:version >= 703)
     setlocal norelativenumber
   endif
