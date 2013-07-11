@@ -18,7 +18,7 @@ execute 'syntax match StartifySlash /\'. s:sep .'/'
 execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash'
 
 if exists('g:startify_custom_header')
-  execute 'syntax region StartifyHeader start=/\%1l/ end=/\%'. (len(g:startify_custom_header) + 1) .'l/'
+  execute 'syntax region StartifyHeader start=/\%1l/ end=/\%'. (len(g:startify_custom_header) + 2) .'l/'
 endif
 
 highlight link StartifyHeader  Normal
