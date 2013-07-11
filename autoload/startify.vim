@@ -30,7 +30,6 @@ function! startify#insane_in_the_membrane() abort
 
   if exists('g:startify_custom_header')
     call append('$', g:startify_custom_header)
-    call append('$', '')
     let s:offset_header += len(g:startify_custom_header)
   endif
 
@@ -308,7 +307,7 @@ endfunction
 function! s:set_cursor() abort
   let s:line_old = exists('s:line_new') ? s:line_new : 5
   let s:line_new = line('.')
-  let offset     = s:offset_header + 3
+  let offset     = s:offset_header + 2
   if empty(getline(s:line_new))
     if (s:line_new > s:line_old)
       let s:line_new += 1
