@@ -1,20 +1,22 @@
-vim-startify
-------------
+![Example:startify in action](https://github.com/mhinz/vim-startify/raw/master/startify.png)
 
-Startify basically provides two things:
+This is it. A splash screen for Vim.
 
-__1)__ If you start Vim without giving any filenames to it (or pipe stuff to it so
-   it reads from STDIN), startify will show a small but pretty start screen
-   which shows recently used files (using viminfo) and sessions by default.
+What does it provide?
+---------------------
+
+__1)__ If you start Vim without giving any filenames to it (or pipe stuff to it
+   so it reads from STDIN), startify will show a small but pretty start screen
+   that shows recently used files (using viminfo) and sessions by default.
 
    Additionally, you can define bookmarks, thus entries for files that always
-   should be available in the start screen.
+   should be available on the start screen.
 
    You can either navigate to a certain menu entry and hit enter or you just
    key in whatever is written between the square brackets on that line. You
    can even double-click anywhere on the line now.
 
-   In addtion, `e` creates an empty buffer, `i` creates an empty buffers and
+   In addition, `e` creates an empty buffer, `i` creates an empty buffer and
    jumps into insert mode, `q` quits.
 
    Moreover, you can open several files at one go. Navigate to an entry and
@@ -24,7 +26,7 @@ __1)__ If you start Vim without giving any filenames to it (or pipe stuff to it 
    these actions via `<cr>`.
 
    When the selection is finished, Startify will close automatically. You can
-   reopen the screen via `:Startify.`
+   reopen the screen via `:Startify`.
 
    And you can define your own custom ascii art header now!
 
@@ -35,18 +37,8 @@ __2)__ It eases handling of loading and saving sessions by only working with a
       :SSave    save a session
       :SDelete  delete a session
 
-__NOTE__: These commands can also take session names directly as an argument. You can
-also make use of completion via `<c-d>` and `<tab>`.
-
-The default settings are pretty sane, so it should work without any
-configuration.
-
-![Example:startify in action](https://github.com/mhinz/vim-startify/raw/master/startify.png)
-
-__NOTE__: The colors shown in the screenshot are not the default. If you want to
-tune the default colors, you can overwrite the highlight groups used by startify
-in your vimrc. Have a look at `:h startify-colors`, after installing the plugin.
-Moreover, `g:startify_enable_special` is set to 0.
+__NOTE__: These commands can also take session names directly as an argument.
+You can also make use of completion via `<c-d>` and `<tab>`.
 
 Feedback, please!
 -----------------
@@ -71,6 +63,9 @@ Afterwards installing vim-startify is as easy as pie:
     $ start Vim
     $ :Helptags
     $ :h startify
+
+It works without any configuration, but you might want to look into the
+documentation for further customization.
 
 Documentation
 -------------

@@ -40,16 +40,16 @@ Startify basically provides two things:
 
 1) If you start Vim without giving any filenames to it (or pipe stuff to it so
    it reads from STDIN), startify will show a small but pretty start screen
-   which shows recently used files (using viminfo) and sessions by default.
+   that shows recently used files (using viminfo) and sessions by default.
 
    Additionally, you can define bookmarks, thus entries for files that always
-   should be available in the start screen.
+   should be available on the start screen.
 
    You can either navigate to a certain menu entry and hit enter or you just
    key in whatever is written between the square brackets on that line. You
    can even double-click anywhere on the line now.
 
-   In addtion, 'e' creates an empty buffer, 'i' creates an empty buffers and
+   In addition, 'e' creates an empty buffer, 'i' creates an empty buffer and
    jumps into insert mode, 'q' quits.
 
    Moreover, you can open several files at one go. Navigate to an entry and
@@ -69,9 +69,6 @@ Startify basically provides two things:
       :SLoad    load a session
       :SSave    save a session
       :SDelete  delete a session
-
-The default settings are pretty sane, so it should work without any
-configuration.
 
 
 ==============================================================================
