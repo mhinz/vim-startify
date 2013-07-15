@@ -211,6 +211,13 @@ Example:
                 \ ]
 
 
+============-
+
+    let g:startify_change_to_dir = 1
+
+When opening a file or bookmark, change to its directory.
+
+
 ==============================================================================
 4. Commands                                                  *startify-commands*
 

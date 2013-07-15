@@ -11,6 +11,8 @@ let g:autoloaded_startify = 1
 let s:session_dir = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
+let s:cmd = (get(g:, 'startify_change_to_dir', 1) ? ' <bar> lcd %:h' : '') . '<cr>'
+
 " Function: startify#insane_in_the_membrane {{{1
 function! startify#insane_in_the_membrane() abort
   if !empty(v:servername) && exists('g:startify_skiplist_server')
@@ -59,7 +61,7 @@ function! startify#insane_in_the_membrane() abort
       let entries[expfname] = 1
       let index = s:get_index_as_string(cnt)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) .' <bar> lcd %:h<cr>'
+      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:cmd
       let cnt += 1
       if (cnt == numfiles)
         break
@@ -86,7 +88,7 @@ function! startify#insane_in_the_membrane() abort
       let cnt += 1
       let index = s:get_index_as_string(cnt)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) .' <bar> lcd %:h<cr>'
+      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:cmd
     endfor
   endif
 
