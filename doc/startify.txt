@@ -1,4 +1,4 @@
-*startify.txt*                        Showing recently used files like a boss.
+*startify.txt*  Showing recently used stuff like a boss.
 *startify*
 
 
