@@ -204,7 +204,7 @@ function! s:show_dir(cnt) abort
     call append('$', '')
   endif
   for fname in split(glob('.\=*'))
-    if (fname == '.') || (fname == '..')
+    if isdirectory(fname)
       continue
     endif
     call add(files, [getftime(fname), fname])
