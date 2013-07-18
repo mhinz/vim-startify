@@ -49,83 +49,20 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   if s:show_dir
-    let files = []
-    if s:show_special
-      call append('$', '')
-    endif
-    for fname in split(glob('.\=*'))
-      if (fname == '.') || (fname == '..')
-        continue
-      endif
-      call add(files, [getftime(fname), fname])
-    endfor
-    function! l:compare(x, y)
-      return a:y[0] - a:x[0]
-    endfunction
-    call sort(files, 'l:compare')
-    for items in files
-      let index = s:get_index_as_string(cnt)
-      let fname = items[1]
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
-      let cnt += 1
-      if (cnt == s:numfiles)
-        break
-      endif
-    endfor
+    let cnt = s:show_dir(cnt)
   endif
 
   if s:show_files && !empty(v:oldfiles)
-    let entries = {}
-    if s:show_special || s:show_dir
-      call append('$', '')
-    endif
-    for fname in v:oldfiles
-      let expfname = resolve(fnamemodify(fname, ':p'))
-      " filter duplicates, bookmarks and entries from the skiplist
-      if has_key(entries, expfname)
-            \ || !filereadable(expfname)
-            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(expfname))
-            \ || (exists('g:startify_bookmarks') && s:is_bookmark(expfname))
-        continue
-      endif
-      let entries[expfname] = 1
-      let index = s:get_index_as_string(cnt)
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:cmd
-      let cnt += 1
-      let s:numfiles -= 1
-      if !s:numfiles
-        break
-      endif
-    endfor
+    let cnt = s:show_files(cnt)
   endif
 
   let sfiles = split(globpath(s:session_dir, '*'), '\n')
-
   if s:show_sessions && !empty(sfiles)
-    if s:show_special || s:show_dir || s:show_files
-      call append('$', '')
-    endif
-    for i in range(len(sfiles))
-      let idx = (i + cnt)
-      let index = s:get_index_as_string(idx)
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
-      execute 'nnoremap <buffer> '. index .' :source '. fnameescape(sfiles[i]) .'<cr>'
-    endfor
-    let cnt = idx
+    let cnt = s:show_sessions(sfiles, cnt)
   endif
 
   if exists('g:startify_bookmarks')
-    if s:show_special || s:show_dir || s:show_files || s:show_sessions
-      call append('$', '')
-    endif
-    for fname in g:startify_bookmarks
-      let cnt += 1
-      let index = s:get_index_as_string(cnt)
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:cmd
-    endfor
+    call s:show_bookmarks(cnt)
   endif
 
   if s:show_special
@@ -160,8 +97,8 @@ function! startify#insane_in_the_membrane() abort
   call cursor((s:show_special ? 4 : 2) + s:offset_header, 5)
 endfunction
 
-" Function: #session_delete {{{1
-function! startify#session_delete(...) abort
+" Function: #session_load {{{1
+function! startify#session_load(...) abort
   if !isdirectory(s:session_dir)
     echo 'The session directory does not exist: '. s:session_dir
     return
@@ -171,17 +108,12 @@ function! startify#session_delete(...) abort
   endif
   let spath = s:session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
-        \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
+        \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
         \ | redraw
-  echo 'Really delete '. spath .'? [y/n]' | redraw
-  if (nr2char(getchar()) == 'y')
-    if delete(spath) == 0
-      echo 'Deleted session '. spath .'!'
-    else
-      echo 'Deletion failed!'
-    endif
+  if filereadable(spath)
+    execute 'source '. fnameescape(spath)
   else
-    echo 'Deletion aborted!'
+    echo 'No such file: '. spath
   endif
 endfunction
 
@@ -224,8 +156,8 @@ function! startify#session_save(...) abort
   endif
 endfunction
 
-" Function: #session_load {{{1
-function! startify#session_load(...) abort
+" Function: #session_delete {{{1
+function! startify#session_delete(...) abort
   if !isdirectory(s:session_dir)
     echo 'The session directory does not exist: '. s:session_dir
     return
@@ -235,12 +167,17 @@ function! startify#session_load(...) abort
   endif
   let spath = s:session_dir . startify#get_separator() . (exists('a:1')
         \ ? a:1
-        \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
+        \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
         \ | redraw
-  if filereadable(spath)
-    execute 'source '. fnameescape(spath)
+  echo 'Really delete '. spath .'? [y/n]' | redraw
+  if (nr2char(getchar()) == 'y')
+    if delete(spath) == 0
+      echo 'Deleted session '. spath .'!'
+    else
+      echo 'Deletion failed!'
+    endif
   else
-    echo 'No such file: '. spath
+    echo 'Deletion aborted!'
   endif
 endfunction
 
@@ -259,6 +196,93 @@ function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
+" Function: s:show_dir {{{1
+function! s:show_dir(cnt) abort
+  let cnt = a:cnt
+  let files = []
+  if s:show_special
+    call append('$', '')
+  endif
+  for fname in split(glob('.\=*'))
+    if (fname == '.') || (fname == '..')
+      continue
+    endif
+    call add(files, [getftime(fname), fname])
+  endfor
+  function! l:compare(x, y)
+    return a:y[0] - a:x[0]
+  endfunction
+  call sort(files, 'l:compare')
+  for items in files
+    let index = s:get_index_as_string(cnt)
+    let fname = items[1]
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+    execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
+    let cnt += 1
+    if (cnt == s:numfiles)
+      break
+    endif
+  endfor
+  return cnt
+endfunction
+
+" Function: s:show_files {{{1
+function! s:show_files(cnt) abort
+  let cnt = a:cnt
+  let entries = {}
+  if s:show_special || s:show_dir
+    call append('$', '')
+  endif
+  for fname in v:oldfiles
+    let expfname = resolve(fnamemodify(fname, ':p'))
+    " filter duplicates, bookmarks and entries from the skiplist
+    if has_key(entries, expfname)
+          \ || !filereadable(expfname)
+          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(expfname))
+          \ || (exists('g:startify_bookmarks') && s:is_bookmark(expfname))
+      continue
+    endif
+    let entries[expfname] = 1
+    let index = s:get_index_as_string(cnt)
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+    execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:cmd
+    let cnt += 1
+    let s:numfiles -= 1
+    if !s:numfiles
+      break
+    endif
+  endfor
+  return cnt
+endfunction
+
+" Function: s:show_sessions {{{1
+function! s:show_sessions(sfiles, cnt) abort
+  let cnt = a:cnt
+  if s:show_special || s:show_dir || s:show_files
+    call append('$', '')
+  endif
+  for i in range(len(a:sfiles))
+    let idx = (i + cnt)
+    let index = s:get_index_as_string(idx)
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(a:sfiles[i], ':t:r'))
+    execute 'nnoremap <buffer> '. index .' :source '. fnameescape(a:sfiles[i]) .'<cr>'
+  endfor
+  return idx
+endfunction
+
+" Function: s:show_bookmarks {{{1
+function! s:show_bookmarks(cnt) abort
+  let cnt = a:cnt
+  if s:show_special || s:show_dir || s:show_files || s:show_sessions
+    call append('$', '')
+  endif
+  for fname in g:startify_bookmarks
+    let cnt += 1
+    let index = s:get_index_as_string(cnt)
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+    execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:cmd
+  endfor
+endfunction
 
 " Function: s:is_in_skiplist {{{1
 function! s:is_in_skiplist(arg) abort
@@ -279,35 +303,21 @@ function! s:is_bookmark(arg) abort
   endfor
 endfunction
 
-" Function: s:open_buffers {{{1
-function! s:open_buffers(cword) abort
-  if exists('s:marked') && !empty(s:marked)
-    for i in range(len(s:marked))
-      for val in values(s:marked)
-        if val[0] == i
-          if val[3] == 'S'
-            execute 'split '. val[2]
-          elseif val[3] == 'V'
-            execute 'vsplit '. val[2]
-          else
-            execute 'edit '. val[2]
-          endif
-          continue
-        endif
-      endfor
-    endfor
+" Function: s:set_cursor {{{1
+function! s:set_cursor() abort
+  let s:line_old = exists('s:line_new') ? s:line_new : 5
+  let s:line_new = line('.')
+  let offset     = s:offset_header + 2
+  if empty(getline(s:line_new))
+    if (s:line_new > s:line_old)
+      let s:line_new += 1
+      call cursor(s:line_new, 5) " going down
+    else
+      let s:line_new -= 1
+      call cursor((s:line_new < offset ? offset : s:line_new), 5) " going up
+    endif
   else
-    execute 'normal '. a:cword
-  endif
-endfunction
-
-" Function: s:get_index_as_string {{{1
-function! s:get_index_as_string(idx) abort
-  if exists('g:startify_custom_indices')
-    let listlen = len(g:startify_custom_indices)
-    return (a:idx < listlen) ? g:startify_custom_indices[a:idx] : string(a:idx - listlen)
-  else
-    return string(a:idx)
+    call cursor((s:line_new < offset ? offset : 0), 5) " hold cursor in column
   endif
 endfunction
 
@@ -342,21 +352,35 @@ function! s:set_mark(type) abort
   setlocal nomodifiable nomodified
 endfunction
 
-" Function: s:set_cursor {{{1
-function! s:set_cursor() abort
-  let s:line_old = exists('s:line_new') ? s:line_new : 5
-  let s:line_new = line('.')
-  let offset     = s:offset_header + 2
-  if empty(getline(s:line_new))
-    if (s:line_new > s:line_old)
-      let s:line_new += 1
-      call cursor(s:line_new, 5) " going down
-    else
-      let s:line_new -= 1
-      call cursor((s:line_new < offset ? offset : s:line_new), 5) " going up
-    endif
+" Function: s:open_buffers {{{1
+function! s:open_buffers(cword) abort
+  if exists('s:marked') && !empty(s:marked)
+    for i in range(len(s:marked))
+      for val in values(s:marked)
+        if val[0] == i
+          if val[3] == 'S'
+            execute 'split '. val[2]
+          elseif val[3] == 'V'
+            execute 'vsplit '. val[2]
+          else
+            execute 'edit '. val[2]
+          endif
+          continue
+        endif
+      endfor
+    endfor
   else
-    call cursor((s:line_new < offset ? offset : 0), 5) " hold cursor in column
+    execute 'normal '. a:cword
+  endif
+endfunction
+
+" Function: s:get_index_as_string {{{1
+function! s:get_index_as_string(idx) abort
+  if exists('g:startify_custom_indices')
+    let listlen = len(g:startify_custom_indices)
+    return (a:idx < listlen) ? g:startify_custom_indices[a:idx] : string(a:idx - listlen)
+  else
+    return string(a:idx)
   endif
 endfunction
 
