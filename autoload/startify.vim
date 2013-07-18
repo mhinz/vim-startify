@@ -43,10 +43,38 @@ function! startify#insane_in_the_membrane() abort
     call append('$', '   [e]  <empty buffer>')
   endif
 
+  if get(g:, 'startify_show_dir')
+    let files    = []
+    let numfiles = get(g:, 'startify_show_files_number', 10)
+    if special
+      call append('$', '')
+    endif
+    for fname in split(glob('.\=*'))
+      if (fname == '.') || (fname == '..')
+        continue
+      endif
+      call add(files, [getftime(fname), fname])
+    endfor
+    function! l:compare(x, y)
+      return a:y[0] - a:x[0]
+    endfunction
+    call sort(files, 'l:compare')
+    for items in files
+      let index = s:get_index_as_string(cnt)
+      let fname = items[1]
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
+      let cnt += 1
+      if (cnt == numfiles)
+        break
+      endif
+    endfor
+  endif
+
   if get(g:, 'startify_show_files', 1) && !empty(v:oldfiles)
     let entries = {}
     let numfiles = get(g:, 'startify_show_files_number', 10)
-    if special
+    if special || get(g:, 'startify_show_dir')
       call append('$', '')
     endif
     for fname in v:oldfiles
@@ -61,9 +89,10 @@ function! startify#insane_in_the_membrane() abort
       let entries[expfname] = 1
       let index = s:get_index_as_string(cnt)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:cmd
+      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:cmd
       let cnt += 1
-      if (cnt == numfiles)
+      let numfiles -= 1
+      if !numfiles
         break
       endif
     endfor
@@ -222,6 +251,7 @@ endfunction
 function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
+
 
 " Function: s:is_in_skiplist {{{1
 function! s:is_in_skiplist(arg) abort

@@ -108,12 +108,23 @@ List saved sessions in g:startify_session_dir.
 
 List recently used files using viminfo.
 
+The number is limited by g:startify_show_files_number.
+
 
 ============-
 
     let g:startify_show_files_number = 10
 
-The amount of files to list.
+The number of files to list.
+
+
+============-
+
+    let g:startify_show_dir = 0
+
+Show files from the current directory sorted by modification time.
+
+The number is limited by g:startify_show_files_number.
 
 
 ============-
