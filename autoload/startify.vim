@@ -8,12 +8,18 @@ if exists('g:autoloaded_startify') || &cp
 endif
 let g:autoloaded_startify = 1
 
+" Init: values {{{1
 let s:session_dir = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
-let s:cmd = (get(g:, 'startify_change_to_dir', 1) ? ' <bar> lcd %:h' : '') . '<cr>'
+let s:cmd           = (get(g:, 'startify_change_to_dir', 1) ? ' <bar> lcd %:h' : '') . '<cr>'
+let s:numfiles      = get(g:, 'startify_show_files_number', 10)
+let s:show_special  = get(g:, 'startify_enable_special', 1)
+let s:show_dir      = get(g:, 'startify_show_dir')
+let s:show_files    = get(g:, 'startify_show_files', 1)
+let s:show_sessions = get(g:, 'startify_show_sessions', 1)
 
-" Function: startify#insane_in_the_membrane {{{1
+" Function: #insane_in_the_membrane {{{1
 function! startify#insane_in_the_membrane() abort
   if !empty(v:servername) && exists('g:startify_skiplist_server')
     for servname in g:startify_skiplist_server
@@ -35,18 +41,16 @@ function! startify#insane_in_the_membrane() abort
     let s:offset_header += len(g:startify_custom_header)
   endif
 
-  let special = get(g:, 'startify_enable_special', 1)
   let sep = startify#get_separator()
   let cnt = 0
 
-  if special
+  if s:show_special
     call append('$', '   [e]  <empty buffer>')
   endif
 
-  if get(g:, 'startify_show_dir')
-    let files    = []
-    let numfiles = get(g:, 'startify_show_files_number', 10)
-    if special
+  if s:show_dir
+    let files = []
+    if s:show_special
       call append('$', '')
     endif
     for fname in split(glob('.\=*'))
@@ -65,16 +69,15 @@ function! startify#insane_in_the_membrane() abort
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
       execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
       let cnt += 1
-      if (cnt == numfiles)
+      if (cnt == s:numfiles)
         break
       endif
     endfor
   endif
 
-  if get(g:, 'startify_show_files', 1) && !empty(v:oldfiles)
+  if s:show_files && !empty(v:oldfiles)
     let entries = {}
-    let numfiles = get(g:, 'startify_show_files_number', 10)
-    if special || get(g:, 'startify_show_dir')
+    if s:show_special || s:show_dir
       call append('$', '')
     endif
     for fname in v:oldfiles
@@ -91,8 +94,8 @@ function! startify#insane_in_the_membrane() abort
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
       execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:cmd
       let cnt += 1
-      let numfiles -= 1
-      if !numfiles
+      let s:numfiles -= 1
+      if !s:numfiles
         break
       endif
     endfor
@@ -100,8 +103,10 @@ function! startify#insane_in_the_membrane() abort
 
   let sfiles = split(globpath(s:session_dir, '*'), '\n')
 
-  if get(g:, 'startify_show_sessions', 1) && !empty(sfiles)
-    call append('$', '')
+  if s:show_sessions && !empty(sfiles)
+    if s:show_special || s:show_dir || s:show_files
+      call append('$', '')
+    endif
     for i in range(len(sfiles))
       let idx = (i + cnt)
       let index = s:get_index_as_string(idx)
@@ -112,7 +117,9 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   if exists('g:startify_bookmarks')
-    call append('$', '')
+    if s:show_special || s:show_dir || s:show_files || s:show_sessions
+      call append('$', '')
+    endif
     for fname in g:startify_bookmarks
       let cnt += 1
       let index = s:get_index_as_string(cnt)
@@ -121,7 +128,7 @@ function! startify#insane_in_the_membrane() abort
     endfor
   endif
 
-  if special
+  if s:show_special
     call append('$', ['', '   [q]  <quit>'])
   endif
 
@@ -150,10 +157,10 @@ function! startify#insane_in_the_membrane() abort
   autocmd  startify BufLeave    <buffer> autocmd! startify *
   autocmd  startify WinLeave    <buffer> bd
 
-  call cursor((special ? 4 : 2) + s:offset_header, 5)
+  call cursor((s:show_special ? 4 : 2) + s:offset_header, 5)
 endfunction
 
-" Function: startify#session_delete {{{1
+" Function: #session_delete {{{1
 function! startify#session_delete(...) abort
   if !isdirectory(s:session_dir)
     echo 'The session directory does not exist: '. s:session_dir
@@ -178,7 +185,7 @@ function! startify#session_delete(...) abort
   endif
 endfunction
 
-" Function: startify#session_save {{{1
+" Function: #session_save {{{1
 function! startify#session_save(...) abort
   if !isdirectory(s:session_dir)
     if exists('*mkdir')
@@ -217,7 +224,7 @@ function! startify#session_save(...) abort
   endif
 endfunction
 
-" Function: startify#session_load {{{1
+" Function: #session_load {{{1
 function! startify#session_load(...) abort
   if !isdirectory(s:session_dir)
     echo 'The session directory does not exist: '. s:session_dir
@@ -237,17 +244,17 @@ function! startify#session_load(...) abort
   endif
 endfunction
 
-" Function: startify#session_list {{{1
+" Function: #session_list {{{1
 function! startify#session_list(lead, ...) abort
   return map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")')
 endfunction
 
-" Function: startify#session_list_as_string {{{1
+" Function: #session_list_as_string {{{1
 function! startify#session_list_as_string(lead, ...) abort
   return join(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), "\n")
 endfunction
 
-" Function: startify#get_separator {{{1
+" Function: #get_separator {{{1
 function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
