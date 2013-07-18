@@ -28,7 +28,8 @@ function! startify#insane_in_the_membrane() abort
       endif
     endfor
   endif
-  setlocal nonumber noswapfile nolist bufhidden=wipe
+
+  setlocal nonumber noswapfile nolist bufhidden=wipe statusline=\ 
   if (v:version >= 703)
     setlocal norelativenumber
   endif
@@ -41,13 +42,11 @@ function! startify#insane_in_the_membrane() abort
     let s:offset_header += len(g:startify_custom_header)
   endif
 
-  let sep = startify#get_separator()
-  let cnt = 0
-
   if s:show_special
     call append('$', '   [e]  <empty buffer>')
   endif
 
+  let cnt = 0
   if s:show_dir
     let cnt = s:show_dir(cnt)
   endif
