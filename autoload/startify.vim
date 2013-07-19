@@ -228,6 +228,7 @@ endfunction
 " Function: s:show_files {{{1
 function! s:show_files(cnt) abort
   let cnt = a:cnt
+  let num = s:numfiles
   let entries = {}
   if s:show_special || s:show_dir
     call append('$', '')
@@ -246,8 +247,8 @@ function! s:show_files(cnt) abort
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:cmd
     let cnt += 1
-    let s:numfiles -= 1
-    if !s:numfiles
+    let num -= 1
+    if !num
       break
     endif
   endfor
