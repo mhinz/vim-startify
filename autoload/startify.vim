@@ -77,7 +77,7 @@ function! startify#insane_in_the_membrane() abort
   nnoremap <buffer><silent> v             :call <SID>set_mark('V')<cr>
   nnoremap <buffer>         <cr>          :call <SID>open_buffers(expand('<cword>'))<cr>
   nnoremap <buffer>         <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
-  nnoremap <buffer>         q
+  nnoremap <buffer><silent> q
         \ :if (len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) > 1) <bar>
         \   bd <bar>
         \ else <bar>
