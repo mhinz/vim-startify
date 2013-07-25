@@ -32,10 +32,14 @@ function! startify#insane_in_the_membrane() abort
   enew
 
   setfiletype startify
-  silent file startify
+  "silent file startify
 
-  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
-  setlocal nonumber nolist statusline=\ %t
+  "setlocal buftype=nofile
+  "setlocal bufhidden=wipe
+  setlocal nobuflisted
+  setlocal noswapfile
+  "setlocal nonumber nolist statusline=\ %t
+  setlocal nonumber nolist statusline=\ startify
 
   if (v:version >= 703)
     setlocal norelativenumber
@@ -84,7 +88,7 @@ function! startify#insane_in_the_membrane() abort
   nnoremap <buffer>         <cr>          :call <SID>open_buffers(expand('<cword>'))<cr>
   nnoremap <buffer>         <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer><silent> q
-        \ :if len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) <bar>
+        \ :if len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) > 1 <bar>
         \   bd <bar>
         \ else <bar>
         \   quit <bar>
@@ -96,8 +100,8 @@ function! startify#insane_in_the_membrane() abort
 
   autocmd! startify *
   autocmd  startify CursorMoved <buffer> call s:set_cursor()
-  autocmd  startify BufLeave    <buffer> autocmd! startify *
-  autocmd  startify WinLeave    <buffer> bd
+  "autocmd  startify BufLeave    <buffer> autocmd! startify *
+  "autocmd  startify WinLeave    <buffer> bd
 
   call cursor((s:show_special ? 4 : 2) + s:offset_header, 5)
 endfunction
@@ -360,6 +364,7 @@ endfunction
 
 " Function: s:open_buffers {{{1
 function! s:open_buffers(cword) abort
+  let id = bufnr('%')
   if exists('s:marked') && !empty(s:marked)
     for i in range(len(s:marked))
       for val in values(s:marked)
@@ -378,6 +383,7 @@ function! s:open_buffers(cword) abort
   else
     execute 'normal '. a:cword
   endif
+  execute 'silent bdelete' id
 endfunction
 
 " Function: s:get_index_as_string {{{1
