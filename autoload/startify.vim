@@ -29,11 +29,17 @@ function! startify#insane_in_the_membrane() abort
     endfor
   endif
 
-  setlocal nonumber noswapfile nolist bufhidden=wipe statusline=\ 
+  enew
+
+  setfiletype startify
+  silent file startify
+
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile
+  setlocal nonumber nolist statusline=\ %t
+
   if (v:version >= 703)
     setlocal norelativenumber
   endif
-  setfiletype startify
 
   let s:offset_header = 0
 
@@ -78,7 +84,7 @@ function! startify#insane_in_the_membrane() abort
   nnoremap <buffer>         <cr>          :call <SID>open_buffers(expand('<cword>'))<cr>
   nnoremap <buffer>         <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer><silent> q
-        \ :if (len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) > 1) <bar>
+        \ :if len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) <bar>
         \   bd <bar>
         \ else <bar>
         \   quit <bar>
