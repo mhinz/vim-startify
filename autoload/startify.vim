@@ -23,25 +23,22 @@ let s:show_sessions = get(g:, 'startify_show_sessions', 1)
 function! startify#insane_in_the_membrane() abort
   if !empty(v:servername) && exists('g:startify_skiplist_server')
     for servname in g:startify_skiplist_server
-      if (servname == v:servername)
+      if servname == v:servername
         return
       endif
     endfor
   endif
 
   enew
-
   setfiletype startify
-  "silent file startify
 
-  "setlocal buftype=nofile
-  "setlocal bufhidden=wipe
+  setlocal buftype=nofile
+  setlocal bufhidden=wipe
   setlocal nobuflisted
   setlocal noswapfile
-  "setlocal nonumber nolist statusline=\ %t
   setlocal nonumber nolist statusline=\ startify
 
-  if (v:version >= 703)
+  if v:version >= 703
     setlocal norelativenumber
   endif
 
@@ -82,17 +79,12 @@ function! startify#insane_in_the_membrane() abort
 
   nnoremap <buffer><silent> e             :enew<cr>
   nnoremap <buffer><silent> i             :enew <bar> startinsert<cr>
-  nnoremap <buffer><silent> b             :call <SID>set_mark('B')<cr>
-  nnoremap <buffer><silent> s             :call <SID>set_mark('S')<cr>
-  nnoremap <buffer><silent> v             :call <SID>set_mark('V')<cr>
-  nnoremap <buffer>         <cr>          :call <SID>open_buffers(expand('<cword>'))<cr>
-  nnoremap <buffer>         <2-LeftMouse> :execute 'normal '. matchstr(getline('.'), '\w\+')<cr>
-  nnoremap <buffer><silent> q
-        \ :if len(filter(range(0, bufnr('$')), 'buflisted(v:val)')) > 1 <bar>
-        \   bd <bar>
-        \ else <bar>
-        \   quit <bar>
-        \ endif<cr>
+  nnoremap <buffer><silent> b             :call <sid>set_mark('B')<cr>
+  nnoremap <buffer><silent> s             :call <sid>set_mark('S')<cr>
+  nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
+  nnoremap <buffer>         <cr>          :call <sid>open_buffers(expand('<cword>'))<cr>
+  nnoremap <buffer>         <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
+  nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
   if exists('g:startify_empty_buffer_key')
     execute 'nnoremap <buffer><silent> '. g:startify_empty_buffer_key .' :enew<cr>'
@@ -100,8 +92,6 @@ function! startify#insane_in_the_membrane() abort
 
   autocmd! startify *
   autocmd  startify CursorMoved <buffer> call s:set_cursor()
-  "autocmd  startify BufLeave    <buffer> autocmd! startify *
-  "autocmd  startify WinLeave    <buffer> bd
 
   call cursor((s:show_special ? 4 : 2) + s:offset_header, 5)
 endfunction
@@ -364,26 +354,46 @@ endfunction
 
 " Function: s:open_buffers {{{1
 function! s:open_buffers(cword) abort
-  let id = bufnr('%')
+  enew
   if exists('s:marked') && !empty(s:marked)
     for i in range(len(s:marked))
       for val in values(s:marked)
         if val[0] == i
           if val[3] == 'S'
-            execute 'split '. val[2]
+            if line2byte('$') == -1
+              execute 'edit' val[2]
+            else
+              execute 'split' val[2]
+            endif
           elseif val[3] == 'V'
-            execute 'vsplit '. val[2]
+            if line2byte('$') == -1
+              execute 'edit' val[2]
+            else
+              execute 'vsplit' val[2]
+            endif
           else
-            execute 'edit '. val[2]
+            execute 'edit' val[2]
           endif
           continue
         endif
       endfor
     endfor
   else
-    execute 'normal '. a:cword
+    execute 'normal' a:cword
   endif
-  execute 'silent bdelete' id
+endfunction
+
+" Function: s:close {{{1
+function! s:close() abort
+  if len(filter(range(0, bufnr('$')), 'buflisted(v:val)'))
+    if bufloaded(bufnr('#'))
+      b #
+    else
+      bn
+    endif
+  else
+    quit
+  endif
 endfunction
 
 " Function: s:get_index_as_string {{{1
