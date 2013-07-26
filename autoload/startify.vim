@@ -93,6 +93,7 @@ function! startify#insane_in_the_membrane() abort
   autocmd! startify *
   autocmd  startify CursorMoved <buffer> call s:set_cursor()
 
+  1
   call cursor((s:show_special ? 4 : 2) + s:offset_header, 5)
 endfunction
 
