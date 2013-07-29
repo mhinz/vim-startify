@@ -380,6 +380,10 @@ function! s:open_buffers(cword) abort
   else
     execute 'normal' a:cword
   endif
+  if exists('s:marked')
+    unlet s:marked
+    unlet s:nmarked
+  endif
 endfunction
 
 " Function: s:close {{{1
