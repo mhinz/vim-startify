@@ -90,8 +90,7 @@ function! startify#insane_in_the_membrane() abort
     execute 'nnoremap <buffer><silent> '. g:startify_empty_buffer_key .' :enew<cr>'
   endif
 
-  autocmd! startify *
-  autocmd  startify CursorMoved <buffer> call s:set_cursor()
+  autocmd startify CursorMoved <buffer> call s:set_cursor()
 
   1
   call cursor((s:show_special ? 4 : 2) + s:offset_header, 5)
@@ -355,8 +354,9 @@ endfunction
 
 " Function: s:open_buffers {{{1
 function! s:open_buffers(cword) abort
-  enew
   if exists('s:marked') && !empty(s:marked)
+    enew
+    setlocal nobuflisted
     for i in range(len(s:marked))
       for val in values(s:marked)
         if val[0] == i
@@ -381,6 +381,10 @@ function! s:open_buffers(cword) abort
     endfor
   else
     execute 'normal' a:cword
+  endif
+  if exists('s:marked')
+    unlet s:marked
+    unlet s:nmarked
   endif
 endfunction
 
