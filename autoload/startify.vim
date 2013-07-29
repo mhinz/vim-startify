@@ -32,10 +32,7 @@ function! startify#insane_in_the_membrane() abort
   enew
   setfiletype startify
 
-  setlocal buftype=nofile
-  setlocal bufhidden=wipe
-  setlocal nobuflisted
-  setlocal noswapfile
+  setlocal noswapfile nobuflisted buftype=nofile bufhidden=wipe
   setlocal nonumber nolist statusline=\ startify
 
   if v:version >= 703
