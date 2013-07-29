@@ -355,6 +355,7 @@ endfunction
 function! s:open_buffers(cword) abort
   if exists('s:marked') && !empty(s:marked)
     enew
+    setlocal nobuflisted
     for i in range(len(s:marked))
       for val in values(s:marked)
         if val[0] == i
