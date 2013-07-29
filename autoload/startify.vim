@@ -204,6 +204,7 @@ function! s:show_dir(cnt) abort
   endif
   for fname in split(glob('.\=*'))
     if isdirectory(fname)
+          \ || (exists('g:startify_skiplist') && s:is_in_skiplist(resolve(fnamemodify(fname, ':p'))))
       continue
     endif
     call add(files, [getftime(fname), fname])

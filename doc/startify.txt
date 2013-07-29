@@ -140,7 +140,8 @@ Example: let g:startify_bookmarks = [ '~/.vimrc' ]
 
     let g:startify_skiplist = []
 
-A list of Vim regular expressions to filter recently used files.
+A list of Vim regular expressions to filter recently used files and files in
+the current directory.
 
 Example: let g:startify_skiplist = [
            \ 'COMMIT_EDITMSG',
