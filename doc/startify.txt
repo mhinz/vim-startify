@@ -79,15 +79,6 @@ default values.
 
 ============-
 
-    let g:startify_empty_buffer_key = ''
-
-This creates an additional, hidden mapping for the empty buffer.
-
-Example: let g:startify_empty_buffer_key = 'o'
-
-
-============-
-
     let g:startify_session_dir = '~/.vim/session'
 
 The directory to save/load sessions to/from.
@@ -97,34 +88,34 @@ The default for Windows systems is '$HOME\vimfiles\session'.
 
 ============-
 
-    let g:startify_show_sessions = 1
+    let g:startify_lists = ['files', 'sessions', 'bookmarks']
 
-List saved sessions in g:startify_session_dir.
+At the moment startify can show these kind of lists:
 
+1) Most recently used files.
 
-============-
-
-    let g:startify_show_files = 1
-
-List recently used files using viminfo.
-
-The number is limited by g:startify_show_files_number.
+   This lists the most recently used files using viminfo. The number of files
+   is limited by g:startify_files_number.
 
 
-============-
+2) Most recently changed files in the current directory.
 
-    let g:startify_show_files_number = 10
+   This lists the files from the current directory sorted by modification
+   time. The number of files is limited by g:startify_files_number.
 
-The number of files to list.
+3) Bookmarks.
 
+   This lists bookmarks, thus hardcoded files that will always be shown.
+   Have a look at g:startify_bookmarks.
 
-============-
+4) Sessions.
 
-    let g:startify_show_dir = 0
+   This lists all the sessions saved in the directory
+   g:startify_session_dir.
 
-Show files from the current directory sorted by modification time.
+Therefore, to show all of them in the above order:
 
-The number is limited by g:startify_show_files_number.
+    let g:startify_lists = ['files', 'dir', 'bookmarks', 'sessions']
 
 
 ============-
@@ -135,6 +126,21 @@ A list of files to bookmark. Those files will always be shown at the bottom of
 the start screen.
 
 Example: let g:startify_bookmarks = [ '~/.vimrc' ]
+
+
+============-
+
+    let g:startify_files_number = 10
+
+The number of files to list.
+
+
+============-
+
+    let g:startify_change_to_dir = 1
+
+When opening a file or bookmark, change to its directory.
+
 
 ============-
 
@@ -158,6 +164,22 @@ Do not create the startify buffer, if this is a Vim server instance with a
 name contained in this list.
 
 Example: let g:startify_skiplist_server = [ 'GVIM' ]
+
+
+============-
+
+    let g:startify_empty_buffer_key = 'o'
+
+This creates an additional, hidden mapping for the empty buffer.
+
+Default: does not exist
+
+
+============-
+
+    let g:startify_enable_special = 1
+
+Show <empty buffer> and <quit>.
 
 
 ============-
@@ -195,13 +217,6 @@ Best practices:
 
 ============-
 
-    let g:startify_enable_special = 1
-
-Don't show <empty buffer> and <quit>.
-
-
-============-
-
     let g:startify_custom_header = ''
 
 This is a list of single-quoted strings to be shown before everything else.
@@ -221,13 +236,6 @@ Example:
                 \ '',
                 \ '',
                 \ ]
-
-
-============-
-
-    let g:startify_change_to_dir = 1
-
-When opening a file or bookmark, change to its directory.
 
 
 ==============================================================================

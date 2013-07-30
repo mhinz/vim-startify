@@ -9,15 +9,11 @@ endif
 let g:autoloaded_startify = 1
 
 " Init: values {{{1
-let s:session_dir = resolve(expand(get(g:, 'startify_session_dir',
+let s:cmd          = (get(g:, 'startify_change_to_dir', 1) ? ' <bar> lcd %:h' : '') . '<cr>'
+let s:numfiles     = get(g:, 'startify_files_number', 10)
+let s:show_special = get(g:, 'startify_enable_special', 1)
+let s:session_dir  = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
-
-let s:cmd           = (get(g:, 'startify_change_to_dir', 1) ? ' <bar> lcd %:h' : '') . '<cr>'
-let s:numfiles      = get(g:, 'startify_show_files_number', 10)
-let s:show_special  = get(g:, 'startify_enable_special', 1)
-let s:show_dir      = get(g:, 'startify_show_dir')
-let s:show_files    = get(g:, 'startify_show_files', 1)
-let s:show_sessions = get(g:, 'startify_show_sessions', 1)
 
 " Function: #insane_in_the_membrane {{{1
 function! startify#insane_in_the_membrane() abort
@@ -39,6 +35,7 @@ function! startify#insane_in_the_membrane() abort
     setlocal norelativenumber
   endif
 
+  let cnt = 0
   let s:offset_header = 0
 
   if exists('g:startify_custom_header')
@@ -47,29 +44,16 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   if s:show_special
-    call append('$', '   [e]  <empty buffer>')
+    call append('$', ['   [e]  <empty buffer>', ''])
   endif
 
-  let cnt = 0
-  if s:show_dir
-    let cnt = s:show_dir(cnt)
-  endif
-
-  if s:show_files && !empty(v:oldfiles)
-    let cnt = s:show_files(cnt)
-  endif
-
-  let sfiles = split(globpath(s:session_dir, '*'), '\n')
-  if s:show_sessions && !empty(sfiles)
-    let cnt = s:show_sessions(sfiles, cnt)
-  endif
-
-  if exists('g:startify_bookmarks')
-    call s:show_bookmarks(cnt)
-  endif
+  for list in get(g:, 'startify_list_order', ['files', 'sessions', 'bookmarks'])
+    let cnt = s:show_{list}(cnt)
+    call append('$', '')
+  endfor
 
   if s:show_special
-    call append('$', ['', '   [q]  <quit>'])
+    call append('$', '   [q]  <quit>')
   endif
 
   setlocal nomodifiable nomodified
@@ -194,11 +178,9 @@ endfunction
 
 " Function: s:show_dir {{{1
 function! s:show_dir(cnt) abort
-  let cnt = a:cnt
+  let cnt   = a:cnt
   let files = []
-  if s:show_special
-    call append('$', '')
-  endif
+
   for fname in split(glob('.\=*'))
     if isdirectory(fname)
           \ || (exists('g:startify_skiplist') && s:is_in_skiplist(resolve(fnamemodify(fname, ':p'))))
@@ -206,80 +188,100 @@ function! s:show_dir(cnt) abort
     endif
     call add(files, [getftime(fname), fname])
   endfor
+
   function! l:compare(x, y)
     return a:y[0] - a:x[0]
   endfunction
+
   call sort(files, 'l:compare')
+
   for items in files
     let index = s:get_index_as_string(cnt)
     let fname = items[1]
+
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
+
     let cnt += 1
+
     if (cnt == s:numfiles)
       break
     endif
   endfor
+
   return cnt
 endfunction
 
 " Function: s:show_files {{{1
 function! s:show_files(cnt) abort
-  let cnt = a:cnt
-  let num = s:numfiles
+  let cnt     = a:cnt
+  let num     = s:numfiles
   let entries = {}
-  if s:show_special || s:show_dir
-    call append('$', '')
-  endif
+
   for fname in v:oldfiles
-    let expfname = resolve(fnamemodify(fname, ':p'))
+    let fullpath = resolve(fnamemodify(fname, ':p'))
+
     " filter duplicates, bookmarks and entries from the skiplist
-    if has_key(entries, expfname)
-          \ || !filereadable(expfname)
-          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(expfname))
-          \ || (exists('g:startify_bookmarks') && s:is_bookmark(expfname))
+    if has_key(entries, fullpath)
+          \ || !filereadable(fullpath)
+          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
+          \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
       continue
     endif
-    let entries[expfname] = 1
+
+    let entries[fullpath] = 1
     let index = s:get_index_as_string(cnt)
+
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:cmd
+
     let cnt += 1
     let num -= 1
+
     if !num
       break
     endif
   endfor
+
   return cnt
 endfunction
 
 " Function: s:show_sessions {{{1
-function! s:show_sessions(sfiles, cnt) abort
-  let cnt = a:cnt
-  if s:show_special || s:show_dir || s:show_files
-    call append('$', '')
+function! s:show_sessions(cnt) abort
+  let sfiles = split(globpath(s:session_dir, '*'), '\n')
+
+  if empty(sfiles)
+    return a:cnt
   endif
-  for i in range(len(a:sfiles))
+
+  let cnt = a:cnt
+
+  for i in range(len(sfiles))
     let idx = (i + cnt)
     let index = s:get_index_as_string(idx)
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(a:sfiles[i], ':t:r'))
-    execute 'nnoremap <buffer> '. index .' :source '. fnameescape(a:sfiles[i]) .'<cr>'
+
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
+    execute 'nnoremap <buffer> '. index .' :source '. fnameescape(sfiles[i]) .'<cr>'
   endfor
+
   return idx
 endfunction
 
 " Function: s:show_bookmarks {{{1
 function! s:show_bookmarks(cnt) abort
   let cnt = a:cnt
-  if s:show_special || s:show_dir || s:show_files || s:show_sessions
-    call append('$', '')
+
+  if exists('g:startify_bookmarks')
+    for fname in g:startify_bookmarks
+      let cnt  += 1
+      let index = s:get_index_as_string(cnt)
+
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:cmd
+    endfor
   endif
-  for fname in g:startify_bookmarks
-    let cnt += 1
-    let index = s:get_index_as_string(cnt)
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-    execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:cmd
-  endfor
+
+  return cnt
 endfunction
 
 " Function: s:is_in_skiplist {{{1
