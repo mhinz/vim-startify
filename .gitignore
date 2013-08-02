@@ -1,10 +1,11 @@
 *
 
 !.gitignore
+!CONTRIBUTING.md
+!LICENSE
+!README.md
 !autoload/startify.vim
 !doc/startify.txt
 !plugin/startify.vim
-!README.md
-!CONTRIBUTING.md
-!syntax/startify.vim
 !startify.png
+!syntax/startify.vim

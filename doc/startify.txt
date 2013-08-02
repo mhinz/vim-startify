@@ -324,9 +324,7 @@ You can also follow me on Twitter: [@_mhinz_](https://twitter.com/_mhinz_)
 ==============================================================================
 8. License                                                    *startify-license*
 
-Copyright © Marco Hinz. Distributed under the same terms as Vim itself.
-
-See |license|.
+MIT license. Copyright (c) 2013 Marco Hinz.
 
 
 vim: tw=78
