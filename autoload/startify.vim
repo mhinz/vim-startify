@@ -217,30 +217,32 @@ function! s:show_files(cnt) abort
   let num     = s:numfiles
   let entries = {}
 
-  for fname in v:oldfiles
-    let fullpath = resolve(fnamemodify(fname, ':p'))
+  if !empty(v:oldfiles)
+    for fname in v:oldfiles
+      let fullpath = resolve(fnamemodify(fname, ':p'))
 
-    " filter duplicates, bookmarks and entries from the skiplist
-    if has_key(entries, fullpath)
-          \ || !filereadable(fullpath)
-          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
-          \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
-      continue
-    endif
+      " filter duplicates, bookmarks and entries from the skiplist
+      if has_key(entries, fullpath)
+            \ || !filereadable(fullpath)
+            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
+            \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
+        continue
+      endif
 
-    let entries[fullpath] = 1
-    let index = s:get_index_as_string(cnt)
+      let entries[fullpath] = 1
+      let index = s:get_index_as_string(cnt)
 
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-    execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:cmd
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:cmd
 
-    let cnt += 1
-    let num -= 1
+      let cnt += 1
+      let num -= 1
 
-    if !num
-      break
-    endif
-  endfor
+      if !num
+        break
+      endif
+    endfor
+  endif
 
   return cnt
 endfunction
