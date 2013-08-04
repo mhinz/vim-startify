@@ -25,7 +25,6 @@ function! startify#insane_in_the_membrane() abort
     endfor
   endif
 
-  enew
   setlocal noswapfile nobuflisted buftype=nofile bufhidden=wipe
   setlocal nonumber nolist statusline=\ startify
   setfiletype startify
