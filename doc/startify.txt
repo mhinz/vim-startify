@@ -237,6 +237,11 @@ Example:
                 \ '',
                 \ ]
 
+============-
+
+    let g:startify_restore_position = 0
+
+Jump to the previous cursor position of a file when opening it.
 
 ==============================================================================
 4. Commands                                                  *startify-commands*
