@@ -184,6 +184,14 @@ Show <empty buffer> and <quit>.
 
 ============-
 
+    let g:startify_restore_position = 0
+
+Jump to the last cursor position when opening a file. You don't need this, if
+you already have this in your vimrc: |last-position-jump|.
+
+
+============-
+
     let g:startify_custom_indices = []
 
 Use any list of strings as indices instead of increasing numbers. If there are
@@ -319,7 +327,8 @@ getting feedback! Same for issues or feature requests.
 
 Thank you for flying mhi airlines. Get the Vim on!
 
-You can also follow me on Twitter: [@_mhinz_](https://twitter.com/_mhinz_)
+You can also follow me on Twitter: @_mhinz_
+
 
 ==============================================================================
 8. License                                                    *startify-license*
