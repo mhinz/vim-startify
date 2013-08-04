@@ -10,10 +10,11 @@ let g:loaded_startify = 1
 
 augroup startify
   autocmd!
-  autocmd VimEnter *
+  autocmd startify VimEnter *
         \ if !argc() && (line2byte('$') == -1) && (v:progname =~? '^[gm]\=vim\%[\.exe]$') |
         \   call startify#insane_in_the_membrane() |
-        \ endif
+        \ endif |
+        \ autocmd! startify VimEnter
 augroup END
 
 command! -nargs=? -bar -complete=customlist,startify#session_list SSave   call startify#session_save(<f-args>)
