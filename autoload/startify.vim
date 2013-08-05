@@ -181,6 +181,7 @@ endfunction
 " Function: s:show_dir {{{1
 function! s:show_dir(cnt) abort
   let cnt   = a:cnt
+  let num   = s:numfiles
   let files = []
 
   for fname in split(glob('.\=*'))
@@ -205,8 +206,9 @@ function! s:show_dir(cnt) abort
     execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
 
     let cnt += 1
+    let num -= 1
 
-    if (cnt == s:numfiles)
+    if !num
       break
     endif
   endfor
