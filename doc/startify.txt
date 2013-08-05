@@ -88,7 +88,7 @@ The default for Windows systems is '$HOME\vimfiles\session'.
 
 ============-
 
-    let g:startify_lists = ['files', 'sessions', 'bookmarks']
+    let g:startify_list_order = ['files', 'sessions', 'bookmarks']
 
 At the moment startify can show these kind of lists:
 
@@ -115,7 +115,7 @@ At the moment startify can show these kind of lists:
 
 Therefore, to show all of them in the above order:
 
-    let g:startify_lists = ['files', 'dir', 'bookmarks', 'sessions']
+    let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions']
 
 
 ============-
