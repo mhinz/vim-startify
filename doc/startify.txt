@@ -291,8 +291,22 @@ Example: (my terminal emulator supports 256 colors)
 ==============================================================================
 6. FAQ (Or: Typical rants)                                        *startify-faq*
 
-"I don't want the start screen to use cursorline!"
---------------------------------------------------
+
+How do I get both NERDTree and Startify working at startup?
+-----------------------------------------------------------
+
+Put this in your vimrc:
+
+    autocmd VimEnter *
+                \ if !argc() |
+                \   Startify |
+                \   NERDTree |
+                \   execute "normal \<c-w>w" |
+                \ endif
+
+
+I don't want the start screen to use cursorline!
+------------------------------------------------
 
 Startify sets its own filetype "startify". Thus one could set buffer-local
 options like this:
@@ -300,14 +314,14 @@ options like this:
     autocmd FileType startify setlocal nocursorline
 
 
-"Last recently used files don't seem to get updated at :Startify!"
------------------------------------------------------------
+Last recently used files don't seem to get updated at :Startify!
+----------------------------------------------------------------
 
 It's because Vim loads the list from viminfo only once, at startup.
 
 
-"I use iTerm2 and have broken colors when using sessions!"
-----------------------------------------------------------
+I use iTerm2 and have broken colors when using sessions!
+--------------------------------------------------------
 
 Nothing this plugin could do about. Try playing around with 'sessionoptions'.
 Some people swear it works for them with these settings:
