@@ -137,6 +137,14 @@ The number of files to list.
 
 ============-
 
+    let g:startify_session_detection = 1
+
+When the file Session.vim is found in the current directory, it will be shown at
+the top of all lists as entry [0].
+
+
+============-
+
     let g:startify_change_to_dir = 1
 
 When opening a file or bookmark, change to its directory.

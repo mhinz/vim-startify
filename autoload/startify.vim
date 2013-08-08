@@ -46,6 +46,12 @@ function! startify#insane_in_the_membrane() abort
     call append('$', ['   [e]  <empty buffer>', ''])
   endif
 
+  if get(g:, 'startify_session_detection', 1) && filereadable('Session.vim')
+    call append('$', ['   [0]  Session.vim', ''])
+    execute 'nnoremap <buffer> 0 :source Session.vim<cr>'
+    let cnt = 1
+  endif
+
   for list in get(g:, 'startify_list_order', ['files', 'sessions', 'bookmarks'])
     let cnt = s:show_{list}(cnt)
     call append('$', '')

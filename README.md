@@ -48,7 +48,10 @@ See `:h startify-options` for more information.
 
 #### 2) Easy session handling
 
-It eases handling of loading, saving and deleting sessions by always working
+When the file Session.vim is found in the current directory, it will be shown at
+the top of all lists as entry `[0]`.
+
+The handling of loading, saving and deleting sessions is eased by always working
 with one and the same directory. These commands are used for convenience:
 
     :SLoad    load a session
