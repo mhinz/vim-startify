@@ -9,12 +9,14 @@ endif
 let g:autoloaded_startify = 1
 
 " Init: values {{{1
-let s:cmd              = (get(g:, 'startify_change_to_dir', 1) ? ' <bar> lcd %:h' : '') . '<cr>'
 let s:numfiles         = get(g:, 'startify_files_number', 10)
 let s:show_special     = get(g:, 'startify_enable_special', 1)
 let s:restore_position = get(g:, 'startify_restore_position')
-let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
+
+let s:session_dir = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
+
+let s:chdir = (get(g:, 'startify_change_to_dir', 1) ? '<bar> if isdirectory(expand("%")) <bar> lcd % <bar> else <bar> lcd %:h <bar> endif' : '') .'<cr>'
 
 " Function: #insane_in_the_membrane {{{1
 function! startify#insane_in_the_membrane() abort
@@ -244,7 +246,7 @@ function! s:show_files(cnt) abort
       let index = s:get_index_as_string(cnt)
 
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:cmd
+      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:chdir
 
       let cnt += 1
       let num -= 1
@@ -289,7 +291,7 @@ function! s:show_bookmarks(cnt) abort
       let index = s:get_index_as_string(cnt)
 
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:cmd
+      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:chdir
     endfor
   endif
 
@@ -393,6 +395,7 @@ function! s:open_buffers(cword) abort
       else
         execute 'edit' path
       endif
+      call s:chdir()
     endfor
 
     " remove markers for next instance of :Startify
@@ -402,6 +405,17 @@ function! s:open_buffers(cword) abort
   " no markers found; open a single buffer
   else
     execute 'normal' a:cword
+  endif
+endfunction
+
+" Function: s:chdir {{{1
+function! s:chdir() abort
+  if get(g:, 'startify_change_to_dir', 1)
+    if isdirectory(expand('%'))
+      lcd %
+    else
+      lcd %:h
+    endif
   endif
 endfunction
 
