@@ -368,42 +368,40 @@ endfunction
 
 " Function: s:open_buffers {{{1
 function! s:open_buffers(cword) abort
+  " markers found; open one or more buffers
   if exists('s:marked') && !empty(s:marked)
     enew
     setlocal nobuflisted
 
-    " markers found; open one or more buffers
-    if exists('s:marked') && !empty(s:marked)
-      for val in values(s:marked)
-        let [path, type] = val[1:2]
-        " open in split
-        if type == 'S'
-          if line2byte('$') == -1
-            execute 'edit' path
-          else
-            execute 'split' path
-          endif
-        " open in vsplit
-        elseif type == 'V'
-          if line2byte('$') == -1
-            execute 'edit' path
-          else
-            execute 'vsplit' path
-          endif
-        " open in current window
-        else
+    for val in values(s:marked)
+      let [path, type] = val[1:2]
+      " open in split
+      if type == 'S'
+        if line2byte('$') == -1
           execute 'edit' path
+        else
+          execute 'split' path
         endif
-        continue
-      endfor
-    " no markers found; open a single buffer
-    else
-      execute 'normal' a:cword
-    endif
-  endif
+      " open in vsplit
+      elseif type == 'V'
+        if line2byte('$') == -1
+          execute 'edit' path
+        else
+          execute 'vsplit' path
+        endif
+      " open in current window
+      else
+        execute 'edit' path
+      endif
+    endfor
 
-  if exists('s:marked')
-    unlet s:marked
+    " remove markers for next instance of :Startify
+    if exists('s:marked')
+      unlet s:marked
+    endif
+  " no markers found; open a single buffer
+  else
+    execute 'normal' a:cword
   endif
 endfunction
 
