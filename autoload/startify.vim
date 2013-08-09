@@ -336,31 +336,33 @@ endfunction
 " Function: s:set_mark {{{1
 "
 " Markers are saved in the s:marked dict using the follow format:
-"   - s:marked[0]: ID (for sorting)
-"   - s:marked[1]: what the brackets contained before
-"   - s:marked[2]: the actual path
-"   - s:marked[3]: type (buffer, split, vsplit)
+"   - s:marked[0]: ID
+"   - s:marked[1]: path
+"   - s:marked[2]: type (buffer, split, vsplit)
 "
 function! s:set_mark(type) abort
   if !exists('s:marked')
     let s:marked  = {}
-    let s:nmarked = 0
   endif
-  " matches[1]: content between brackets
-  " matches[2]: path
-  let matches = matchlist(getline('.'), '\v\[(.*)\]\s+(.*)')
-  if matches[2] =~ '\V<empty buffer>\|<quit>' || matches[2] =~ '^\w\+$'
+
+  let [id, path] = matchlist(getline('.'), '\v\[(.*)\]\s+(.*)')[1:2]
+
+  if path =~# '\V<empty buffer>\|<quit>'
     return
   endif
+
   setlocal modifiable
-  if matches[1] =~ 'B\|S\|V'
-    let s:nmarked -= 1
-    execute 'normal! ci]'. remove(s:marked, line('.'))[1]
+
+  " set markers
+  if id =~# '[BSV]'
+    " replace marker by old ID
+    execute 'normal! ci]'. remove(s:marked, line('.'))[0]
   else
-    let s:marked[line('.')] = [s:nmarked, matches[1], matches[2], a:type]
-    let s:nmarked += 1
-    execute 'normal! ci]'. repeat(a:type, len(matches[1]))
+    " save ID and replace it by the marker of the given type
+    let s:marked[line('.')] = [id, path, a:type]
+    execute 'normal! ci]'. repeat(a:type, len(id))
   endif
+
   setlocal nomodifiable nomodified
 endfunction
 
@@ -369,34 +371,39 @@ function! s:open_buffers(cword) abort
   if exists('s:marked') && !empty(s:marked)
     enew
     setlocal nobuflisted
-    for i in range(len(s:marked))
+
+    " markers found; open one or more buffers
+    if exists('s:marked') && !empty(s:marked)
       for val in values(s:marked)
-        if val[0] == i
-          if val[3] == 'S'
-            if line2byte('$') == -1
-              execute 'edit' val[2]
-            else
-              execute 'split' val[2]
-            endif
-          elseif val[3] == 'V'
-            if line2byte('$') == -1
-              execute 'edit' val[2]
-            else
-              execute 'vsplit' val[2]
-            endif
+        let [path, type] = val[1:2]
+        " open in split
+        if type == 'S'
+          if line2byte('$') == -1
+            execute 'edit' path
           else
-            execute 'edit' val[2]
+            execute 'split' path
           endif
-          continue
+        " open in vsplit
+        elseif type == 'V'
+          if line2byte('$') == -1
+            execute 'edit' path
+          else
+            execute 'vsplit' path
+          endif
+        " open in current window
+        else
+          execute 'edit' path
         endif
+        continue
       endfor
-    endfor
-  else
-    execute 'normal' a:cword
+    " no markers found; open a single buffer
+    else
+      execute 'normal' a:cword
+    endif
   endif
+
   if exists('s:marked')
     unlet s:marked
-    unlet s:nmarked
   endif
 endfunction
 
