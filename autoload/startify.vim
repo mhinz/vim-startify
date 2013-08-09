@@ -275,7 +275,7 @@ function! s:show_sessions(cnt) abort
     let index = s:get_index_as_string(idx)
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
-    execute 'nnoremap <buffer> '. index .' :source '. fnameescape(sfiles[i]) .'<cr>'
+    execute 'nnoremap <buffer>' index ':source' fnameescape(sfiles[i]) '<cr>'
   endfor
 
   return idx
@@ -291,7 +291,7 @@ function! s:show_bookmarks(cnt) abort
       let index = s:get_index_as_string(cnt)
 
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer> '. index .' :edit '. fnameescape(fname) . s:chdir
+      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) s:chdir
     endfor
   endif
 
