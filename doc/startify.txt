@@ -142,6 +142,15 @@ The number of files to list.
 When the file Session.vim is found in the current directory, it will be shown at
 the top of all lists as entry [0].
 
+============-
+
+    let g:startify_session_autoload = 0
+
+If you bookmark a directory that contains a Session.vim and this option is
+enabled, that session will be loaded automatically when you open the
+directory.
+
+Great way to create a portable project folder.
 
 ============-
 
