@@ -411,13 +411,16 @@ endfunction
 
 " Function: s:check_user_options {{{1
 function! s:check_user_options() abort
-  let path = expand('%') . s:sep .'Session.vim'
+  let path    = expand('%')
+  let session = path . s:sep .'Session.vim'
+
+  echom '>>> '. path
   " autoload session
-  if get(g:, 'startify_session_autoload') && filereadable(path)
-    execute 'source' path
+  if get(g:, 'startify_session_autoload') && filereadable(session)
+    execute 'source' session
   " change directory
   elseif get(g:, 'startify_change_to_dir', 1)
-    if isdirectory(expand('%'))
+    if isdirectory(path)
       lcd %
     else
       lcd %:h
