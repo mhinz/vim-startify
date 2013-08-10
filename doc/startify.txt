@@ -322,6 +322,14 @@ Put this in your vimrc:
                 \ endif
 
 
+The session autoload feature is not working!
+--------------------------------------------
+
+Do you have NERDTree installed by any chance? If so, try this:
+
+    let NERDTreeHijackNetrw = 0
+
+
 I don't want the start screen to use cursorline!
 ------------------------------------------------
 
