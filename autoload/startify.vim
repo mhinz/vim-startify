@@ -277,7 +277,7 @@ function! s:show_sessions(cnt) abort
     execute 'nnoremap <buffer>' index ':source' fnameescape(sfiles[i]) '<cr>'
   endfor
 
-  return idx
+  return idx + 1
 endfunction
 
 " Function: s:show_bookmarks {{{1
@@ -286,11 +286,12 @@ function! s:show_bookmarks(cnt) abort
 
   if exists('g:startify_bookmarks')
     for fname in g:startify_bookmarks
-      let cnt  += 1
       let index = s:get_index_as_string(cnt)
 
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
       execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
+
+      let cnt += 1
     endfor
   endif
 
@@ -414,7 +415,6 @@ function! s:check_user_options() abort
   let path    = expand('%')
   let session = path . s:sep .'Session.vim'
 
-  echom '>>> '. path
   " autoload session
   if get(g:, 'startify_session_autoload') && filereadable(session)
     execute 'source' session
