@@ -77,7 +77,24 @@ Startify basically provides two things:
 Put these variables into your vimrc. The shown assignments are also the
 default values.
 
-============-
+    |g:startify_session_dir|
+    |g:startify_list_order|
+    |g:startify_bookmarks|
+    |g:startify_files_number|
+    |g:startify_session_detection|
+    |g:startify_session_autoload|
+    |g:startify_session_persistence|
+    |g:startify_skiplist|
+    |g:startify_skiplist_server|
+    |g:startify_change_to_dir|
+    |g:startify_custom_indices|
+    |g:startify_custom_header|
+    |g:startify_restore_position|
+    |g:startify_empty_buffer_key|
+    |g:startify_enable_special|
+
+
+============-                                           *g:startify_session_dir*
 
     let g:startify_session_dir = '~/.vim/session'
 
@@ -86,7 +103,7 @@ The directory to save/load sessions to/from.
 The default for Windows systems is '$HOME\vimfiles\session'.
 
 
-============-
+============-                                            *g:startify_list_order*
 
     let g:startify_list_order = ['files', 'sessions', 'bookmarks']
 
@@ -118,7 +135,7 @@ Therefore, to show all of them in the above order:
     let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions']
 
 
-============-
+============-                                             *g:startify_bookmarks*
 
     let g:startify_bookmarks = []
 
@@ -128,14 +145,14 @@ the start screen.
 Example: let g:startify_bookmarks = [ '~/.vimrc' ]
 
 
-============-
+============-                                          *g:startify_files_number*
 
     let g:startify_files_number = 10
 
 The number of files to list.
 
 
-============-
+============-                                     *g:startify_session_detection*
 
     let g:startify_session_detection = 1
 
@@ -143,7 +160,7 @@ When the file Session.vim is found in the current directory, it will be shown at
 the top of all lists as entry [0].
 
 
-============-
+============-                                      *g:startify_session_autoload*
 
     let g:startify_session_autoload = 0
 
@@ -154,21 +171,21 @@ directory.
 Great way to create a portable project folder.
 
 
-============-
+============-                                   *g:startify_session_persistence*
 
     let g:startify_session_persistence = 0
 
 Automatically update sessions before exiting Vim.
 
 
-============-
+============-                                         *g:startify_change_to_dir*
 
     let g:startify_change_to_dir = 1
 
 When opening a file or bookmark, change to its directory.
 
 
-============-
+============-                                              *g:startify_skiplist*
 
     let g:startify_skiplist = []
 
@@ -182,7 +199,7 @@ Example: let g:startify_skiplist = [
            \ ]
 
 
-============-
+============-                                       *g:startify_skiplist_server*
 
     let g:startify_skiplist_server = []
 
@@ -192,7 +209,7 @@ name contained in this list.
 Example: let g:startify_skiplist_server = [ 'GVIM' ]
 
 
-============-
+============-                                      *g:startify_empty_buffer_key*
 
     let g:startify_empty_buffer_key = 'o'
 
@@ -201,14 +218,14 @@ This creates an additional, hidden mapping for the empty buffer.
 Default: does not exist
 
 
-============-
+============-                                        *g:startify_enable_special*
 
     let g:startify_enable_special = 1
 
 Show <empty buffer> and <quit>.
 
 
-============-
+============-                                      *g:startify_restore_position*
 
     let g:startify_restore_position = 0
 
@@ -216,7 +233,7 @@ Jump to the last cursor position when opening a file. You don't need this, if
 you already have this in your vimrc: |last-position-jump|.
 
 
-============-
+============-                                        *g:startify_custom_indices*
 
     let g:startify_custom_indices = []
 
@@ -249,7 +266,7 @@ Best practices:
 - (you might want to keep 'j' and 'k' for navigation)
 
 
-============-
+============-                                         *g:startify_custom_header*
 
     let g:startify_custom_header = ''
 
