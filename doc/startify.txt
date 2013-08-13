@@ -142,6 +142,7 @@ The number of files to list.
 When the file Session.vim is found in the current directory, it will be shown at
 the top of all lists as entry [0].
 
+
 ============-
 
     let g:startify_session_autoload = 0
@@ -151,6 +152,14 @@ enabled, that session will be loaded automatically when you open the
 directory.
 
 Great way to create a portable project folder.
+
+
+============-
+
+    let g:startify_session_persistence = 0
+
+Automatically update sessions before exiting Vim.
+
 
 ============-
 

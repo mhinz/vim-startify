@@ -15,6 +15,15 @@ let s:restore_position = get(g:, 'startify_restore_position')
 let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
+" Init: autocmds {{{1
+
+if get(g:, 'startify_session_persistence')
+  autocmd startify VimLeave *
+        \ if exists('v:this_session') && filewritable(v:this_session) |
+        \   execute 'mksession!' fnameescape(v:this_session) |
+        \ endif
+endif
+
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
