@@ -244,26 +244,27 @@ entries will be filled using the default numbering scheme starting from 0.
 Thus you can create your own indexing scheme that fits your keyboard layout.
 You don't want to leave the home row, do you?!
 
-Example: let g:startify_custom_indices = ['a','s','d','f']
+Example: let g:startify_custom_indices = ['f', 'g', 'h']
 
 This would result in:
 
-    [a]  /last/recently/used/file1
-    [s]  /last/recently/used/file2
-    [d]  /last/recently/used/file3
-    [f]  /last/recently/used/file4
-    [0]  /last/recently/used/file5
-    [1]  /last/recently/used/file6
+    [f]  /last/recently/used/file1
+    [g]  /last/recently/used/file2
+    [h]  /last/recently/used/file3
+    [0]  /last/recently/used/file4
+    [1]  /last/recently/used/file5
+    [2]  /last/recently/used/file6
     etc.
 
 NOTE: There is no sanitizing going on, so you should know what you're doing!
 
 Best practices:
 
-- do not use 'e', 'i' or 'q' (they will be overwritten anyway)
-- do not use duplicates (previous mappings will be overwritten)
-- do not uses empty strings (creates unreachable entries)
-- (you might want to keep 'j' and 'k' for navigation)
+- do not use 'e', 'i' or 'q'  (they will be overwritten anyway)
+- do not use 'b', 's', 'v'  (used for opening several files at once)
+- do not use duplicates  (previous mappings will be overwritten)
+- do not uses empty strings  (creates unreachable entries)
+- you might want to keep 'j' and 'k'  (for navigation)
 
 
 ============-                                         *g:startify_custom_header*
