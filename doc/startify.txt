@@ -318,6 +318,18 @@ Example: (my terminal emulator supports 256 colors)
 6. FAQ (Or: Typical rants)                                        *startify-faq*
 
 
+CtrlP opens a split in Startify!
+--------------------------------
+
+Solution 1)
+
+    let g:ctrlp_reuse_window = 'startify'
+
+Solution 2)
+
+    autocmd FileType startify setlocal buftype=
+
+
 How do I get both NERDTree and Startify working at startup?
 -----------------------------------------------------------
 
