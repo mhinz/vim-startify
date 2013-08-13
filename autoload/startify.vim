@@ -3,7 +3,7 @@
 " Maintainer:  Marco Hinz <http://github.com/mhinz>
 " Version:     1.7
 
-if exists('g:autoloaded_startify') || &cp
+if exists('g:autoloaded_startify') || &compatible
   finish
 endif
 let g:autoloaded_startify = 1
@@ -124,7 +124,7 @@ endfunction
 function! startify#session_save(...) abort
   if !isdirectory(s:session_dir)
     if exists('*mkdir')
-      echo 'The session directory does not exist: '. s:session_dir .'. Create it?  [y/n]' | redraw
+      echo 'The session directory does not exist: '. s:session_dir .'. Create it?  [y/n]'
       if (nr2char(getchar()) == 'y')
         call mkdir(s:session_dir, 'p')
       else
@@ -136,6 +136,7 @@ function! startify#session_save(...) abort
       return
     endif
   endif
+
   if exists('a:1')
     let sname = a:1
   else
@@ -146,11 +147,13 @@ function! startify#session_save(...) abort
       return
     endif
   endif
+
   let spath = s:session_dir . s:sep . sname
   if !filereadable(spath)
     execute 'mksession '. fnameescape(spath) | echo 'Session saved under: '. spath
     return
   endif
+
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
   if nr2char(getchar()) == 'y'
     execute 'mksession! '. fnameescape(spath) | echo 'Session saved under: '. spath
@@ -168,10 +171,12 @@ function! startify#session_delete(...) abort
     echo 'There are no sessions...'
     return
   endif
+
   let spath = s:session_dir . s:sep . (exists('a:1')
         \ ? a:1
         \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
         \ | redraw
+
   echo 'Really delete '. spath .'? [y/n]' | redraw
   if (nr2char(getchar()) == 'y')
     if delete(spath) == 0
