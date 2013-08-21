@@ -193,9 +193,9 @@ A list of Vim regular expressions to filter recently used files and files in
 the current directory.
 
 Example: let g:startify_skiplist = [
-           \ 'COMMIT_EDITMSG',
-           \ $VIMRUNTIME .'/doc',
-           \ 'bundle/.*/doc'
+           \ '.vimgolf',
+           \ '^/tmp'
+           \ '/project/.*/documentation'
            \ ]
 
 
@@ -335,9 +335,9 @@ Example: (my terminal emulator supports 256 colors)
 ==============================================================================
 6. FAQ (Or: Typical rants)                                        *startify-faq*
 
+------------------------------------------------------------------------------
 
-CtrlP opens a split in Startify!
---------------------------------
+==> CtrlP opens a split in Startify!
 
 Solution 1)
 
@@ -348,8 +348,8 @@ Solution 2)
     autocmd FileType startify setlocal buftype=
 
 
-How do I get both NERDTree and Startify working at startup?
------------------------------------------------------------
+------------------------------------------------------------------------------
+==> How do I get both NERDTree and Startify working at startup?
 
 Put this in your vimrc:
 
@@ -361,16 +361,16 @@ Put this in your vimrc:
                 \ endif
 
 
-The session autoload feature is not working!
---------------------------------------------
+------------------------------------------------------------------------------
+==> The session autoload feature is not working!
 
 Do you have NERDTree installed by any chance? If so, try this:
 
     let NERDTreeHijackNetrw = 0
 
 
-I don't want the start screen to use cursorline!
-------------------------------------------------
+------------------------------------------------------------------------------
+==> I don't want the start screen to use cursorline!
 
 Startify sets its own filetype "startify". Thus one could set buffer-local
 options like this:
@@ -378,19 +378,32 @@ options like this:
     autocmd FileType startify setlocal nocursorline
 
 
-Last recently used files don't seem to get updated at :Startify!
-----------------------------------------------------------------
+------------------------------------------------------------------------------
+==> Last recently used files don't seem to get updated at :Startify!
 
 It's because Vim loads the list from viminfo only once, at startup.
 
 
-I use iTerm2 and have broken colors when using sessions!
---------------------------------------------------------
+------------------------------------------------------------------------------
+==> I use iTerm2 and have broken colors when using sessions!
 
 Nothing this plugin could do about. Try playing around with 'sessionoptions'.
 Some people swear it works for them with these settings:
 
     set sessionoptions=blank,curdir,folds,help,tabpages,winpos
+
+
+------------------------------------------------------------------------------
+==> How to disable common but unimportant files?
+
+Use the skiplist. Personally I use:
+
+Example: let g:startify_skiplist = [
+           \ 'COMMIT_EDITMSG',
+           \ $VIMRUNTIME .'/doc',
+           \ 'bundle/.*/doc',
+           \ '\.DS_Store'
+           \ ]
 
 
 ==============================================================================
