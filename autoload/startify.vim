@@ -394,7 +394,7 @@ function! s:open_buffers(cword) abort
       let [path, type] = val[1:2]
 
       if line2byte('$') == -1
-        " open in current buffer
+        " open in current window
         execute 'edit' path
       elseif type == 'S'
         " open in split
@@ -406,7 +406,7 @@ function! s:open_buffers(cword) abort
         " open in tab
         execute 'tabnew' path
       else
-        " open in current buffer
+        " open in current window
         execute 'edit' path
       endif
 
