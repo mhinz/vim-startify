@@ -53,10 +53,10 @@ Startify basically provides two things:
    jumps into insert mode, 'q' quits.
 
    Moreover, you can open several files at one go. Navigate to an entry and
-   hit either 'b' (open in same window), 's' (open in split) or 'v' (open in
-   vertical split). You can do that for multiple entries. You can also mix
-   them. The order of the selections will be remembered. Afterwards execute
-   these actions via <cr>.
+   hit either 'b' (open in same window), 's' (open in split), 'v' (open in
+   vertical split) or 't' (open in tab). You can do that for multiple entries.
+   You can also mix them. The order of the selections will be remembered.
+   Afterwards execute these actions via <cr>.
 
    When the selection is finished, Startify will close automatically. You can
    reopen the screen via :Startify.
@@ -261,7 +261,7 @@ NOTE: There is no sanitizing going on, so you should know what you're doing!
 Best practices:
 
 - do not use 'e', 'i' or 'q'  (they will be overwritten anyway)
-- do not use 'b', 's', 'v'  (used for opening several files at once)
+- do not use 'b', 's', 't', 'v'  (used for opening several files at once)
 - do not use duplicates  (previous mappings will be overwritten)
 - do not uses empty strings  (creates unreachable entries)
 - you might want to keep 'j' and 'k'  (for navigation)

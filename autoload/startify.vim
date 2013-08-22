@@ -82,6 +82,7 @@ function! startify#insane_in_the_membrane() abort
   nnoremap <buffer><silent> i             :enew <bar> startinsert<cr>
   nnoremap <buffer><silent> b             :call <sid>set_mark('B')<cr>
   nnoremap <buffer><silent> s             :call <sid>set_mark('S')<cr>
+  nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
   nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
   nnoremap <buffer>         <cr>          :call <sid>open_buffers(expand('<cword>'))<cr>
   nnoremap <buffer>         <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
@@ -370,7 +371,7 @@ function! s:set_mark(type) abort
   setlocal modifiable
 
   " set markers
-  if id =~# '[BSV]'
+  if id =~# '[BSTV]'
     " replace marker by old ID
     execute 'normal! ci]'. remove(s:marked, line('.'))[0]
   else
@@ -405,6 +406,13 @@ function! s:open_buffers(cword) abort
           execute 'edit' path
         else
           execute 'vsplit' path
+        endif
+      " open in tab
+      elseif type == 'T'
+        if line2byte('$') == -1
+          execute 'edit' path
+        else
+          execute 'tabnew' path
         endif
       " open in current window
       else
