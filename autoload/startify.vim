@@ -393,29 +393,20 @@ function! s:open_buffers(cword) abort
     for val in values(s:marked)
       let [path, type] = val[1:2]
 
-      " open in split
-      if type == 'S'
-        if line2byte('$') == -1
-          execute 'edit' path
-        else
-          execute 'split' path
-        endif
-      " open in vsplit
+      if line2byte('$') == -1
+        " open in current buffer
+        execute 'edit' path
+      elseif type == 'S'
+        " open in split
+        execute 'split' path
       elseif type == 'V'
-        if line2byte('$') == -1
-          execute 'edit' path
-        else
-          execute 'vsplit' path
-        endif
-      " open in tab
+        " open in vsplit
+        execute 'vsplit' path
       elseif type == 'T'
-        if line2byte('$') == -1
-          execute 'edit' path
-        else
-          execute 'tabnew' path
-        endif
-      " open in current window
+        " open in tab
+        execute 'tabnew' path
       else
+        " open in current buffer
         execute 'edit' path
       endif
 
