@@ -110,10 +110,10 @@ key in whatever is written between the square brackets on that line. You can
 even double-click anywhere on the line.
 
 Moreover, you can open several files at one go! Navigate to an entry and hit
-either `b` (open in same window), `s` (open in split) or `v` (open in vertical
-split) for marking it. You can mark several entries and also mix different
-markers. Afterwards execute all the markers in the order they were given via
-`<cr>`.
+either `b` (open in same window), `s` (open in split), `v` (open in vertical
+split) or `t` (open in tab) for marking it. You can mark several entries and
+also mix different markers. Afterwards execute all the markers in the order they
+were given via `<cr>`.
 
 In case you don't want to open a file, there is also `e` for creating an empty
 buffer, `i` for creating an empty buffer and jumping into insert mode and `q`
