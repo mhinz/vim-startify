@@ -185,6 +185,14 @@ Automatically update sessions before exiting Vim.
 When opening a file or bookmark, change to its directory.
 
 
+============-                                    *g:startify_change_to_vcs_root*
+
+    let g:startify_change_to_vcs_root = 0
+
+When opening a file or bookmark, seek and change to the root directory of the
+VCS (if there is one).
+
+
 ============-                                              *g:startify_skiplist*
 
     let g:startify_skiplist = []

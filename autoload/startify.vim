@@ -431,6 +431,9 @@ function! s:check_user_options() abort
   " autoload session
   if get(g:, 'startify_session_autoload') && filereadable(session)
     execute 'source' session
+  " change to VCS root directory
+  elseif get(g:, 'startify_change_to_vcs_root')
+    call s:cd_to_vcs_root(path)
   " change directory
   elseif get(g:, 'startify_change_to_dir', 1)
     if isdirectory(path)
@@ -439,6 +442,18 @@ function! s:check_user_options() abort
       lcd %:h
     endif
   endif
+endfunction
+
+" Function: s:cd_to_vcs_root {{{1
+function! s:cd_to_vcs_root(path) abort
+  let dir = fnamemodify(a:path, ':p:h')
+  for vcs in [ '.git', '.hg', '.bzr', '.svn' ]
+    let root = finddir(vcs, dir .';')
+    if !empty(root)
+      execute 'cd '. fnamemodify(root, ':h')
+      return
+    endif
+  endfor
 endfunction
 
 " Function: s:close {{{1
