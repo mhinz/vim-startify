@@ -80,6 +80,7 @@ function! startify#insane_in_the_membrane() abort
 
   nnoremap <buffer><silent> e             :enew<cr>
   nnoremap <buffer><silent> i             :enew <bar> startinsert<cr>
+  nnoremap <buffer><silent> <insert>      :enew <bar> startinsert<cr>
   nnoremap <buffer><silent> b             :call <sid>set_mark('B')<cr>
   nnoremap <buffer><silent> s             :call <sid>set_mark('S')<cr>
   nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
