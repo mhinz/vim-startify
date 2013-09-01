@@ -69,11 +69,12 @@ function! startify#insane_in_the_membrane() abort
 
   for list in get(g:, 'startify_list_order', ['files', 'sessions', 'bookmarks'])
     let cnt = s:show_{list}(cnt)
-    call append('$', '')
   endfor
 
+  $delete
+
   if s:show_special
-    call append('$', '   [q]  <quit>')
+    call append('$', ['', '   [q]  <quit>'])
   endif
 
   setlocal nomodifiable nomodified
@@ -212,6 +213,7 @@ function! s:show_dir(cnt) abort
           \ || (exists('g:startify_skiplist') && s:is_in_skiplist(resolve(fnamemodify(fname, ':p'))))
       continue
     endif
+
     call add(files, [getftime(fname), fname])
   endfor
 
@@ -235,6 +237,10 @@ function! s:show_dir(cnt) abort
       break
     endif
   endfor
+
+  if !empty(files)
+    call append('$', '')
+  endif
 
   return cnt
 endfunction
@@ -270,14 +276,17 @@ function! s:show_files(cnt) abort
         break
       endif
     endfor
-  endif
 
-  return cnt
+    call append('$', '')
+
+    return cnt
+  endif
 endfunction
 
 " Function: s:show_sessions {{{1
 function! s:show_sessions(cnt) abort
   let sfiles = split(globpath(s:session_dir, '*'), '\n')
+  let slen   = len(sfiles)
 
   if empty(sfiles)
     return a:cnt
@@ -285,13 +294,15 @@ function! s:show_sessions(cnt) abort
 
   let cnt = a:cnt
 
-  for i in range(len(sfiles))
-    let idx = (i + cnt)
+  for i in range(slen)
+    let idx   = (i + cnt)
     let index = s:get_index_as_string(idx)
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
     execute 'nnoremap <buffer>' index ':source' fnameescape(sfiles[i]) '<cr>'
   endfor
+
+  call append('$', '')
 
   return idx + 1
 endfunction
@@ -309,6 +320,8 @@ function! s:show_bookmarks(cnt) abort
 
       let cnt += 1
     endfor
+
+    call append('$', '')
   endif
 
   return cnt
@@ -360,7 +373,7 @@ endfunction
 "
 function! s:set_mark(type) abort
   if !exists('s:marked')
-    let s:marked  = {}
+    let s:marked = {}
   endif
 
   let [id, path] = matchlist(getline('.'), '\v\[(.*)\]\s+(.*)')[1:2]
