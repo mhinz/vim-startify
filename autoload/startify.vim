@@ -50,11 +50,11 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   let cnt = 0
-  let s:offset_header = 0
+  let s:headoff = 0
 
   if exists('g:startify_custom_header')
     call append('$', g:startify_custom_header)
-    let s:offset_header += len(g:startify_custom_header)
+    let s:headoff += len(g:startify_custom_header)
   endif
 
   if s:show_special
@@ -75,6 +75,12 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
+  endif
+
+  let s:lastline = line('$')
+
+  if exists('g:startify_custom_footer')
+    call append('$', g:startify_custom_footer)
   endif
 
   setlocal nomodifiable nomodified
@@ -100,7 +106,7 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   1
-  call cursor((s:show_special ? 4 : 2) + s:offset_header, 5)
+  call cursor((s:show_special ? 4 : 2) + s:headoff, 5)
 endfunction
 
 " Function: #session_load {{{1
@@ -348,19 +354,37 @@ endfunction
 
 " Function: s:set_cursor {{{1
 function! s:set_cursor() abort
-  let s:line_old = exists('s:line_new') ? s:line_new : 5
-  let s:line_new = line('.')
-  let offset     = s:offset_header + 2
-  if empty(getline(s:line_new))
-    if (s:line_new > s:line_old)
-      let s:line_new += 1
-      call cursor(s:line_new, 5) " going down
-    else
-      let s:line_new -= 1
-      call cursor((s:line_new < offset ? offset : s:line_new), 5) " going up
+  let s:oldline = exists('s:newline') ? s:newline : 5
+  let s:newline = line('.')
+  let headoff   = s:headoff + 2
+
+  echom 'newline: '. s:newline
+
+  " going down
+  if s:newline > s:oldline
+    if empty(getline(s:newline))
+      let s:newline += 1
     endif
+    if s:newline > s:lastline
+      call cursor(headoff, 5)
+      let s:newline = headoff
+    else
+      call cursor(s:newline, 5)
+    endif
+  " going up
+  elseif s:newline < s:oldline
+    if empty(getline(s:newline))
+      let s:newline -= 1
+    endif
+    if s:newline < headoff
+      call cursor(s:lastline, 5)
+      let s:newline = s:lastline
+    else
+      call cursor(s:newline, 5)
+    endif
+  " hold cursor in column
   else
-    call cursor((s:line_new < offset ? offset : 0), 5) " hold cursor in column
+    call cursor(s:newline, 5)
   endif
 endfunction
 
