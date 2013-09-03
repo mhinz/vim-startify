@@ -358,8 +358,6 @@ function! s:set_cursor() abort
   let s:newline = line('.')
   let headoff   = s:headoff + 2
 
-  echom 'newline: '. s:newline
-
   " going down
   if s:newline > s:oldline
     if empty(getline(s:newline))
