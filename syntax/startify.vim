@@ -21,6 +21,12 @@ if exists('g:startify_custom_header')
   execute 'syntax region StartifyHeader start=/\%1l/ end=/\%'. (len(g:startify_custom_header) + 2) .'l/'
 endif
 
+if exists('g:startify_custom_footer')
+  autocmd startify User <buffer>
+        \ execute 'syntax region StartifyFooter start=/\%'. (startify#get_lastline() + 1) .'l/ end=/*/' |
+        \ autocmd! startify User <buffer>
+endif
+
 highlight default link StartifyHeader  Normal
 highlight default link StartifyBracket Delimiter
 highlight default link StartifyNumber  Number

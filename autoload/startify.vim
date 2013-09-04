@@ -31,6 +31,11 @@ endfunction
 
 let s:sep = startify#get_separator()
 
+" Function: #get_lastline {{{1
+function! startify#get_lastline() abort
+  return s:lastline
+endfunction
+
 " Function: #insane_in_the_membrane {{{1
 function! startify#insane_in_the_membrane() abort
   if !empty(v:servername) && exists('g:startify_skiplist_server')
@@ -107,6 +112,8 @@ function! startify#insane_in_the_membrane() abort
 
   1
   call cursor((s:show_special ? 4 : 2) + s:headoff, 5)
+
+  doautocmd <nomodeline> startify User
 endfunction
 
 " Function: #session_load {{{1

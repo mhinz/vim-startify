@@ -89,6 +89,7 @@ default values.
     |g:startify_change_to_dir|
     |g:startify_custom_indices|
     |g:startify_custom_header|
+    |g:startify_custom_footer|
     |g:startify_restore_position|
     |g:startify_empty_buffer_key|
     |g:startify_enable_special|
@@ -300,6 +301,13 @@ Example:
                 \ ]
 
 
+============-                                         *g:startify_custom_footer*
+
+    let g:startify_custom_footer = ''
+
+Same as the custom header, but shown at the bottom of the startify buffer.
+
+
 ==============================================================================
 4. Commands                                                  *startify-commands*
 
@@ -327,6 +335,7 @@ these groups:
 
     StartifyBracket         [,]
     StartifyFile            the actual file
+    StartifyFooter          the custom footer
     StartifyHeader          the custom header
     StartifyNumber          the numbers between []
     StartifyPath            the path to a file
@@ -336,6 +345,7 @@ these groups:
 Example: (my terminal emulator supports 256 colors)
 
     hi StartifyBracket ctermfg=240
+    hi StartifyFooter  ctermfg=111
     hi StartifyHeader  ctermfg=203
     hi StartifyNumber  ctermfg=215
     hi StartifyPath    ctermfg=245
