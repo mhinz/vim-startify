@@ -113,7 +113,7 @@ function! startify#insane_in_the_membrane() abort
   1
   call cursor((s:show_special ? 4 : 2) + s:headoff, 5)
 
-  doautocmd <nomodeline> startify User
+  silent! doautocmd <nomodeline> startify User
 endfunction
 
 " Function: #session_load {{{1
