@@ -287,7 +287,14 @@ Every string will be written on its own line.
 
 NOTE: If a string contains ', you have to quote it with another '.
 
-Example:
+
+A programmatic example:
+
+    let g:startify_custom_header =
+      \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
+
+
+A hardcoded example:
 
     let g:startify_custom_header = [
                 \ '   __      ___            ______ ____   ',
