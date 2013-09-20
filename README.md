@@ -103,11 +103,11 @@ automatically. This works for both ways of handling sessions.
 _Read `:help startify-options` to learn more about how to configure session
 handling to your liking._
 
-#### 3) Powerful entry handling
+#### 3) Powerful menu handling
 
-You can either navigate to a certain entry using `j`/`k` and hit `<cr>` or just
-key in whatever is written between the square brackets on that line. You can
-even double-click anywhere on the line.
+You can either navigate the menu by using the usual suspects (`j`, `G`, `}`
+etc.) and hit `<cr>` or just key in whatever is written between the square
+brackets on that line. You can even double-click anywhere on the line.
 
 Moreover, you can open several files at one go! Navigate to an entry and hit
 either `b` (open in same window), `s` (open in split), `v` (open in vertical
