@@ -83,6 +83,7 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   let s:lastline = line('$')
+  call append('$', '')
 
   if exists('g:startify_custom_footer')
     call append('$', g:startify_custom_footer)
