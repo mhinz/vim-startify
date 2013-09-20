@@ -1,6 +1,6 @@
 ![Example:startify in action](https://github.com/mhinz/vim-startify/raw/master/startify.png)
 
-This is it. A start screen for Vim.
+This is it. A start screen for Vim.  _( all features enabled - freely customizable )_
 
 What does it provide?
 ---------------------
@@ -48,6 +48,12 @@ __Bookmarks__ ( _empty by default_ ):
 
 Additionally, you can define bookmarks, thus entries for files that always
 should be available on the start screen.
+
+---
+
+__Custom footer__ ( _empty by default_ ):
+
+Same as the custom header.. but at the bottom.
 
 ---
 
