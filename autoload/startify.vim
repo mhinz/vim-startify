@@ -82,9 +82,6 @@ function! startify#insane_in_the_membrane() abort
     call append('$', ['', '   [q]  <quit>'])
   endif
 
-  let s:lastline = line('$')
-  call append('$', '')
-
   if exists('g:startify_custom_footer')
     call append('$', g:startify_custom_footer)
   endif
@@ -367,30 +364,14 @@ function! s:set_cursor() abort
 
   " going down
   if s:newline > s:oldline
-    if empty(getline(s:newline))
-      let s:newline += 1
-    endif
-    if s:newline > s:lastline
-      call cursor(headoff, 5)
-      let s:newline = headoff
-    else
-      call cursor(s:newline, 5)
-    endif
+    if empty(getline(s:newline)) | let s:newline += 1      | endif
   " going up
   elseif s:newline < s:oldline
-    if empty(getline(s:newline))
-      let s:newline -= 1
-    endif
-    if s:newline < headoff
-      call cursor(s:lastline, 5)
-      let s:newline = s:lastline
-    else
-      call cursor(s:newline, 5)
-    endif
-  " hold cursor in column
-  else
-    call cursor(s:newline, 5)
+    if empty(getline(s:newline)) | let s:newline -= 1      | endif
+    if s:newline < headoff       | let s:newline = headoff | endif
   endif
+
+  call cursor(s:newline, 5)
 endfunction
 
 " Function: s:set_mark {{{1
