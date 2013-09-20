@@ -47,7 +47,7 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   setlocal noswapfile nobuflisted buftype=nofile bufhidden=wipe
-  setlocal nonumber nolist statusline=\ startify
+  setlocal nonumber nocursorline nolist statusline=\ startify
   setfiletype startify
 
   if v:version >= 703
@@ -366,7 +366,8 @@ function! s:set_cursor() abort
 
   " going down
   if s:newline > s:oldline
-    if empty(getline(s:newline)) | let s:newline += 1      | endif
+    if empty(getline(s:newline)) | let s:newline += 1         | endif
+    if s:newline > s:lastline    | let s:newline = s:lastline | endif
   " going up
   elseif s:newline < s:oldline
     if empty(getline(s:newline)) | let s:newline -= 1      | endif
