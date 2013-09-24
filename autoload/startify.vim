@@ -20,7 +20,7 @@ let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
 if get(g:, 'startify_session_persistence')
   autocmd startify VimLeave *
         \ if exists('v:this_session') && filewritable(v:this_session) |
-        \   execute 'mksession!' fnameescape(v:this_session) |
+        \   call s:session_write(fnameescape(v:this_session)) |
         \ endif
 endif
 
@@ -165,13 +165,15 @@ function! startify#session_save(...) abort
 
   let spath = s:session_dir . s:sep . sname
   if !filereadable(spath)
-    execute 'mksession '. fnameescape(spath) | echo 'Session saved under: '. spath
+    call s:session_write(fnameescape(spath))
+    echo 'Session saved under: '. spath
     return
   endif
 
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
   if nr2char(getchar()) == 'y'
-    execute 'mksession! '. fnameescape(spath) | echo 'Session saved under: '. spath
+    call s:session_write(fnameescape(spath))
+    echo 'Session saved under: '. spath
   else
     echo 'Did NOT save the session!'
   endif
@@ -511,6 +513,25 @@ function! s:restore_position() abort
   autocmd! startify *
   if line("'\"") > 0 && line("'\"") <= line('$')
     call cursor(getpos("'\"")[1:])
+  endif
+endfunction
+
+" Function: s:session_write {{{1
+function! s:session_write(spath)
+  execute 'mksession!' a:spath
+
+  if exists('g:startify_session_savevars') || exists('g:startify_session_savecmds')
+    execute 'split' a:spath
+
+    " put existing variables from savevars into session file
+    call append(line('$')-3, map(filter(get(g:, 'startify_session_savevars', []), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))'))
+
+    " put commands from savecmds into session file
+    call append(line('$')-3, get(g:, 'startify_session_savecmds', []))
+
+    setlocal bufhidden=delete
+    silent update
+    silent hide
   endif
 endfunction
 
