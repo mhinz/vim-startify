@@ -1,3 +1,5 @@
+" vim: et sw=2 sts=2
+
 " Plugin:      https://github.com/mhinz/vim-startify
 " Description: Start screen displaying recently used stuff.
 " Maintainer:  Marco Hinz <http://github.com/mhinz>
@@ -534,5 +536,3 @@ function! s:session_write(spath)
     silent hide
   endif
 endfunction
-
-" vim: et sw=2 sts=2

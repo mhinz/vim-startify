@@ -1,3 +1,5 @@
+" vim: et sw=2 sts=2
+
 " Plugin:      https://github.com/mhinz/vim-startify
 " Description: Start screen displaying recently used stuff.
 " Maintainer:  Marco Hinz <http://github.com/mhinz>
@@ -34,5 +36,3 @@ highlight default link StartifyBracket Delimiter
 highlight default link StartifyNumber  Number
 
 let b:current_syntax = 'startify'
-
-" vim: et sw=2 sts=2

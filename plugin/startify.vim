@@ -1,3 +1,5 @@
+" vim: et sw=2 sts=2
+
 " Plugin:      https://github.com/mhinz/vim-startify
 " Description: Start screen displaying recently used stuff.
 " Maintainer:  Marco Hinz <http://github.com/mhinz>
@@ -20,5 +22,3 @@ command! -nargs=? -bar -complete=customlist,startify#session_list SSave   call s
 command! -nargs=? -bar -complete=customlist,startify#session_list SLoad   call startify#session_load(<f-args>)
 command! -nargs=? -bar -complete=customlist,startify#session_list SDelete call startify#session_delete(<f-args>)
 command! -nargs=0 -bar Startify enew | call startify#insane_in_the_membrane()
-
-" vim: et sw=2 sts=2
