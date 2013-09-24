@@ -165,13 +165,17 @@ function! startify#session_save(...) abort
 
   let spath = s:session_dir . s:sep . sname
   if !filereadable(spath)
-    execute 'mksession '. fnameescape(spath) | echo 'Session saved under: '. spath
+    execute 'mksession '. fnameescape(spath)
+    call startify#session_save_more(fnameescape(spath))
+    echo 'Session saved under: '. spath
     return
   endif
 
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
   if nr2char(getchar()) == 'y'
-    execute 'mksession! '. fnameescape(spath) | echo 'Session saved under: '. spath
+    execute 'mksession! '. fnameescape(spath)
+    call startify#session_save_more(fnameescape(spath))
+    echo 'Session saved under: '. spath
   else
     echo 'Did NOT save the session!'
   endif
@@ -202,6 +206,22 @@ function! startify#session_delete(...) abort
   else
     echo 'Deletion aborted!'
   endif
+endfunction
+
+" Function: #session_save_more {{{1
+function! startify#session_save_more(spath)
+  execute "split " . a:spath
+  for var in get(g:, 'startify_savevars', [])
+    if exists(var)
+      call append(line('$')-3, 'let '. var .'='. strtrans(string(eval(var))))
+    endif
+  endfor
+  for cmd in get(g:, 'startify_savecmds', [])
+    call append(line('$')-3, cmd)
+  endfor
+  w!
+  setlocal bufhidden=delete
+  silent! hide
 endfunction
 
 " Function: #session_list {{{1
