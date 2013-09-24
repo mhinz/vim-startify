@@ -93,6 +93,8 @@ default values.
     |g:startify_restore_position|
     |g:startify_empty_buffer_key|
     |g:startify_enable_special|
+    |g:startify_session_savevars|
+    |g:startify_session_savecmds|
 
 
 ============-                                           *g:startify_session_dir*
@@ -235,6 +237,35 @@ Default: does not exist
 
 Show <empty buffer> and <quit>.
 
+============-                                      *g:startify_session_savevars*
+
+    let g:startify_session_savevars = []
+
+Include a list of variables in here which you would like Startify to save into
+the session file in addition to what Vim normally saves into the session file.
+For example, Vim will not normally save all-lowercase global variables, which
+are common for plugin settings.  It may be advisable to include
+|g:startify_session_savevars| and |g:startify_session_savecmds| into this list
+so they are saved every time the session saves.
+
+Example: let g:startify_session_savevars = [
+           \ 'g:startify_session_savevars',
+           \ 'g:startify_session_savecmds',
+           \ 'g:random_plugin_use_feature'
+           \ ]
+
+============-                                      *g:startify_session_savecmds*
+
+    let g:startify_session_savecmds = []
+
+Include a list of cmdline commands which Vim will run upon loading the
+session.  This can be useful to set various things (other than variables,
+|g:startify_session_savevars| above) which Vim may not normally save into the
+session file, as well as run external commands upon loading a session.
+
+Example: let g:startify_session_savecmds = [
+           \ 'silent !pdfreader ~/latexproject/main.pdf &'
+           \ ]
 
 ============-                                      *g:startify_restore_position*
 
