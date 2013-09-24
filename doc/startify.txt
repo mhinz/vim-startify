@@ -95,6 +95,7 @@ default values.
     |g:startify_enable_special|
     |g:startify_session_savevars|
     |g:startify_session_savecmds|
+    |g:startify_disable_at_vimenter|
 
 
 ============-                                           *g:startify_session_dir*
@@ -344,6 +345,14 @@ A hardcoded example:
     let g:startify_custom_footer = ''
 
 Same as the custom header, but shown at the bottom of the startify buffer.
+
+
+============-                                   *g:startify_disable_at_vimenter*
+
+    let g:startify_disable_at_vimenter = 0
+
+Don't run Startify at Vim startup. You can still call it anytime via
+:Startify.
 
 
 ==============================================================================
