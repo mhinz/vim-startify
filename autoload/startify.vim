@@ -17,6 +17,21 @@ let s:restore_position = get(g:, 'startify_restore_position')
 let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
+if exists('g:startify_list_order')
+  let s:lists = g:startify_list_order
+else
+  let s:lists = [
+        \ ['   Last recently opened files:', ''],
+        \ 'files',
+        \ ['   Last recently modified files in the current directory:', ''],
+        \ 'dir',
+        \ ['   My sessions:', ''],
+        \ 'sessions',
+        \ ['   My bookmarks:', ''],
+        \ 'bookmarks',
+        \ ]
+endif
+
 " Init: autocmds {{{1
 
 if get(g:, 'startify_session_persistence')
@@ -74,8 +89,14 @@ function! startify#insane_in_the_membrane() abort
     let cnt = 1
   endif
 
-  for list in get(g:, 'startify_list_order', ['files', 'sessions', 'bookmarks'])
-    let cnt = s:show_{list}(cnt)
+  for item in s:lists
+    if type(item) == 1
+      let cnt = s:show_{item}(cnt)
+      "unlet s:
+    else
+      let s:last_message = item
+    endif
+    unlet item
   endfor
 
   silent $delete
@@ -233,28 +254,33 @@ function! s:show_dir(cnt) abort
     call add(files, [getftime(fname), fname])
   endfor
 
-  function! l:compare(x, y)
-    return a:y[0] - a:x[0]
-  endfunction
-
-  call sort(files, 'l:compare')
-
-  for items in files
-    let index = s:get_index_as_string(cnt)
-    let fname = items[1]
-
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-    execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
-
-    let cnt += 1
-    let num -= 1
-
-    if !num
-      break
-    endif
-  endfor
-
   if !empty(files)
+    if exists('s:last_message')
+      call append('$', s:last_message)
+      unlet s:last_message
+    endif
+
+    function! l:compare(x, y)
+      return a:y[0] - a:x[0]
+    endfunction
+
+    call sort(files, 'l:compare')
+
+    for items in files
+      let index = s:get_index_as_string(cnt)
+      let fname = items[1]
+
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
+
+      let cnt += 1
+      let num -= 1
+
+      if !num
+        break
+      endif
+    endfor
+
     call append('$', '')
   endif
 
@@ -268,6 +294,11 @@ function! s:show_files(cnt) abort
   let entries = {}
 
   if !empty(v:oldfiles)
+    if exists('s:last_message')
+      call append('$', s:last_message)
+      unlet s:last_message
+    endif
+
     for fname in v:oldfiles
       let fullpath = resolve(fnamemodify(fname, ':p'))
 
@@ -305,10 +336,16 @@ function! s:show_sessions(cnt) abort
   let slen   = len(sfiles)
 
   if empty(sfiles)
+    if exists('s:last_message')
+      unlet s:last_message
+    endif
     return a:cnt
   endif
-
   let cnt = a:cnt
+
+  if exists('s:last_message')
+    call append('$', s:last_message)
+  endif
 
   for i in range(slen)
     let idx   = (i + cnt)
@@ -328,6 +365,11 @@ function! s:show_bookmarks(cnt) abort
   let cnt = a:cnt
 
   if exists('g:startify_bookmarks')
+    if exists('s:last_message')
+      call append('$', s:last_message)
+      unlet s:last_message
+    endif
+
     for fname in g:startify_bookmarks
       let index = s:get_index_as_string(cnt)
 
