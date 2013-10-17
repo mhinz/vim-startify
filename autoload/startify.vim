@@ -520,7 +520,15 @@ endfunction
 
 " Function: s:session_write {{{1
 function! s:session_write(spath)
-  execute 'mksession!' a:spath
+  let ssop = &sessionoptions
+  try
+    set sessionoptions-=options
+    execute 'mksession!' a:spath
+  catch
+    execute 'echoerr' string(v:exception)
+  finally
+    let &sessionoptions = ssop
+  endtry
 
   if exists('g:startify_session_savevars') || exists('g:startify_session_savecmds')
     execute 'split' a:spath
