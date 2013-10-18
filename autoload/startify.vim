@@ -491,9 +491,9 @@ endfunction
 function! s:close() abort
   if len(filter(range(0, bufnr('$')), 'buflisted(v:val)'))
     if bufloaded(bufnr('#'))
-      b #
+      buffer #
     else
-      bn
+      bnext
     endif
   else
     quit
