@@ -100,7 +100,7 @@ function! startify#insane_in_the_membrane() abort
   nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
   nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
   nnoremap <buffer>         <cr>          :call <sid>open_buffers(expand('<cword>'))<cr>
-  nnoremap <buffer>         <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
+  nnoremap <buffer>         <2-LeftMouse> :execute 'normal!' matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
   if exists('g:startify_empty_buffer_key')
@@ -450,7 +450,7 @@ function! s:open_buffers(cword) abort
     endif
   " no markers found; open a single buffer
   else
-    execute 'normal' a:cword
+    execute 'normal!' a:cword
   endif
 endfunction
 
