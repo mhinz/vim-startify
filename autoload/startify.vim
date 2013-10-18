@@ -78,7 +78,7 @@ function! startify#insane_in_the_membrane() abort
     let cnt = s:show_{list}(cnt)
   endfor
 
-  silent $delete
+  silent $delete _
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
