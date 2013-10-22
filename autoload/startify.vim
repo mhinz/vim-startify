@@ -505,6 +505,8 @@ function! s:open_buffers(cword) abort
   else
     execute 'normal' a:cword
   endif
+
+  call clearmatches()
 endfunction
 
 " Function: s:check_user_options {{{1
