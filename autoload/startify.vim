@@ -32,6 +32,7 @@ else
         \ ]
 endif
 
+let s:secoff = type(s:lists[0]) == 3 ? len(s:lists[0]) : 0
 let s:section_header_lines = []
 
 " Init: autocmds {{{1
@@ -410,14 +411,20 @@ endfunction
 function! s:set_cursor() abort
   let s:oldline = exists('s:newline') ? s:newline : 5
   let s:newline = line('.')
-  let headoff   = s:headoff + 2
+  let headoff   = s:headoff + 2 + s:secoff
 
   " going down
   if s:newline > s:oldline
+    while index(s:section_header_lines, s:newline) != -1
+      let s:newline += 1
+    endwhile
     if empty(getline(s:newline)) | let s:newline += 1         | endif
     if s:newline > s:lastline    | let s:newline = s:lastline | endif
   " going up
   elseif s:newline < s:oldline
+    while index(s:section_header_lines, s:newline) != -1
+      let s:newline -= 1
+    endwhile
     if empty(getline(s:newline)) | let s:newline -= 1      | endif
     if s:newline < headoff       | let s:newline = headoff | endif
   endif
