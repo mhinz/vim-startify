@@ -32,6 +32,7 @@ if exists('g:startify_custom_footer')
 endif
 
 highlight default link StartifyHeader  Normal
+highlight default link StartifyFooter  Normal
 highlight default link StartifyBracket Delimiter
 highlight default link StartifyNumber  Number
 highlight default link StartifySection Special
