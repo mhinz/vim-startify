@@ -31,6 +31,7 @@ CONTENTS                                                     *startify-contents*
     USAGE .......................................... |startify-usage|
     OPTIONS ........................................ |startify-options|
     COMMANDS ....................................... |startify-commands|
+    MAPPINGS ....................................... |startify-mappings|
     COLORS ......................................... |startify-colors|
     FAQ ............................................ |startify-faq|
 
@@ -412,6 +413,45 @@ argument with either <c-d> or <tab> afterwards.
     :Startify
 <
 Open the startify buffer.
+
+==============================================================================
+MAPPINGS                                                     *startify-mappings*
+
+Some things are remapped in the startify buffer..
+>
+    q
+<
+Close startify. Also quit Vim if it is the only buffer.
+>
+    e
+<
+Close startify and create a blank buffer.
+>
+    i
+    <insert>
+<
+Close startify, create a blank buffer and jump into insert mode right away.
+>
+    <2-LeftMouse>
+<
+Use a simple mouse click to open the targeted entry.
+>
+    [any number that is shown between square brackets]
+<
+Open the entry with the given number.
+>
+    b
+    s
+    v
+    t
+<
+Mark current entry to be opened in either the same window, in a split window,
+in a vertical split window or in a new tab.
+>
+    <cr>
+<
+Open all marked entries. If nothing was marked beforehand, just open the
+current entry.
 
 ==============================================================================
 COLORS                                                         *startify-colors*
