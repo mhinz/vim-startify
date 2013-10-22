@@ -32,6 +32,8 @@ else
         \ ]
 endif
 
+let s:section_header_lines = []
+
 " Init: autocmds {{{1
 
 if get(g:, 'startify_session_persistence')
@@ -92,7 +94,6 @@ function! startify#insane_in_the_membrane() abort
   for item in s:lists
     if type(item) == 1
       let cnt = s:show_{item}(cnt)
-      "unlet s:
     else
       let s:last_message = item
     endif
@@ -100,6 +101,10 @@ function! startify#insane_in_the_membrane() abort
   endfor
 
   silent $delete
+
+  for item in s:section_header_lines
+    call matchadd('StartifySection', '\%'. item .'l', -1)
+  endfor
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
@@ -256,8 +261,7 @@ function! s:show_dir(cnt) abort
 
   if !empty(files)
     if exists('s:last_message')
-      call append('$', s:last_message)
-      unlet s:last_message
+      call s:print_section_header()
     endif
 
     function! l:compare(x, y)
@@ -295,8 +299,7 @@ function! s:show_files(cnt) abort
 
   if !empty(v:oldfiles)
     if exists('s:last_message')
-      call append('$', s:last_message)
-      unlet s:last_message
+      call s:print_section_header()
     endif
 
     for fname in v:oldfiles
@@ -344,7 +347,7 @@ function! s:show_sessions(cnt) abort
   let cnt = a:cnt
 
   if exists('s:last_message')
-    call append('$', s:last_message)
+    call s:print_section_header()
   endif
 
   for i in range(slen)
@@ -366,8 +369,7 @@ function! s:show_bookmarks(cnt) abort
 
   if exists('g:startify_bookmarks')
     if exists('s:last_message')
-      call append('$', s:last_message)
-      unlet s:last_message
+      call s:print_section_header()
     endif
 
     for fname in g:startify_bookmarks
@@ -577,4 +579,17 @@ function! s:session_write(spath)
     silent update
     silent hide
   endif
+endfunction
+
+" Function: s:print_section_header {{{1
+function! s:print_section_header() abort
+  $
+  let curline = line('.')
+
+  for lnum in range(curline, curline + len(s:last_message))
+    call add(s:section_header_lines, lnum)
+  endfor
+
+  call append('$', s:last_message)
+  unlet s:last_message
 endfunction
