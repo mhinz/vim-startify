@@ -399,7 +399,6 @@ endfunction
 
 " Function: s:is_bookmark {{{1
 function! s:is_bookmark(arg) abort
-  "for foo in filter(map(copy(g:startify_bookmarks), 'resolve(fnamemodify(v:val, ":p"))'), '!isdirectory(v:val)')
   for foo in map(filter(copy(g:startify_bookmarks), '!isdirectory(v:val)'), 'resolve(fnamemodify(v:val, ":p"))')
     if foo == a:arg
       return 1
