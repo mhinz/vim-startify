@@ -149,6 +149,8 @@ item is a startify list ("dir", "bookmarks", ...) and empty (no files in the
 current directory, no bookmarks defined, ...), the section header won't be
 shown as well.
 
+NOTE: The section header use the StartifySection highlight group.
+
 Section headers example:~
 >
     let g:startify_list_order = [
@@ -423,6 +425,7 @@ these groups:
     StartifyHeader          the custom header
     StartifyNumber          the numbers between []
     StartifyPath            the path to a file
+    StartifySection         section headers
     StartifySlash           slashes in paths
     StartifySpecial         <empty buffer>,<quit>
 
