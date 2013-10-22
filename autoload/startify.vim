@@ -21,18 +21,18 @@ if exists('g:startify_list_order')
   let s:lists = g:startify_list_order
 else
   let s:lists = [
-        \ ['   Last recently opened files:', ''],
+        \ ['   Last recently opened files:'],
         \ 'files',
-        \ ['   Last recently modified files in the current directory:', ''],
+        \ ['   Last recently modified files in the current directory:'],
         \ 'dir',
-        \ ['   My sessions:', ''],
+        \ ['   My sessions:'],
         \ 'sessions',
-        \ ['   My bookmarks:', ''],
+        \ ['   My bookmarks:'],
         \ 'bookmarks',
         \ ]
 endif
 
-let s:secoff = type(s:lists[0]) == 3 ? len(s:lists[0]) : 0
+let s:secoff = type(s:lists[0]) == 3 ? (len(s:lists[0]) + 1) : 0
 let s:section_header_lines = []
 
 " Init: autocmds {{{1
@@ -593,10 +593,10 @@ function! s:print_section_header() abort
   $
   let curline = line('.')
 
-  for lnum in range(curline, curline + len(s:last_message))
+  for lnum in range(curline, curline + len(s:last_message) + 1)
     call add(s:section_header_lines, lnum)
   endfor
 
-  call append('$', s:last_message)
+  call append('$', s:last_message + [''])
   unlet s:last_message
 endfunction
