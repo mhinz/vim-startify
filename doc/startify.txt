@@ -119,22 +119,22 @@ The default for Windows systems is '$HOME\vimfiles\session'.
 <
 At the moment startify supports these lists:~
 
-1) "files" - Most recently used files.
+1) "files"
 
    This lists the most recently used files using viminfo. The number of files
    is limited by g:startify_files_number.
 
-2) "dir" - Most recently changed files in the current directory.
+2) "dir"
 
    This lists the files from the current directory sorted by modification
    time. The number of files is limited by g:startify_files_number.
 
-3) "bookmarks" - Bookmarks.
+3) "bookmarks"
 
    This lists bookmarks, thus hardcoded files or directories that will always
    be shown. Have a look at g:startify_bookmarks.
 
-4) "sessions" - Sessions.
+4) "sessions"
 
    This lists all the sessions saved in the directory
    g:startify_session_dir.
