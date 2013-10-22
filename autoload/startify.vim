@@ -17,6 +17,24 @@ let s:restore_position = get(g:, 'startify_restore_position')
 let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
+if exists('g:startify_list_order')
+  let s:lists = g:startify_list_order
+else
+  let s:lists = [
+        \ ['   Last recently opened files:'],
+        \ 'files',
+        \ ['   Last recently modified files in the current directory:'],
+        \ 'dir',
+        \ ['   My sessions:'],
+        \ 'sessions',
+        \ ['   My bookmarks:'],
+        \ 'bookmarks',
+        \ ]
+endif
+
+let s:secoff = type(s:lists[0]) == 3 ? (len(s:lists[0]) + 1) : 0
+let s:section_header_lines = []
+
 " Init: autocmds {{{1
 
 if get(g:, 'startify_session_persistence')
@@ -74,11 +92,20 @@ function! startify#insane_in_the_membrane() abort
     let cnt = 1
   endif
 
-  for list in get(g:, 'startify_list_order', ['files', 'sessions', 'bookmarks'])
-    let cnt = s:show_{list}(cnt)
+  for item in s:lists
+    if type(item) == 1
+      let cnt = s:show_{item}(cnt)
+    else
+      let s:last_message = item
+    endif
+    unlet item
   endfor
 
   silent $delete _
+
+  for item in s:section_header_lines
+    call matchadd('StartifySection', '\%'. item .'l', -1)
+  endfor
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
@@ -233,28 +260,32 @@ function! s:show_dir(cnt) abort
     call add(files, [getftime(fname), fname])
   endfor
 
-  function! l:compare(x, y)
-    return a:y[0] - a:x[0]
-  endfunction
-
-  call sort(files, 'l:compare')
-
-  for items in files
-    let index = s:get_index_as_string(cnt)
-    let fname = items[1]
-
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-    execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
-
-    let cnt += 1
-    let num -= 1
-
-    if !num
-      break
-    endif
-  endfor
-
   if !empty(files)
+    if exists('s:last_message')
+      call s:print_section_header()
+    endif
+
+    function! l:compare(x, y)
+      return a:y[0] - a:x[0]
+    endfunction
+
+    call sort(files, 'l:compare')
+
+    for items in files
+      let index = s:get_index_as_string(cnt)
+      let fname = items[1]
+
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
+
+      let cnt += 1
+      let num -= 1
+
+      if !num
+        break
+      endif
+    endfor
+
     call append('$', '')
   endif
 
@@ -268,6 +299,10 @@ function! s:show_files(cnt) abort
   let entries = {}
 
   if !empty(v:oldfiles)
+    if exists('s:last_message')
+      call s:print_section_header()
+    endif
+
     for fname in v:oldfiles
       let fullpath = resolve(fnamemodify(fname, ':p'))
 
@@ -305,10 +340,16 @@ function! s:show_sessions(cnt) abort
   let slen   = len(sfiles)
 
   if empty(sfiles)
+    if exists('s:last_message')
+      unlet s:last_message
+    endif
     return a:cnt
   endif
-
   let cnt = a:cnt
+
+  if exists('s:last_message')
+    call s:print_section_header()
+  endif
 
   for i in range(slen)
     let idx   = (i + cnt)
@@ -328,6 +369,10 @@ function! s:show_bookmarks(cnt) abort
   let cnt = a:cnt
 
   if exists('g:startify_bookmarks')
+    if exists('s:last_message')
+      call s:print_section_header()
+    endif
+
     for fname in g:startify_bookmarks
       let index = s:get_index_as_string(cnt)
 
@@ -366,14 +411,20 @@ endfunction
 function! s:set_cursor() abort
   let s:oldline = exists('s:newline') ? s:newline : 5
   let s:newline = line('.')
-  let headoff   = s:headoff + 2
+  let headoff   = s:headoff + 2 + s:secoff
 
   " going down
   if s:newline > s:oldline
+    while index(s:section_header_lines, s:newline) != -1
+      let s:newline += 1
+    endwhile
     if empty(getline(s:newline)) | let s:newline += 1         | endif
     if s:newline > s:lastline    | let s:newline = s:lastline | endif
   " going up
   elseif s:newline < s:oldline
+    while index(s:section_header_lines, s:newline) != -1
+      let s:newline -= 1
+    endwhile
     if empty(getline(s:newline)) | let s:newline -= 1      | endif
     if s:newline < headoff       | let s:newline = headoff | endif
   endif
@@ -543,4 +594,17 @@ function! s:session_write(spath)
     silent update
     silent hide
   endif
+endfunction
+
+" Function: s:print_section_header {{{1
+function! s:print_section_header() abort
+  $
+  let curline = line('.')
+
+  for lnum in range(curline, curline + len(s:last_message) + 1)
+    call add(s:section_header_lines, lnum)
+  endfor
+
+  call append('$', s:last_message + [''])
+  unlet s:last_message
 endfunction
