@@ -75,7 +75,7 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   let cnt = 0
-  let s:headoff = 0
+  let s:headoff = 2
 
   if exists('g:startify_custom_header')
     call append('$', g:startify_custom_header)
@@ -139,7 +139,7 @@ function! startify#insane_in_the_membrane() abort
     autocmd startify BufReadPost * call s:restore_position()
   endif
 
-  call cursor((s:show_special ? 4 : 2) + s:headoff, 5)
+  call cursor((s:show_special ? 2 : 0) + s:headoff, 5)
 
   silent! doautocmd <nomodeline> startify User
 endfunction
@@ -411,7 +411,10 @@ endfunction
 function! s:set_cursor() abort
   let s:oldline = exists('s:newline') ? s:newline : 5
   let s:newline = line('.')
-  let headoff   = s:headoff + 2 + s:secoff
+
+  if !exists('s:firstline')
+    let s:firstline = s:show_special ? s:headoff : (s:headoff + s:secoff)
+  endif
 
   " going down
   if s:newline > s:oldline
@@ -425,8 +428,8 @@ function! s:set_cursor() abort
     while index(s:section_header_lines, s:newline) != -1
       let s:newline -= 1
     endwhile
-    if empty(getline(s:newline)) | let s:newline -= 1      | endif
-    if s:newline < headoff       | let s:newline = headoff | endif
+    if empty(getline(s:newline)) | let s:newline -= 1          | endif
+    if s:newline < s:firstline   | let s:newline = s:firstline | endif
   endif
 
   call cursor(s:newline, 5)
