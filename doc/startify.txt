@@ -34,6 +34,7 @@ CONTENTS                                                     *startify-contents*
     MAPPINGS ....................................... |startify-mappings|
     COLORS ......................................... |startify-colors|
     FAQ ............................................ |startify-faq|
+    EXAMPLE ........................................ |startify-example|
 
 ==============================================================================
 INTRO                                                           *startify-intro*
@@ -554,6 +555,52 @@ Use the skiplist. Personally I use:
            \ 'bundle/.*/doc',
            \ '\.DS_Store'
            \ ]
+<
+==============================================================================
+EXAMPLE                                                       *startify-example*
+
+This is my configuration..
+>
+    let g:startify_files_number        = 8
+    let g:startify_session_persistence = 1
+    let g:startify_session_autoload    = 1
+    let g:startify_enable_special      = 0
+
+    let g:startify_list_order = [
+          \ ['   LRU:'],
+          \ 'files',
+          \ ['   Sessions:'],
+          \ 'sessions',
+          \ ['   Bookmarks:'],
+          \ 'bookmarks',
+          \ ]
+
+    let g:startify_skiplist = [
+                \ 'COMMIT_EDITMSG',
+                \ $VIMRUNTIME .'/doc',
+                \ 'bundle/.*/doc',
+                \ '.vimgolf',
+                \ ]
+
+    let g:startify_bookmarks = [
+                \ '~/.vim/vimrc',
+                \ '/data/vim/golfing',
+                \ ]
+
+    let g:startify_custom_footer =
+          \ ['', "   Vim is charityware. Please read ':help uganda'.", '']
+
+    let g:startify_custom_header =
+          \ map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
+
+    hi StartifyBracket ctermfg=240
+    hi StartifyNumber  ctermfg=215
+    hi StartifyPath    ctermfg=245
+    hi StartifySlash   ctermfg=240
+    hi StartifySpecial ctermfg=240
+    hi StartifyHeader  ctermfg=114
+    hi StartifyFooter  ctermfg=240
+    "hi StartifyFile    ctermfg=111
 <
 ==============================================================================
 vim: tw=78
