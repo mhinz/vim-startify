@@ -115,34 +115,55 @@ The default for Windows systems is '$HOME\vimfiles\session'.
 ------------------------------------------------------------------------------
                                                          *g:startify_list_order*
 >
-    let g:startify_list_order = ['files', 'sessions', 'bookmarks']
+    let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions']
 <
-At the moment startify can show these kind of lists:
+At the moment startify supports these lists:~
 
-1) Most recently used files.
+1) "files" - Most recently used files.
 
    This lists the most recently used files using viminfo. The number of files
    is limited by g:startify_files_number.
 
-2) Most recently changed files in the current directory.
+2) "dir" - Most recently changed files in the current directory.
 
    This lists the files from the current directory sorted by modification
    time. The number of files is limited by g:startify_files_number.
 
-3) Bookmarks.
+3) "bookmarks" - Bookmarks.
 
-   This lists bookmarks, thus hardcoded files that will always be shown.
-   Have a look at g:startify_bookmarks.
+   This lists bookmarks, thus hardcoded files or directories that will always
+   be shown. Have a look at g:startify_bookmarks.
 
-4) Sessions.
+4) "sessions" - Sessions.
 
    This lists all the sessions saved in the directory
    g:startify_session_dir.
 
-Therefore, to show all of them in the above order:
+Section headers:~
+
+Additionally you can add lists of strings to that list. These will be shown
+above the following item in |g:startify_list_order|.
+
+NOTE: Section headers are context-senstive. This means that if the following
+item is a startify list ("dir", "bookmarks", ...) and empty (no files in the
+current directory, no bookmarks defined, ...), the section header won't be
+shown as well.
+
+Section headers example:~
 >
-    let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions']
+    let g:startify_list_order = [
+            \ ['   My last recently', '   opened files'],
+            \ 'files',
+            \ ['   My last recently modified files in the current directory:'],
+            \ 'dir',
+            \ ['   These are my sessions:'],
+            \ 'sessions',
+            \ ['   These are my bookmarks:'],
+            \ 'bookmarks',
+            \ ]
 <
+Feel free to add some cool ASCII action!
+
 ------------------------------------------------------------------------------
                                                           *g:startify_bookmarks*
 >
