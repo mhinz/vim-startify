@@ -36,7 +36,6 @@ let s:secoff = type(s:lists[0]) == 3 ? (len(s:lists[0]) + 1) : 0
 let s:section_header_lines = []
 
 " Init: autocmds {{{1
-
 if get(g:, 'startify_session_persistence')
   autocmd startify VimLeave *
         \ if exists('v:this_session') && filewritable(v:this_session) |
@@ -134,6 +133,7 @@ function! startify#insane_in_the_membrane() abort
     execute 'nnoremap <buffer><silent> '. g:startify_empty_buffer_key .' :enew<cr>'
   endif
 
+  autocmd startify BufLeave    <buffer> call clearmatches()
   autocmd startify CursorMoved <buffer> call s:set_cursor()
   if s:restore_position
     autocmd startify BufReadPost * call s:restore_position()
@@ -505,8 +505,6 @@ function! s:open_buffers(cword) abort
   else
     execute 'normal' a:cword
   endif
-
-  call clearmatches()
 endfunction
 
 " Function: s:check_user_options {{{1
