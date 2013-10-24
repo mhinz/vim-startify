@@ -110,7 +110,8 @@ function! startify#insane_in_the_membrane() abort
     call append('$', ['', '   [q]  <quit>'])
   endif
 
-  let s:lastline = line('$')
+  let s:firstline = s:show_special ? s:headoff : (s:headoff + s:secoff)
+  let s:lastline  = line('$')
 
   if exists('g:startify_custom_footer')
     call append('$', g:startify_custom_footer)
@@ -411,25 +412,21 @@ function! s:set_cursor() abort
   let s:oldline = exists('s:newline') ? s:newline : 5
   let s:newline = line('.')
 
-  if !exists('s:firstline')
-    let s:firstline = s:show_special ? s:headoff : (s:headoff + s:secoff)
+  " going up (-1) or down (1)
+  let movement = 2 * (s:newline > s:oldline) - 1
+
+  " skip section headers lines until an entry is found
+  while index(s:section_header_lines, s:newline) != -1
+    let s:newline += movement
+  endwhile
+
+  " skip blank lines between lists
+  if empty(getline(s:newline))
+    let s:newline += movement
   endif
 
-  " going down
-  if s:newline > s:oldline
-    while index(s:section_header_lines, s:newline) != -1
-      let s:newline += 1
-    endwhile
-    if empty(getline(s:newline)) | let s:newline += 1         | endif
-    if s:newline > s:lastline    | let s:newline = s:lastline | endif
-  " going up
-  elseif s:newline < s:oldline
-    while index(s:section_header_lines, s:newline) != -1
-      let s:newline -= 1
-    endwhile
-    if empty(getline(s:newline)) | let s:newline -= 1          | endif
-    if s:newline < s:firstline   | let s:newline = s:firstline | endif
-  endif
+  " don't go beyond first or last entry
+  let s:newline = max([s:firstline, min([s:lastline, s:newline])])
 
   call cursor(s:newline, 5)
 endfunction
