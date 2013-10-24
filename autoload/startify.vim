@@ -139,7 +139,7 @@ function! startify#insane_in_the_membrane() abort
     autocmd startify BufReadPost * call s:restore_position()
   endif
 
-  call cursor((s:show_special ? 2 : 0) + s:headoff + 2, 5)
+  call cursor((s:show_special ? 2 : 0) + s:headoff + s:secoff, 5)
 
   silent! doautocmd <nomodeline> startify User
 endfunction
