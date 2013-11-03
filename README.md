@@ -25,7 +25,7 @@ How about some ASCII art action?
 
 ---
 
-__Files from directory__ ( _disabled by default_ ):
+__Files from directory__ ( _enabled by default_ ):
 
 This lists all files from the current directory sorted by modification time.
 
