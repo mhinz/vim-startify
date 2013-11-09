@@ -484,15 +484,15 @@ FAQ                                                               *startify-faq*
 
 ------------------------------------------------------------------------------
 
-CtrlP opens a split in Startify!~
+CtrlP or NERDTree opens a split in Startify!~
 
-Solution 1)
+Solution 1, works for CtrlP and NERDTree)
 >
-    let g:ctrlp_reuse_window = 'startify'
+    autocmd FileType startify setlocal buftype=
 <
 Solution 2)
 >
-    autocmd FileType startify setlocal buftype=
+    let g:ctrlp_reuse_window = 'startify'
 <
 ------------------------------------------------------------------------------
 
