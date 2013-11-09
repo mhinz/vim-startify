@@ -484,15 +484,16 @@ FAQ                                                               *startify-faq*
 
 ------------------------------------------------------------------------------
 
-CtrlP opens a split in Startify!~
+CtrlP or NERDTree open a split in Startify!~
 
-Solution 1)
->
-    let g:ctrlp_reuse_window = 'startify'
-<
-Solution 2)
+Put this in your vimrc:
 >
     autocmd FileType startify setlocal buftype=
+<
+If you're using CtrlP without NERDTree, there is an even more elegant
+solution:
+>
+    let g:ctrlp_reuse_window = 'startify'
 <
 ------------------------------------------------------------------------------
 
