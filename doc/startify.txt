@@ -242,7 +242,7 @@ Example:
 >
     let g:startify_skiplist = [
            \ '.vimgolf',
-           \ '^/tmp'
+           \ '^/tmp',
            \ '/project/.*/documentation'
            \ ]
 <
