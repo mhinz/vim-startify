@@ -105,6 +105,7 @@ default values.
     |g:startify_session_savevars|
     |g:startify_session_savecmds|
     |g:startify_disable_at_vimenter|
+    |g:startify_relative_path|
 
 ------------------------------------------------------------------------------
                                                         *g:startify_session_dir*
@@ -404,6 +405,14 @@ Same as the custom header, but shown at the bottom of the startify buffer.
 <
 Don't run Startify at Vim startup. You can still call it anytime via
 :Startify.
+
+-----------------------------------------------------------------------------
+                                                     *g:startify_relative_path*
+>
+    let g:startify_relative_path = 0
+<
+Show filenames relative to the current working directory instead of as
+absolute paths.
 
 ==============================================================================
 COMMANDS                                                     *startify-commands*
