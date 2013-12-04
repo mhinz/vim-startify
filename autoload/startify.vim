@@ -15,6 +15,7 @@ let s:numfiles         = get(g:, 'startify_files_number', 10)
 let s:show_special     = get(g:, 'startify_enable_special', 1)
 let s:restore_position = get(g:, 'startify_restore_position')
 let s:delete_buffers   = get(g:, 'startify_session_delete_buffers')
+let s:relative_path    = get(g:, 'startify_relative_path')
 let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
@@ -288,8 +289,9 @@ function! s:show_dir(cnt) abort
 
       let entries[fullpath] = 1
       let index = s:get_index_as_string(cnt)
+      let display_fname = s:relative_path ? fnamemodify(fname, ':.') : fname
 
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
       execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
 
       let cnt += 1
@@ -330,8 +332,9 @@ function! s:show_files(cnt) abort
 
       let entries[fullpath] = 1
       let index = s:get_index_as_string(cnt)
+      let display_fname = s:relative_path ? fnamemodify(fname, ':.') : fname
 
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
       execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
 
       let cnt += 1
