@@ -499,7 +499,11 @@ function! s:open_buffers(cword) abort
     endif
   " no markers found; open a single buffer
   else
-    execute 'normal' a:cword
+    try
+      execute 'normal' a:cword
+    catch /E832/
+      edit
+    endtry
   endif
 endfunction
 
