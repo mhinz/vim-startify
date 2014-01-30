@@ -472,6 +472,7 @@ function! s:open_buffers(cword) abort
 
     for val in values(s:marked)
       let [path, type] = val[1:2]
+      let path = fnameescape(path)
 
       if line2byte('$') == -1
         " open in current window
