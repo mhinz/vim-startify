@@ -504,6 +504,12 @@ function! s:open_buffers(cword) abort
       execute 'normal' a:cword
     catch /E832/
       edit
+    catch /E325/  " E325: ATTENTION (swap file found)
+      " The user has been warned and asked about how to proceed already.
+      " Catching this exception removes the additional output afterwards:
+      "   Error detected while processing function <SNR>237_open_buffers:
+      "   line   38:
+      "   E325: ATTENTION
     endtry
   endif
 endfunction
