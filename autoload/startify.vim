@@ -502,8 +502,9 @@ function! s:open_buffers(cword) abort
   else
     try
       execute 'normal' a:cword
-    catch /E832/
+    catch /E832/  " don't ask for undo encryption key twice
       edit
+    catch /E325/  " swap file found
     endtry
   endif
 endfunction
