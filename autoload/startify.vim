@@ -14,6 +14,7 @@ let g:autoloaded_startify = 1
 let s:numfiles         = get(g:, 'startify_files_number', 10)
 let s:show_special     = get(g:, 'startify_enable_special', 1)
 let s:restore_position = get(g:, 'startify_restore_position')
+let s:delete_buffers   = get(g:, 'startify_session_delete_buffers')
 let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
@@ -153,6 +154,7 @@ function! startify#session_load(...) abort
     echo 'There are no sessions...'
     return
   endif
+  call startify#session_delete_buffers()
   let spath = s:session_dir . s:sep . (exists('a:1')
         \ ? a:1
         \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
@@ -233,6 +235,20 @@ function! startify#session_delete(...) abort
   else
     echo 'Deletion aborted!'
   endif
+endfunction
+
+" Function: #session_delete_buffers {{{1
+function! startify#session_delete_buffers() abort
+  if !s:delete_buffers
+    return
+  endif
+  let n = 1
+  while n <= bufnr('$')
+    if buflisted(n)
+      silent execute 'bdelete' n
+    endif
+    let n += 1
+  endwhile
 endfunction
 
 " Function: #session_list {{{1
