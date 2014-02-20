@@ -82,7 +82,7 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   if s:show_special
-    call append('$', ['   [e]  <empty buffer>', ''])
+    call append('$', ['   [e]  <empty buffer>', '   [i]  <empty buffer> (insert mode)', ''])
   endif
 
   if get(g:, 'startify_session_detection', 1) && filereadable('Session.vim')
