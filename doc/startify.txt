@@ -100,6 +100,7 @@ default values.
     |g:startify_custom_footer|
     |g:startify_restore_position|
     |g:startify_empty_buffer_key|
+    |g:startify_unload_elder_buffers|
     |g:startify_enable_special|
     |g:startify_session_savevars|
     |g:startify_session_savecmds|
@@ -266,6 +267,15 @@ Example:
 This creates an additional, hidden mapping for the empty buffer.
 
 Default: does not exist
+
+------------------------------------------------------------------------------
+                                                   *g:startify_unload_elder_buffers*
+>
+    let g:startify_unload_elder_buffers = 1
+<
+Unload buffers before loading a new session.
+
+Default: 1
 
 ------------------------------------------------------------------------------
                                                      *g:startify_enable_special*

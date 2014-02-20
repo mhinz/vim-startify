@@ -16,6 +16,7 @@ let s:show_special     = get(g:, 'startify_enable_special', 1)
 let s:restore_position = get(g:, 'startify_restore_position')
 let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
+let s:unload_elder_buffers = get(g:, 'startify_unload_elder_buffers', 1)
 
 if exists('g:startify_list_order')
   let s:lists = g:startify_list_order
@@ -144,6 +145,21 @@ function! startify#insane_in_the_membrane() abort
   silent! doautocmd <nomodeline> startify User
 endfunction
 
+" Function: #_unload_elder_buffers {{{1
+" TODO: handle bang option.
+function! startify#_unload_elder_buffers() abort
+  if ! s:unload_elder_buffers
+    return
+  endif
+  let n = 1
+  while n <= bufnr('$')
+    if buflisted(n)
+      silent execute 'bdelete ' . n
+    endif
+    let n = n + 1
+  endwhile
+endfunction
+
 " Function: #session_load {{{1
 function! startify#session_load(...) abort
   if !isdirectory(s:session_dir)
@@ -153,6 +169,7 @@ function! startify#session_load(...) abort
     echo 'There are no sessions...'
     return
   endif
+  call startify#_unload_elder_buffers()
   let spath = s:session_dir . s:sep . (exists('a:1')
         \ ? a:1
         \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
