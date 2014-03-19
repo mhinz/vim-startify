@@ -263,36 +263,34 @@ endfunction
 
 " Function: s:show_dir {{{1
 function! s:show_dir(cnt) abort
-  let cnt   = a:cnt
-  let num   = s:numfiles
-  let files = []
+  let cnt     = a:cnt
+  let num     = s:numfiles
+  let entries = {}
 
-  for fname in split(glob('.\=*'))
-    if isdirectory(fname)
-          \ || (exists('g:startify_skiplist') && s:is_in_skiplist(resolve(fnamemodify(fname, ':p'))))
-      continue
-    endif
-
-    call add(files, [getftime(fname), fname])
-  endfor
+  let cwd   = getcwd()
+  let files = filter(map(copy(v:oldfiles), 'resolve(fnamemodify(v:val, ":p"))'), 'match(v:val, cwd) == 0')
 
   if !empty(files)
     if exists('s:last_message')
       call s:print_section_header()
     endif
 
-    function! l:compare(x, y)
-      return a:y[0] - a:x[0]
-    endfunction
+    for fname in files
+      let fullpath = resolve(fnamemodify(fname, ':p'))
 
-    call sort(files, 'l:compare')
+      " filter duplicates, bookmarks and entries from the skiplist
+      if has_key(entries, fullpath)
+            \ || !filereadable(fullpath)
+            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
+            \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
+        continue
+      endif
 
-    for items in files
+      let entries[fullpath] = 1
       let index = s:get_index_as_string(cnt)
-      let fname = items[1]
 
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<cr>'
+      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
 
       let cnt += 1
       let num -= 1
@@ -303,9 +301,9 @@ function! s:show_dir(cnt) abort
     endfor
 
     call append('$', '')
-  endif
 
-  return cnt
+    return cnt
+  endif
 endfunction
 
 " Function: s:show_files {{{1
