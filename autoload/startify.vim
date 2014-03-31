@@ -359,7 +359,6 @@ endfunction
 " Function: s:show_sessions {{{1
 function! s:show_sessions(cnt) abort
   let sfiles = split(globpath(s:session_dir, '*'), '\n')
-  let slen   = len(sfiles)
 
   if empty(sfiles)
     if exists('s:last_message')
@@ -367,33 +366,36 @@ function! s:show_sessions(cnt) abort
     endif
     return a:cnt
   endif
-  let cnt = a:cnt
 
   if exists('s:last_message')
     call s:print_section_header()
   endif
 
+  let cnt  = a:cnt
+  let slen = len(sfiles)
+
   for i in range(slen)
-    let idx   = (i + cnt)
-    let index = s:get_index_as_string(idx)
+    let index = s:get_index_as_string(cnt)
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
     execute 'nnoremap <buffer>' index ':source' fnameescape(sfiles[i]) '<cr>'
+
+    let cnt += 1
   endfor
 
   call append('$', '')
 
-  return idx + 1
+  return cnt
 endfunction
 
 " Function: s:show_bookmarks {{{1
 function! s:show_bookmarks(cnt) abort
-  let cnt = a:cnt
-
   if exists('g:startify_bookmarks')
     if exists('s:last_message')
       call s:print_section_header()
     endif
+
+    let cnt = a:cnt
 
     for fname in g:startify_bookmarks
       let index = s:get_index_as_string(cnt)
