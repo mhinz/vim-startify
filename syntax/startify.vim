@@ -26,9 +26,9 @@ if exists('g:startify_custom_header')
 endif
 
 if exists('g:startify_custom_footer')
-  autocmd startify User <buffer>
+  autocmd startify User Startified
         \ execute 'syntax region StartifyFooter start=/\%'. (startify#get_lastline() + 1) .'l/ end=/*/' |
-        \ autocmd! startify User <buffer>
+        \ autocmd! startify User
 endif
 
 highlight default link StartifyHeader  Normal
