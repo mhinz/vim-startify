@@ -263,12 +263,15 @@ endfunction
 
 " Function: s:show_dir {{{1
 function! s:show_dir(cnt) abort
+  if empty(v:oldfiles)
+    return a:cnt
+  endif
+
   let cnt     = a:cnt
   let num     = s:numfiles
   let entries = {}
-
-  let cwd   = getcwd()
-  let files = filter(map(copy(v:oldfiles), 'resolve(fnamemodify(v:val, ":p"))'), 'match(v:val, cwd) == 0')
+  let cwd     = getcwd()
+  let files   = filter(map(copy(v:oldfiles), 'resolve(fnamemodify(v:val, ":p"))'), 'match(v:val, cwd) == 0')
 
   if !empty(files)
     if exists('s:last_message')
@@ -308,44 +311,46 @@ endfunction
 
 " Function: s:show_files {{{1
 function! s:show_files(cnt) abort
+  if empty(v:oldfiles)
+    return a:cnt
+  endif
+
+  if exists('s:last_message')
+    call s:print_section_header()
+  endif
+
   let cnt     = a:cnt
   let num     = s:numfiles
   let entries = {}
 
-  if !empty(v:oldfiles)
-    if exists('s:last_message')
-      call s:print_section_header()
+  for fname in v:oldfiles
+    let fullpath = resolve(fnamemodify(fname, ':p'))
+
+    " filter duplicates, bookmarks and entries from the skiplist
+    if has_key(entries, fullpath)
+          \ || !filereadable(fullpath)
+          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
+          \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
+      continue
     endif
 
-    for fname in v:oldfiles
-      let fullpath = resolve(fnamemodify(fname, ':p'))
+    let entries[fullpath] = 1
+    let index = s:get_index_as_string(cnt)
 
-      " filter duplicates, bookmarks and entries from the skiplist
-      if has_key(entries, fullpath)
-            \ || !filereadable(fullpath)
-            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
-            \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
-        continue
-      endif
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+    execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
 
-      let entries[fullpath] = 1
-      let index = s:get_index_as_string(cnt)
+    let cnt += 1
+    let num -= 1
 
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
+    if !num
+      break
+    endif
+  endfor
 
-      let cnt += 1
-      let num -= 1
+  call append('$', '')
 
-      if !num
-        break
-      endif
-    endfor
-
-    call append('$', '')
-
-    return cnt
-  endif
+  return cnt
 endfunction
 
 " Function: s:show_sessions {{{1
