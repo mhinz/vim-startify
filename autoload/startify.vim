@@ -390,24 +390,26 @@ endfunction
 
 " Function: s:show_bookmarks {{{1
 function! s:show_bookmarks(cnt) abort
-  if exists('g:startify_bookmarks')
-    if exists('s:last_message')
-      call s:print_section_header()
-    endif
-
-    let cnt = a:cnt
-
-    for fname in g:startify_bookmarks
-      let index = s:get_index_as_string(cnt)
-
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
-
-      let cnt += 1
-    endfor
-
-    call append('$', '')
+  if !exists('g:startify_bookmarks')
+    return a:cnt
   endif
+
+  if exists('s:last_message')
+    call s:print_section_header()
+  endif
+
+  let cnt = a:cnt
+
+  for fname in g:startify_bookmarks
+    let index = s:get_index_as_string(cnt)
+
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+    execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
+
+    let cnt += 1
+  endfor
+
+  call append('$', '')
 
   return cnt
 endfunction
