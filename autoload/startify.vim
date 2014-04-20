@@ -280,7 +280,7 @@ function! s:show_dir(cnt) abort
     endif
 
     for fname in files
-      let fullpath = resolve(fnamemodify(fname, ':p'))
+      let fullpath = resolve(fnamemodify(glob(fname), ':p'))
 
       " filter duplicates, bookmarks and entries from the skiplist
       if has_key(entries, fullpath)
@@ -326,7 +326,7 @@ function! s:show_files(cnt) abort
   let entries = {}
 
   for fname in v:oldfiles
-    let fullpath = resolve(fnamemodify(fname, ':p'))
+    let fullpath = resolve(fnamemodify(glob(fname), ':p'))
 
     " filter duplicates, bookmarks and entries from the skiplist
     if has_key(entries, fullpath)
