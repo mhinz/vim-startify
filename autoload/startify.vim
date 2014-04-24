@@ -292,7 +292,7 @@ function! s:show_dir(cnt) abort
 
       let entries[fullpath] = 1
       let index = s:get_index_as_string(cnt)
-      let display_fname = s:relative_path ? fnamemodify(fname, ':.') : fname
+      let display_fname = s:relative_path ? fnamemodify(glob(fname), ':.') : fnamemodify(glob(fname), ':p:~')
 
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
       execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
@@ -338,7 +338,7 @@ function! s:show_files(cnt) abort
 
     let entries[fullpath] = 1
     let index = s:get_index_as_string(cnt)
-    let display_fname = s:relative_path ? fnamemodify(fname, ':.') : fname
+    let display_fname = s:relative_path ? fnamemodify(glob(fname), ':.') : fnamemodify(glob(fname), ':p:~')
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
     execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
