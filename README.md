@@ -1,3 +1,5 @@
+[![Stories in Ready](https://badge.waffle.io/mhinz/vim-startify.png?label=ready&title=Ready)](https://waffle.io/mhinz/vim-startify)
+
 ![Example:startify in action](https://github.com/mhinz/vim-startify/raw/master/startify.png)
 
 This is it. A start screen for Vim.  _( all features enabled - freely customizable )_
