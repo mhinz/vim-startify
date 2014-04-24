@@ -271,7 +271,7 @@ function! s:show_dir(cnt) abort
   let cnt     = a:cnt
   let num     = s:numfiles
   let entries = {}
-  let cwd     = getcwd()
+  let cwd     = escape(getcwd(), '\')
   let files   = filter(map(copy(v:oldfiles), 'resolve(fnamemodify(v:val, ":p"))'), 'match(v:val, cwd) == 0')
 
   if !empty(files)
