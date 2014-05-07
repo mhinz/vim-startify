@@ -370,7 +370,11 @@ function! s:sanitize_file_list(flist)
   for fname in a:flist
     " Force slashes to abide by 'shellslash' setting
     " glob() will also return nothing for invalid/non-existent files
-    let fname = glob(escape(fname, '[]'))
+    if has('win32') || has('win64')
+      let fname = glob(fname)
+    else
+      let fname = glob(escape(fname, '[]'))
+    endif
 
     if strlen(fname) == 0
       continue
