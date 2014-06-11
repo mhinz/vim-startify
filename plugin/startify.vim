@@ -18,6 +18,13 @@ augroup startify
           \ endif |
           \ autocmd! startify VimEnter
   endif
+
+  if get(g:, 'startify_session_persistence')
+    autocmd startify VimLeave *
+          \ if exists('v:this_session') && filewritable(v:this_session) |
+          \   call startify#session_write(fnameescape(v:this_session)) |
+          \ endif
+  endif
 augroup END
 
 command! -nargs=? -bar -complete=customlist,startify#session_list SSave   call startify#session_save(<f-args>)

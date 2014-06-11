@@ -215,6 +215,10 @@ Great way to create a portable project folder.
 <
 Automatically update sessions before exiting Vim.
 
+This also works for sessions started with:
+>
+    vim -S mysession.vim
+<
 ------------------------------------------------------------------------------
                                              *g:startify_session_delete_buffers*
 >

@@ -37,14 +37,6 @@ endif
 let s:secoff = type(s:lists[0]) == 3 ? (len(s:lists[0]) + 1) : 0
 let s:section_header_lines = []
 
-" Init: autocmds {{{1
-if get(g:, 'startify_session_persistence')
-  autocmd startify VimLeave *
-        \ if exists('v:this_session') && filewritable(v:this_session) |
-        \   call s:session_write(fnameescape(v:this_session)) |
-        \ endif
-endif
-
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
@@ -197,17 +189,44 @@ function! startify#session_save(...) abort
 
   let spath = s:session_dir . s:sep . sname
   if !filereadable(spath)
-    call s:session_write(fnameescape(spath))
+    call startify#session_write(fnameescape(spath))
     echo 'Session saved under: '. spath
     return
   endif
 
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
   if nr2char(getchar()) == 'y'
-    call s:session_write(fnameescape(spath))
+    call startify#session_write(fnameescape(spath))
     echo 'Session saved under: '. spath
   else
     echo 'Did NOT save the session!'
+  endif
+endfunction
+
+" Function: #session_write {{{1
+function! startify#session_write(spath)
+  let ssop = &sessionoptions
+  try
+    set sessionoptions-=options
+    execute 'mksession!' a:spath
+  catch
+    execute 'echoerr' string(v:exception)
+  finally
+    let &sessionoptions = ssop
+  endtry
+
+  if exists('g:startify_session_savevars') || exists('g:startify_session_savecmds')
+    execute 'split' a:spath
+
+    " put existing variables from savevars into session file
+    call append(line('$')-3, map(filter(get(g:, 'startify_session_savevars', []), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))'))
+
+    " put commands from savecmds into session file
+    call append(line('$')-3, get(g:, 'startify_session_savecmds', []))
+
+    setlocal bufhidden=delete
+    silent update
+    silent hide
   endif
 endfunction
 
@@ -596,33 +615,6 @@ function! s:restore_position() abort
   autocmd! startify *
   if line("'\"") > 0 && line("'\"") <= line('$')
     call cursor(getpos("'\"")[1:])
-  endif
-endfunction
-
-" Function: s:session_write {{{1
-function! s:session_write(spath)
-  let ssop = &sessionoptions
-  try
-    set sessionoptions-=options
-    execute 'mksession!' a:spath
-  catch
-    execute 'echoerr' string(v:exception)
-  finally
-    let &sessionoptions = ssop
-  endtry
-
-  if exists('g:startify_session_savevars') || exists('g:startify_session_savecmds')
-    execute 'split' a:spath
-
-    " put existing variables from savevars into session file
-    call append(line('$')-3, map(filter(get(g:, 'startify_session_savevars', []), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))'))
-
-    " put commands from savecmds into session file
-    call append(line('$')-3, get(g:, 'startify_session_savecmds', []))
-
-    setlocal bufhidden=delete
-    silent update
-    silent hide
   endif
 endfunction
 
