@@ -357,6 +357,10 @@ This would result in:
     [2]  /last/recently/used/file6
     etc.
 
+If you want numbers to start at 1 instead of 0, you could use this:
+>
+    let g:startify_custom_indices = map(range(1,100), 'string(v:val)')
+<
 NOTE: There is no sanitizing going on, so you should know what you're doing!
 
 Best practices:
