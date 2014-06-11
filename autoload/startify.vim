@@ -325,9 +325,9 @@ function! s:show_dir(cnt) abort
     endfor
 
     call append('$', '')
-
-    return cnt
   endif
+
+  return cnt
 endfunction
 
 " Function: s:show_files {{{1
