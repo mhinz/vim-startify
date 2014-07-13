@@ -314,7 +314,7 @@ function! s:show_dir(cnt) abort
       let display_fname = s:relative_path ? fnamemodify(glob(fname), ':.') : fnamemodify(glob(fname), ':p:~')
 
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
-      execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
+      execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
 
       let cnt += 1
       let num -= 1
@@ -360,7 +360,7 @@ function! s:show_files(cnt) abort
     let display_fname = s:relative_path ? fnamemodify(glob(fname), ':.') : fnamemodify(glob(fname), ':p:~')
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
-    execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
+    execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
 
     let cnt += 1
     let num -= 1
@@ -397,7 +397,7 @@ function! s:show_sessions(cnt) abort
     let index = s:get_index_as_string(cnt)
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
-    execute 'nnoremap <buffer>' index ':source' fnameescape(sfiles[i]) '<cr>'
+    execute 'nnoremap <buffer><silent>' index ':source' fnameescape(sfiles[i]) '<cr>'
 
     let cnt += 1
   endfor
@@ -423,7 +423,7 @@ function! s:show_bookmarks(cnt) abort
     let index = s:get_index_as_string(cnt)
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-    execute 'nnoremap <buffer>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
+    execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
 
     let cnt += 1
   endfor
