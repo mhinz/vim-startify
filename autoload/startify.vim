@@ -85,6 +85,12 @@ function! startify#insane_in_the_membrane() abort
     let cnt = 1
   endif
 
+  if empty(v:oldfiles)
+    echohl WarningMsg
+    echomsg "startify: Can't read viminfo file.  Read :help startify-faq"
+    echohl None
+  endif
+
   for item in s:lists
     if type(item) == 1
       let cnt = s:show_{item}(cnt)

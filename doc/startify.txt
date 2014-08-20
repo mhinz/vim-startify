@@ -507,6 +507,69 @@ Example: (my terminal emulator supports 256 colors)
 ==============================================================================
 FAQ                                                               *startify-faq*
 
+I don't want the start screen to use cursorline!~
+
+Startify sets its own filetype "startify". Thus one could set buffer-local
+options like this:
+>
+    autocmd FileType startify setlocal nocursorline
+<
+------------------------------------------------------------------------------
+
+Recent files aren't shown!~
+
+Perhaps the problem is that the viminfo file..
+
+    - doesn't exist
+    - is invalid
+    - is empty
+    - can't be read (check permissions)
+
+I suggest the following steps:
+
+    1) Create a new directory:
+>
+        $ mkdir -p ~/.vim/files/info
+<
+    2) Put this into your vimrc:
+>
+        set viminfo='100,n$HOME/.vim/files/info/viminfo
+<
+See |'viminfo'| for information about the second step and what it does
+exactly.
+
+------------------------------------------------------------------------------
+
+Last recently used files don't seem to get updated at :Startify!~
+
+Vim loads the list from viminfo only once, at startup.
+
+------------------------------------------------------------------------------
+
+I have broken colors when using sessions!~
+
+Nothing this plugin could do about. Try playing around with 'sessionoptions'.
+
+NOTE: Startify removes 'options' from the session options automatically,
+because it's the source of many problems.
+
+Some people swear it works for them with these settings:
+>
+    set sessionoptions=blank,curdir,folds,help,tabpages,winpos
+<
+------------------------------------------------------------------------------
+
+How to disable common but unimportant files?~
+
+Use the skiplist. Personally I use:
+>
+    let g:startify_skiplist = [
+           \ 'COMMIT_EDITMSG',
+           \ $VIMRUNTIME .'/doc',
+           \ 'bundle/.*/doc',
+           \ '\.DS_Store'
+           \ ]
+<
 ------------------------------------------------------------------------------
 
 CtrlP or NERDTree open a split in Startify!~
@@ -540,47 +603,6 @@ The session autoload feature is not working!~
 Do you have NERDTree installed by any chance? If so, try this:
 >
     let NERDTreeHijackNetrw = 0
-<
-------------------------------------------------------------------------------
-
-I don't want the start screen to use cursorline!~
-
-Startify sets its own filetype "startify". Thus one could set buffer-local
-options like this:
->
-    autocmd FileType startify setlocal nocursorline
-<
-------------------------------------------------------------------------------
-
-Last recently used files don't seem to get updated at :Startify!~
-
-Vim loads the list from viminfo only once, at startup.
-
-------------------------------------------------------------------------------
-
-I have broken colors when using sessions!~
-
-Nothing this plugin could do about. Try playing around with 'sessionoptions'.
-
-NOTE: Startify removes 'options' from the session options automatically,
-because it's the source of many problems.
-
-Some people swear it works for them with these settings:
->
-    set sessionoptions=blank,curdir,folds,help,tabpages,winpos
-<
-------------------------------------------------------------------------------
-
-How to disable common but unimportant files?~
-
-Use the skiplist. Personally I use:
->
-    let g:startify_skiplist = [
-           \ 'COMMIT_EDITMSG',
-           \ $VIMRUNTIME .'/doc',
-           \ 'bundle/.*/doc',
-           \ '\.DS_Store'
-           \ ]
 <
 ==============================================================================
 EXAMPLE                                                       *startify-example*
