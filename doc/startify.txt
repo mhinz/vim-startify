@@ -248,8 +248,7 @@ At the moment only git, hg, bzr and svn are supported.
 >
     let g:startify_skiplist = []
 <
-A list of Vim regular expressions to filter recently used files and files in
-the current directory.
+A list of Vim regular expressions that filters recently used files.
 
 Example:
 >
