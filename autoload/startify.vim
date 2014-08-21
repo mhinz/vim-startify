@@ -296,8 +296,8 @@ function! s:show_dir(cnt) abort
   let cnt     = a:cnt
   let num     = s:numfiles
   let entries = {}
-  let cwd     = escape(getcwd(), '\')
-  let files   = filter(map(copy(v:oldfiles), 'resolve(fnamemodify(v:val, ":p"))'), 'match(v:val, cwd) == 0')
+  let cwd     = getcwd()
+  let files   = s:sanitize_file_list(v:oldfiles)
 
   if !empty(files)
     if exists('s:last_message')
@@ -305,19 +305,22 @@ function! s:show_dir(cnt) abort
     endif
 
     for fname in files
-      let fullpath = resolve(fnamemodify(glob(fname), ':p'))
-
-      " filter duplicates, bookmarks and entries from the skiplist
-      if has_key(entries, fullpath)
-            \ || !filereadable(fullpath)
-            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
-            \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
+      " Filter entries not in cwd
+      if match(fname, escape(cwd, '\')) != 0
         continue
       endif
 
-      let entries[fullpath] = 1
+      " filter duplicates, bookmarks and entries from the skiplist
+      if has_key(entries, fname)
+            \ || !filereadable(fname)
+            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fname))
+            \ || (exists('g:startify_bookmarks') && s:is_bookmark(fname))
+        continue
+      endif
+
+      let entries[fname] = 1
       let index = s:get_index_as_string(cnt)
-      let display_fname = s:relative_path ? fnamemodify(glob(fname), ':.') : fnamemodify(glob(fname), ':p:~')
+      let display_fname = s:relative_path ? fnamemodify(fname, ':.') : fnamemodify(fname, ':p:~')
 
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
       execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
@@ -350,20 +353,18 @@ function! s:show_files(cnt) abort
   let num     = s:numfiles
   let entries = {}
 
-  for fname in v:oldfiles
-    let fullpath = resolve(fnamemodify(glob(fname), ':p'))
-
+  for fname in s:sanitize_file_list(v:oldfiles)
     " filter duplicates, bookmarks and entries from the skiplist
-    if has_key(entries, fullpath)
-          \ || !filereadable(fullpath)
-          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
-          \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
+    if has_key(entries, fname)
+          \ || !filereadable(fname)
+          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fname))
+          \ || (exists('g:startify_bookmarks') && s:is_bookmark(fname))
       continue
     endif
 
-    let entries[fullpath] = 1
+    let entries[fname] = 1
     let index = s:get_index_as_string(cnt)
-    let display_fname = s:relative_path ? fnamemodify(glob(fname), ':.') : fnamemodify(glob(fname), ':p:~')
+    let display_fname = s:relative_path ? fnamemodify(fname, ':.') : fnamemodify(fname, ':p:~')
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
     execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
@@ -381,6 +382,33 @@ function! s:show_files(cnt) abort
   return cnt
 endfunction
 
+" Function: s:sanitize_file_list {{{1
+" Given a list of files (eg. v:oldfiles), return a modified list with path
+" separators that respect 'shellslash', and invalid entries culled
+function! s:sanitize_file_list(flist)
+  if empty(a:flist)
+    return []
+  endif
+
+  let sanitized_list = []
+
+  for fname in a:flist
+    " Force slashes to abide by 'shellslash' setting
+    " glob() will also return nothing for invalid/non-existent files
+    if has('win32') || has('win64')
+      let fname = glob(fname)
+    else
+      let fname = glob(escape(fname, '[]'))
+    endif
+
+    if strlen(fname) == 0
+      continue
+    else
+      call add(sanitized_list, resolve(fnamemodify(fname, ':p')))
+    endif
+  endfor
+  return sanitized_list
+endfunction
 " Function: s:show_sessions {{{1
 function! s:show_sessions(cnt) abort
   let sfiles = split(globpath(s:session_dir, '*'), '\n')
