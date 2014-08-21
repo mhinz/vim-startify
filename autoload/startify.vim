@@ -297,30 +297,30 @@ function! s:show_dir(cnt) abort
   let num     = s:numfiles
   let entries = {}
   let cwd     = escape(getcwd(), '\')
-  let files   = filter(map(copy(v:oldfiles), 'resolve(fnamemodify(v:val, ":p"))'), 'match(v:val, cwd) == 0')
+  let files   = filter(map(copy(v:oldfiles), 'fnamemodify(resolve(v:val), ":p")'), 'match(v:val, cwd) == 0')
 
   if !empty(files)
     if exists('s:last_message')
       call s:print_section_header()
     endif
 
-    for fname in files
-      let fullpath = resolve(fnamemodify(glob(fname), ':p'))
+    for abs_path in files
+      let abs_path = glob(abs_path)
 
       " filter duplicates, bookmarks and entries from the skiplist
-      if has_key(entries, fullpath)
-            \ || !filereadable(fullpath)
-            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
-            \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
+      if has_key(entries, abs_path)
+            \ || !filereadable(abs_path)
+            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(abs_path))
+            \ || (exists('g:startify_bookmarks') && s:is_bookmark(abs_path))
         continue
       endif
 
-      let entries[fullpath] = 1
-      let index = s:get_index_as_string(cnt)
-      let display_fname = s:relative_path ? fnamemodify(glob(fname), ':.') : fnamemodify(glob(fname), ':p:~')
+      let entries[abs_path] = 1
+      let index             = s:get_index_as_string(cnt)
+      let display_path      = fnamemodify(abs_path, s:relative_path ? ':.' : ':p:~')
 
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
-      execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_path)
+      execute 'nnoremap <buffer><silent>' index ':edit' abs_path '<bar> call <sid>check_user_options()<cr>'
 
       let cnt += 1
       let num -= 1
@@ -351,22 +351,22 @@ function! s:show_files(cnt) abort
   let entries = {}
 
   for fname in v:oldfiles
-    let fullpath = resolve(fnamemodify(glob(fname), ':p'))
+    let abs_path = glob(fnamemodify(resolve(fname), ':p'))
 
     " filter duplicates, bookmarks and entries from the skiplist
-    if has_key(entries, fullpath)
-          \ || !filereadable(fullpath)
-          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(fullpath))
-          \ || (exists('g:startify_bookmarks') && s:is_bookmark(fullpath))
+    if has_key(entries, abs_path)
+          \ || !filereadable(abs_path)
+          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(abs_path))
+          \ || (exists('g:startify_bookmarks') && s:is_bookmark(abs_path))
       continue
     endif
 
-    let entries[fullpath] = 1
-    let index = s:get_index_as_string(cnt)
-    let display_fname = s:relative_path ? fnamemodify(glob(fname), ':.') : fnamemodify(glob(fname), ':p:~')
+    let entries[abs_path] = 1
+    let index             = s:get_index_as_string(cnt)
+    let display_path      = fnamemodify(abs_path, s:relative_path ? ':.' : ':p:~')
 
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_fname)
-    execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_path)
+    execute 'nnoremap <buffer><silent>' index ':edit' abs_path '<bar> call <sid>check_user_options()<cr>'
 
     let cnt += 1
     let num -= 1
