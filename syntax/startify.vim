@@ -15,7 +15,7 @@ syntax sync fromstart
 
 syntax match StartifySpecial /\V<empty buffer>\|<quit>/
 syntax match StartifyBracket /.*\%9c/ contains=StartifyNumber
-syntax match StartifyNumber  /\[[^BSTV]\{-1,2}\]/hs=s+1,he=e-1
+syntax match StartifyNumber  /^\s*\zs[^BSVT]*\]\ze\s/hs=s+1,he=e-1
 syntax match StartifyFile    /.*/ contains=StartifyBracket,StartifyNumber,StartifyPath,StartifySpecial
 
 execute 'syntax match StartifySlash /\'. s:sep .'/'
