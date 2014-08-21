@@ -494,6 +494,7 @@ function! s:set_mark(type) abort
   endif
 
   let [id, path] = matchlist(getline('.'), '\v\[(.*)\]\s+(.*)')[1:2]
+  let path = fnamemodify(path, ':p')
 
   if path =~# '\V<empty buffer>\|<quit>' || path =~# '^\w\+$'
     return
