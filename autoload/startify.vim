@@ -81,7 +81,7 @@ function! startify#insane_in_the_membrane() abort
 
   if get(g:, 'startify_session_detection', 1) && filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
-    execute 'nnoremap <buffer> 0 :source Session.vim<cr>'
+    execute 'nnoremap <buffer> 0 :call startify#session_delete_buffers() <bar> source Session.vim<cr>'
     let cnt = 1
   endif
 
@@ -385,32 +385,23 @@ endfunction
 " Function: s:show_sessions {{{1
 function! s:show_sessions(cnt) abort
   let sfiles = split(globpath(s:session_dir, '*'), '\n')
-
   if empty(sfiles)
     if exists('s:last_message')
       unlet s:last_message
     endif
     return a:cnt
   endif
-
   if exists('s:last_message')
     call s:print_section_header()
   endif
-
   let cnt  = a:cnt
-  let slen = len(sfiles)
-
-  for i in range(slen)
+  for i in range(len(sfiles))
     let index = s:get_index_as_string(cnt)
-
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
-    execute 'nnoremap <buffer><silent>' index ':source' fnameescape(sfiles[i]) '<cr>'
-
+    execute 'nnoremap <buffer><silent>' index ':SLoad' fnamemodify(sfiles[i], ':t:r') '<cr>'
     let cnt += 1
   endfor
-
   call append('$', '')
-
   return cnt
 endfunction
 
