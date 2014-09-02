@@ -397,8 +397,8 @@ function! s:show_sessions(cnt) abort
   let cnt  = a:cnt
   for i in range(len(sfiles))
     let index = s:get_index_as_string(cnt)
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t:r'))
-    execute 'nnoremap <buffer><silent>' index ':SLoad' fnamemodify(sfiles[i], ':t:r') '<cr>'
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t'))
+    execute 'nnoremap <buffer><silent>' index ':SLoad' fnamemodify(sfiles[i], ':t') '<cr>'
     let cnt += 1
   endfor
   call append('$', '')
