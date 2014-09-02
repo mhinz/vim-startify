@@ -17,8 +17,8 @@ syntax match StartifyBracket /.*\%9c/ contains=
       \ StartifyNumber,
       \ StartifySelect,
 syntax match StartifySpecial /\V<empty buffer>\|<quit>/
-syntax match StartifyNumber  /^\s*\[\zs[^BSVT]*\ze\]/
-syntax match StartifySelect  /^\s*\[\zs[BSVT]*\ze\]/
+syntax match StartifyNumber  /^\s*\[\zs[^BSVT]\{-}\ze\]/
+syntax match StartifySelect  /^\s*\[\zs[BSVT]\{-}\ze\]/
 syntax match StartifyFile    /.*/ contains=
       \ StartifyBracket,
       \ StartifyPath,
