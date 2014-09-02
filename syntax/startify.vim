@@ -13,10 +13,16 @@ let s:sep = startify#get_separator()
 
 syntax sync fromstart
 
+syntax match StartifyBracket /.*\%9c/ contains=
+      \ StartifyNumber,
+      \ StartifySelect,
 syntax match StartifySpecial /\V<empty buffer>\|<quit>/
-syntax match StartifyBracket /.*\%9c/ contains=StartifyNumber
-syntax match StartifyNumber  /^\s*\zs[^BSVT]*\]\ze\s/hs=s+1,he=e-1
-syntax match StartifyFile    /.*/ contains=StartifyBracket,StartifyNumber,StartifyPath,StartifySpecial
+syntax match StartifyNumber  /^\s*\[\zs[^BSVT]*\ze\]/
+syntax match StartifySelect  /^\s*\[\zs[BSVT]*\ze\]/
+syntax match StartifyFile    /.*/ contains=
+      \ StartifyBracket,
+      \ StartifyPath,
+      \ StartifySpecial,
 
 execute 'syntax match StartifySlash /\'. s:sep .'/'
 execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash'
@@ -31,10 +37,11 @@ if exists('g:startify_custom_footer')
         \ autocmd! startify User
 endif
 
-highlight default link StartifyHeader  Normal
-highlight default link StartifyFooter  Normal
 highlight default link StartifyBracket Delimiter
+highlight default link StartifyFooter  Normal
+highlight default link StartifyHeader  Normal
 highlight default link StartifyNumber  Number
 highlight default link StartifySection Special
+highlight default link StartifySelect  Title
 
 let b:current_syntax = 'startify'

@@ -484,24 +484,29 @@ COLORS                                                         *startify-colors*
 You can overwrite the highlight groups used by startify. The plugin defines
 these groups:
 
-    StartifyBracket         [,]
-    StartifyFile            the actual file
-    StartifyFooter          the custom footer
-    StartifyHeader          the custom header
-    StartifyNumber          the numbers between []
-    StartifyPath            the path to a file
-    StartifySection         section headers
-    StartifySlash           slashes in paths
-    StartifySpecial         <empty buffer>,<quit>
+    Highlight group  |  Description             |  Default
+    ------------------------------------------------------------------
+                     |                          |
+    StartifyBracket  |  [,]                     |  linked to Delimiter
+    StartifyFile     |  the actual file         |  <none>
+    StartifyFooter   |  the custom footer       |  linked to Normal
+    StartifyHeader   |  the custom header       |  linked to Normal
+    StartifyNumber   |  the numbers between []  |  linked to Number
+    StartifyPath     |  the path to a file      |  <none>
+    StartifySection  |  section headers         |  linked to Special
+    StartifySelect   |  selected entries        |  linked to Title
+    StartifySlash    |  slashes in paths        |  <none>
+    StartifySpecial  |  <empty buffer>,<quit>   |  <none>
 
 Example: (my terminal emulator supports 256 colors)
 >
-    hi StartifyBracket ctermfg=240
-    hi StartifyFooter  ctermfg=111
-    hi StartifyHeader  ctermfg=203
-    hi StartifyNumber  ctermfg=215
-    hi StartifyPath    ctermfg=245
-    hi StartifySlash   ctermfg=240
+    highlight StartifyBracket ctermfg=240
+    highlight StartifyFooter  ctermfg=240
+    highlight StartifyHeader  ctermfg=114
+    highlight StartifyNumber  ctermfg=215
+    highlight StartifyPath    ctermfg=245
+    highlight StartifySlash   ctermfg=240
+    highlight StartifySpecial ctermfg=240
 <
 ==============================================================================
 FAQ                                                               *startify-faq*
