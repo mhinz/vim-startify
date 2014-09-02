@@ -18,6 +18,7 @@ let s:delete_buffers   = get(g:, 'startify_session_delete_buffers')
 let s:relative_path    = get(g:, 'startify_relative_path')
 let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
+let s:show_cursorline  = get(g:, 'startify_show_cursorline')
 
 if exists('g:startify_list_order')
   let s:lists = g:startify_list_order
@@ -62,6 +63,10 @@ function! startify#insane_in_the_membrane() abort
   setlocal noswapfile nobuflisted buftype=nofile bufhidden=wipe
   setlocal nonumber nocursorline nocursorcolumn nolist statusline=\ startify
   set filetype=startify
+
+  if s:show_cursorline
+    setlocal cursorline
+  endif
 
   if v:version >= 703
     setlocal norelativenumber
