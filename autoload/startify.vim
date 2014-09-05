@@ -34,7 +34,6 @@ else
         \ ]
 endif
 
-let s:secoff = type(s:lists[0]) == 3 ? (len(s:lists[0]) + 1) : 0
 let s:section_header_lines = []
 
 " Function: #get_separator {{{1
@@ -67,22 +66,21 @@ function! startify#insane_in_the_membrane() abort
     setlocal norelativenumber
   endif
 
-  let cnt = 0
-  let s:headoff = 2
-
   if exists('g:startify_custom_header')
     call append('$', g:startify_custom_header)
-    let s:headoff += len(g:startify_custom_header)
   endif
 
   if s:show_special
     call append('$', ['   [e]  <empty buffer>', ''])
   endif
 
+  let cnt = 0
+
   if get(g:, 'startify_session_detection', 1) && filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
     execute 'nnoremap <buffer> 0 :call startify#session_delete_buffers() <bar> source Session.vim<cr>'
     let cnt = 1
+    let l:show_session = 1
   endif
 
   if empty(v:oldfiles)
@@ -110,8 +108,18 @@ function! startify#insane_in_the_membrane() abort
     call append('$', ['', '   [q]  <quit>'])
   endif
 
-  let s:firstline = s:show_special ? s:headoff : (s:headoff + s:secoff)
-  let s:lastline  = line('$')
+  " compute first line offset
+  let s:firstline = 2
+  " increase offset if there is a custom header
+  if exists('g:startify_custom_header')
+    let s:firstline += len(g:startify_custom_header)
+  endif
+  " no special, no local Session.vim, but a section header
+  if !s:show_special && !exists('l:show_session') && type(s:lists[0]) == 3
+    let s:firstline += len(s:lists[0]) + 1
+  endif
+
+  let s:lastline = line('$')
 
   if exists('g:startify_custom_footer')
     call append('$', g:startify_custom_footer)
@@ -139,7 +147,7 @@ function! startify#insane_in_the_membrane() abort
     autocmd startify BufReadPost * call s:restore_position()
   endif
 
-  call cursor((s:show_special ? 2 : 0) + s:headoff + s:secoff, 5)
+  call cursor(s:firstline + (s:show_special ? 2 : 0), 5)
 
   silent! doautocmd <nomodeline> startify User Startified
 endfunction
