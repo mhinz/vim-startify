@@ -219,6 +219,8 @@ function! startify#session_write(spath)
   let ssop = &sessionoptions
   try
     set sessionoptions-=options
+    " prevent saving already deleted buffers that were in the arglist
+    silent! argdelete *
     execute 'mksession!' a:spath
   catch
     execute 'echoerr' string(v:exception)
