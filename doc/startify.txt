@@ -213,7 +213,10 @@ Great way to create a portable project folder.
 >
     let g:startify_session_persistence = 0
 <
-Automatically update sessions before exiting Vim.
+Automatically update sessions in two cases:
+
+    1) Before leaving Vim
+    2) Before loading a new session via :SLoad
 
 This also works for sessions started with:
 >

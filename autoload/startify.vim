@@ -147,18 +147,23 @@ endfunction
 " Function: #session_load {{{1
 function! startify#session_load(...) abort
   if !isdirectory(s:session_dir)
-    echo 'The session directory does not exist: '. s:session_dir
+    echomsg 'The session directory does not exist: '. s:session_dir
     return
   elseif empty(startify#session_list_as_string(''))
-    echo 'There are no sessions...'
+    echomsg 'There are no sessions...'
     return
   endif
-  call startify#session_delete_buffers()
   let spath = s:session_dir . s:sep . (exists('a:1')
         \ ? a:1
         \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
         \ | redraw
   if filereadable(spath)
+    if get(g:, 'startify_session_persistence')
+          \ && exists('v:this_session')
+          \ && filewritable(v:this_session)
+      call startify#session_write(fnameescape(v:this_session))
+    endif
+    call startify#session_delete_buffers()
     execute 'source '. fnameescape(spath)
   else
     echo 'No such file: '. spath
@@ -398,7 +403,7 @@ function! s:show_sessions(cnt) abort
   for i in range(len(sfiles))
     let index = s:get_index_as_string(cnt)
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t'))
-    execute 'nnoremap <buffer><silent>' index ':SLoad' fnamemodify(sfiles[i], ':t') '<cr>'
+    execute 'nnoremap <buffer><silent>' index ':enew <bar> SLoad' fnamemodify(sfiles[i], ':t') '<cr>'
     let cnt += 1
   endfor
   call append('$', '')
