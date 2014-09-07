@@ -34,8 +34,6 @@ else
         \ ]
 endif
 
-let s:section_header_lines = []
-
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
@@ -88,6 +86,8 @@ function! startify#insane_in_the_membrane() abort
     echomsg "startify: Can't read viminfo file.  Read :help startify-faq"
     echohl None
   endif
+
+  let s:section_header_lines = []
 
   for item in s:lists
     if type(item) == 1
