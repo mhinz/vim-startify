@@ -50,7 +50,7 @@ function! startify#get_lastline() abort
 endfunction
 
 " Function: #insane_in_the_membrane {{{1
-function! startify#insane_in_the_membrane() abort
+function! startify#insane_in_the_membrane(callingbuffer) abort
   if !empty(v:servername) && exists('g:startify_skiplist_server')
     for servname in g:startify_skiplist_server
       if servname == v:servername
@@ -59,10 +59,14 @@ function! startify#insane_in_the_membrane() abort
     endfor
   endif
 
+  if a:callingbuffer != 0
+    let s:callingbuffer = a:callingbuffer
+  endif
+
+  enew
+  set filetype=startify
   setlocal noswapfile nobuflisted buftype=nofile bufhidden=wipe
   setlocal nonumber nocursorline nocursorcolumn nolist statusline=\ startify
-  set filetype=startify
-
   if v:version >= 703
     setlocal norelativenumber
   endif
@@ -218,9 +222,20 @@ endfunction
 function! startify#session_write(spath)
   let ssop = &sessionoptions
   try
-    set sessionoptions-=options
+    " if this function was called through :Startify instead of :SLoad
+    " switch back to the previous buffer before saving the session
+    if exists('s:callingbuffer')
+      redir => callingbuffer
+      file
+      redir END
+      if callingbuffer !~# '\[No Name\]'
+        execute 'buffer' s:callingbuffer
+      endif
+      unlet s:callingbuffer
+    endif
     " prevent saving already deleted buffers that were in the arglist
     silent! argdelete *
+    set sessionoptions-=options
     execute 'mksession!' a:spath
   catch
     execute 'echoerr' string(v:exception)
@@ -405,7 +420,7 @@ function! s:show_sessions(cnt) abort
   for i in range(len(sfiles))
     let index = s:get_index_as_string(cnt)
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t'))
-    execute 'nnoremap <buffer><silent>' index ':enew <bar> SLoad' fnamemodify(sfiles[i], ':t') '<cr>'
+    execute 'nnoremap <buffer><silent>' index ':SLoad' fnamemodify(sfiles[i], ':t') '<cr>'
     let cnt += 1
   endfor
   call append('$', '')
