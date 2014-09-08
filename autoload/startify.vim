@@ -47,7 +47,7 @@ function! startify#get_lastline() abort
 endfunction
 
 " Function: #insane_in_the_membrane {{{1
-function! startify#insane_in_the_membrane() abort
+function! startify#insane_in_the_membrane(callingbuffer) abort
   if !empty(v:servername) && exists('g:startify_skiplist_server')
     for servname in g:startify_skiplist_server
       if servname == v:servername
@@ -56,10 +56,14 @@ function! startify#insane_in_the_membrane() abort
     endfor
   endif
 
+  if a:callingbuffer != 0
+    let s:callingbuffer = a:callingbuffer
+  endif
+
+  enew
+  set filetype=startify
   setlocal noswapfile nobuflisted buftype=nofile bufhidden=wipe
   setlocal nonumber nocursorline nocursorcolumn nolist statusline=\ startify
-  set filetype=startify
-
   if v:version >= 703
     setlocal norelativenumber
   endif
@@ -155,18 +159,23 @@ endfunction
 " Function: #session_load {{{1
 function! startify#session_load(...) abort
   if !isdirectory(s:session_dir)
-    echo 'The session directory does not exist: '. s:session_dir
+    echomsg 'The session directory does not exist: '. s:session_dir
     return
   elseif empty(startify#session_list_as_string(''))
-    echo 'There are no sessions...'
+    echomsg 'There are no sessions...'
     return
   endif
-  call startify#session_delete_buffers()
   let spath = s:session_dir . s:sep . (exists('a:1')
         \ ? a:1
         \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
         \ | redraw
   if filereadable(spath)
+    if get(g:, 'startify_session_persistence')
+          \ && exists('v:this_session')
+          \ && filewritable(v:this_session)
+      call startify#session_write(fnameescape(v:this_session))
+    endif
+    call startify#session_delete_buffers()
     execute 'source '. fnameescape(spath)
   else
     echo 'No such file: '. spath
@@ -221,6 +230,19 @@ endfunction
 function! startify#session_write(spath)
   let ssop = &sessionoptions
   try
+    " if this function was called through :Startify instead of :SLoad
+    " switch back to the previous buffer before saving the session
+    if exists('s:callingbuffer')
+      redir => callingbuffer
+      file
+      redir END
+      if callingbuffer !~# '\[No Name\]'
+        execute 'buffer' s:callingbuffer
+      endif
+      unlet s:callingbuffer
+    endif
+    " prevent saving already deleted buffers that were in the arglist
+    silent! argdelete *
     set sessionoptions-=options
     execute 'mksession!' a:spath
   catch
