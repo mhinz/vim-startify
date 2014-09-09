@@ -19,20 +19,22 @@ let s:relative_path    = get(g:, 'startify_relative_path')
 let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
-if exists('g:startify_list_order')
-  let s:lists = g:startify_list_order
-else
-  let s:lists = [
-        \ ['   Last recently opened files:'],
-        \ 'files',
-        \ ['   Last recently modified files in the current directory:'],
-        \ 'dir',
-        \ ['   My sessions:'],
-        \ 'sessions',
-        \ ['   My bookmarks:'],
-        \ 'bookmarks',
-        \ ]
-endif
+let s:skiplist = get(g:, 'startify_skiplist', [
+      \ 'COMMIT_EDITMSG',
+      \ $VIMRUNTIME .'/doc',
+      \ 'bundle/.*/doc',
+      \ ])
+
+let s:lists = get(g:, 'startify_list_order', [
+      \ ['   Last recently opened files:'],
+      \ 'files',
+      \ ['   Last recently modified files in the current directory:'],
+      \ 'dir',
+      \ ['   My sessions:'],
+      \ 'sessions',
+      \ ['   My bookmarks:'],
+      \ 'bookmarks',
+      \ ])
 
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
@@ -341,7 +343,7 @@ function! s:show_dir(cnt) abort
       " filter duplicates, bookmarks and entries from the skiplist
       if has_key(entries, abs_path)
             \ || !filereadable(abs_path)
-            \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(abs_path))
+            \ || s:is_in_skiplist(abs_path)
             \ || (exists('g:startify_bookmarks') && s:is_bookmark(abs_path))
         continue
       endif
@@ -387,7 +389,7 @@ function! s:show_files(cnt) abort
     " filter duplicates, bookmarks and entries from the skiplist
     if has_key(entries, abs_path)
           \ || !filereadable(abs_path)
-          \ || (exists('g:startify_skiplist')  && s:is_in_skiplist(abs_path))
+          \ || s:is_in_skiplist(abs_path)
           \ || (exists('g:startify_bookmarks') && s:is_bookmark(abs_path))
       continue
     endif
@@ -463,7 +465,7 @@ endfunction
 
 " Function: s:is_in_skiplist {{{1
 function! s:is_in_skiplist(arg) abort
-  for regexp in g:startify_skiplist
+  for regexp in s:skiplist
     if (a:arg =~# regexp)
       return 1
     endif

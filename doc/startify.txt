@@ -249,16 +249,21 @@ At the moment only git, hg, bzr and svn are supported.
 ------------------------------------------------------------------------------
                                                            *g:startify_skiplist*
 >
-    let g:startify_skiplist = []
+    let g:startify_skiplist = [
+        \ 'COMMIT_EDITMSG',
+        \ $VIMRUNTIME .'/doc',
+        \ 'bundle/.*/doc',
+        \ '.vimgolf',
+        \ ]
 <
 A list of Vim regular expressions that filters recently used files.
 
 Example:
 >
     let g:startify_skiplist = [
-           \ '.vimgolf',
+           \ '\.vimgolf',
            \ '^/tmp',
-           \ '/project/.*/documentation'
+           \ '/project/.*/documentation',
            \ ]
 <
 ------------------------------------------------------------------------------
