@@ -528,6 +528,20 @@ Example: (my terminal emulator supports 256 colors)
 ==============================================================================
 FAQ                                                               *startify-faq*
 
+    |startify-faq-01|  I don't want the start screen to use cursorline!
+    |startify-faq-02|  Recent files aren't shown!
+    |startify-faq-03|  Last recently used files don't seem to get updated
+                     at :Startify!
+    |startify-faq-04|  I have broken colors when using sessions!
+    |startify-faq-05|  How to disable common but unimportant files?
+    |startify-faq-06|  CtrlP or NERDTree open a split in Startify!
+    |startify-faq-07|  How do I get both NERDTree and Startify working at
+                     startup?
+    |startify-faq-08|  Startify prevents my statusline plugin from working!
+    |startify-faq-09|  The session autoload feature is not working!
+
+------------------------------------------------------------------------------
+                                                               *startify-faq-01*
 I don't want the start screen to use cursorline!~
 
 Startify sets its own filetype "startify". Thus one could set buffer-local
@@ -536,7 +550,7 @@ options like this:
     autocmd FileType startify setlocal nocursorline
 <
 ------------------------------------------------------------------------------
-
+                                                               *startify-faq-02*
 Recent files aren't shown!~
 
 Perhaps the problem is that the viminfo file..
@@ -560,13 +574,13 @@ See |'viminfo'| for information about the second step and what it does
 exactly.
 
 ------------------------------------------------------------------------------
-
+                                                               *startify-faq-03*
 Last recently used files don't seem to get updated at :Startify!~
 
 Vim loads the list from viminfo only once, at startup.
 
 ------------------------------------------------------------------------------
-
+                                                               *startify-faq-04*
 I have broken colors when using sessions!~
 
 Nothing this plugin could do about. Try playing around with 'sessionoptions'.
@@ -579,7 +593,7 @@ Some people swear it works for them with these settings:
     set sessionoptions=blank,curdir,folds,help,tabpages,winpos
 <
 ------------------------------------------------------------------------------
-
+                                                               *startify-faq-05*
 How to disable common but unimportant files?~
 
 Use the skiplist. Personally I use:
@@ -592,7 +606,7 @@ Use the skiplist. Personally I use:
            \ ]
 <
 ------------------------------------------------------------------------------
-
+                                                               *startify-faq-06*
 CtrlP or NERDTree open a split in Startify!~
 
 Put this in your vimrc:
@@ -605,7 +619,7 @@ solution:
     let g:ctrlp_reuse_window = 'startify'
 <
 ------------------------------------------------------------------------------
-
+                                                               *startify-faq-07*
 How do I get both NERDTree and Startify working at startup?~
 
 Put this in your vimrc:
@@ -618,7 +632,7 @@ Put this in your vimrc:
                 \ endif
 <
 ------------------------------------------------------------------------------
-
+                                                               *startify-faq-08*
 Startify prevents my statusline plugin from working!~
 
 airline:
@@ -630,7 +644,7 @@ lightline:
     autocmd User Startified call lightline#update()
 <
 ------------------------------------------------------------------------------
-
+                                                               *startify-faq-09*
 The session autoload feature is not working!~
 
 Do you have NERDTree installed by any chance? If so, try this:
