@@ -30,6 +30,7 @@ CONTENTS                                                     *startify-contents*
     INTRO .......................................... |startify-intro|
     USAGE .......................................... |startify-usage|
     OPTIONS ........................................ |startify-options|
+    AUTOCMD ........................................ |startify-autocmd|
     COMMANDS ....................................... |startify-commands|
     MAPPINGS ....................................... |startify-mappings|
     COLORS ......................................... |startify-colors|
@@ -429,6 +430,14 @@ Don't run Startify at Vim startup. You can still call it anytime via
 Show filenames relative to the current working directory instead of as
 absolute paths.
 
+==============================================================================
+AUTOCMD                                                       *startify-autocmd*
+
+In case you want to alter the startify buffer to cause all kinds of mayhem, an
+user autocmd is issued. You can hook into it like this:
+>
+    autocmd User Startified let &l:stl = ' This statusline rocks!'
+<
 ==============================================================================
 COMMANDS                                                     *startify-commands*
 >

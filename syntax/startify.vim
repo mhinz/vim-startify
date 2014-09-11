@@ -33,8 +33,7 @@ endif
 
 if exists('g:startify_custom_footer')
   autocmd startify User Startified
-        \ execute 'syntax region StartifyFooter start=/\%'. (startify#get_lastline() + 1) .'l/ end=/*/' |
-        \ autocmd! startify User
+        \ execute 'syntax region StartifyFooter start=/\%'. (startify#get_lastline() + 1) .'l/ end=/*/'
 endif
 
 highlight default link StartifyBracket Delimiter

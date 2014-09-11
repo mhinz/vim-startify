@@ -155,7 +155,7 @@ function! startify#insane_in_the_membrane(callingbuffer) abort
 
   call cursor(s:firstline + (s:show_special ? 2 : 0), 5)
 
-  silent! doautocmd <nomodeline> startify User Startified
+  silent! doautocmd <nomodeline> User Startified
 endfunction
 
 " Function: #session_load {{{1
