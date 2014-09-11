@@ -16,6 +16,7 @@ let s:show_special     = get(g:, 'startify_enable_special', 1)
 let s:restore_position = get(g:, 'startify_restore_position')
 let s:delete_buffers   = get(g:, 'startify_session_delete_buffers')
 let s:relative_path    = get(g:, 'startify_relative_path')
+let s:statusline       = get(g:, 'startify_statusline', '\ startify')
 let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
@@ -65,7 +66,10 @@ function! startify#insane_in_the_membrane(callingbuffer) abort
   enew
   set filetype=startify
   setlocal noswapfile nobuflisted buftype=nofile bufhidden=wipe
-  setlocal nonumber nocursorline nocursorcolumn nolist statusline=\ startify
+         \ nonumber nocursorline nocursorcolumn nolist
+  if !empty(s:statusline)
+    exe 'setlocal statusline='.s:statusline
+  endif
   if v:version >= 703
     setlocal norelativenumber
   endif
