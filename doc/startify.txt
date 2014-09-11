@@ -619,6 +619,18 @@ Put this in your vimrc:
 <
 ------------------------------------------------------------------------------
 
+Startify prevents my statusline plugin from working!~
+
+airline:
+>
+    autocmd User Startified call AirlineRefresh
+<
+lightline:
+>
+    autocmd User Startified call lightline#update()
+<
+------------------------------------------------------------------------------
+
 The session autoload feature is not working!~
 
 Do you have NERDTree installed by any chance? If so, try this:
