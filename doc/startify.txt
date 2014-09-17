@@ -90,7 +90,6 @@ default values.
     |g:startify_list_order|
     |g:startify_bookmarks|
     |g:startify_files_number|
-    |g:startify_session_detection|
     |g:startify_session_autoload|
     |g:startify_session_persistence|
     |g:startify_session_delete_buffers|
@@ -187,14 +186,6 @@ Example:
     let g:startify_files_number = 10
 <
 The number of files to list.
-
-------------------------------------------------------------------------------
-                                                  *g:startify_session_detection*
->
-    let g:startify_session_detection = 1
-<
-When the file Session.vim is found in the current directory, it will be shown
-at the top of all lists as entry [0].
 
 ------------------------------------------------------------------------------
                                                    *g:startify_session_autoload*

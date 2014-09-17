@@ -68,7 +68,7 @@ function! startify#insane_in_the_membrane(callingbuffer) abort
 
   let cnt = 0
 
-  if get(g:, 'startify_session_detection', 1) && filereadable('Session.vim')
+  if filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
     execute 'nnoremap <buffer> 0 :call startify#session_delete_buffers() <bar> source Session.vim<cr>'
     let cnt = 1
