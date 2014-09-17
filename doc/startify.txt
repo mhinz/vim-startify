@@ -86,24 +86,24 @@ OPTIONS                                                       *startify-options*
 Put these variables into your vimrc. The shown assignments are also the
 default values.
 
-    |g:startify_session_dir|
-    |g:startify_list_order|
     |g:startify_bookmarks|
-    |g:startify_files_number|
-    |g:startify_session_autoload|
-    |g:startify_session_persistence|
-    |g:startify_session_delete_buffers|
-    |g:startify_skiplist|
-    |g:startify_skiplist_server|
     |g:startify_change_to_dir|
-    |g:startify_custom_indices|
-    |g:startify_custom_header|
     |g:startify_custom_footer|
-    |g:startify_enable_special|
-    |g:startify_session_savevars|
-    |g:startify_session_savecmds|
+    |g:startify_custom_header|
+    |g:startify_custom_indices|
     |g:startify_disable_at_vimenter|
+    |g:startify_enable_special|
+    |g:startify_files_number|
+    |g:startify_list_order|
     |g:startify_relative_path|
+    |g:startify_session_autoload|
+    |g:startify_session_delete_buffers|
+    |g:startify_session_dir|
+    |g:startify_session_persistence|
+    |g:startify_session_savecmds|
+    |g:startify_session_savevars|
+    |g:startify_skiplist_server|
+    |g:startify_skiplist|
 
 ------------------------------------------------------------------------------
                                                         *g:startify_session_dir*
