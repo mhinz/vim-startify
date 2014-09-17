@@ -25,17 +25,6 @@ let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'bundle/.*/doc',
       \ ])
 
-let s:lists = get(g:, 'startify_list_order', [
-      \ ['   Last recently opened files:'],
-      \ 'files',
-      \ ['   Last recently modified files in the current directory:'],
-      \ 'dir',
-      \ ['   My sessions:'],
-      \ 'sessions',
-      \ ['   My bookmarks:'],
-      \ 'bookmarks',
-      \ ])
-
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
@@ -94,6 +83,16 @@ function! startify#insane_in_the_membrane(callingbuffer) abort
   endif
 
   let s:section_header_lines = []
+  let s:lists = get(g:, 'startify_list_order', [
+        \ ['   Last recently opened files:'],
+        \ 'files',
+        \ ['   Last recently modified files in the current directory:'],
+        \ 'dir',
+        \ ['   My sessions:'],
+        \ 'sessions',
+        \ ['   My bookmarks:'],
+        \ 'bookmarks',
+        \ ])
 
   for item in s:lists
     if type(item) == 1
