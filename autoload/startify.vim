@@ -47,6 +47,18 @@ function! startify#insane_in_the_membrane(callingbuffer) abort
     endfor
   endif
 
+  let s:lists = get(g:, 'startify_list_order', [
+        \ ['   Last recently opened files:'],
+        \ 'files',
+        \ ['   Last recently modified files in the current directory:'],
+        \ 'dir',
+        \ ['   My sessions:'],
+        \ 'sessions',
+        \ ['   My bookmarks:'],
+        \ 'bookmarks',
+        \ ])
+
+
   if a:callingbuffer != 0
     let s:callingbuffer = a:callingbuffer
   endif
