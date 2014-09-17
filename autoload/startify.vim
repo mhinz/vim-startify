@@ -143,10 +143,6 @@ function! startify#insane_in_the_membrane(callingbuffer) abort
   nnoremap <buffer>         <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
-  if exists('g:startify_empty_buffer_key')
-    execute 'nnoremap <buffer><silent> '. g:startify_empty_buffer_key .' :enew<cr>'
-  endif
-
   autocmd startify CursorMoved <buffer> call s:set_cursor()
   if s:restore_position
     autocmd startify BufReadPost * call s:restore_position()

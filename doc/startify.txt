@@ -101,7 +101,6 @@ default values.
     |g:startify_custom_header|
     |g:startify_custom_footer|
     |g:startify_restore_position|
-    |g:startify_empty_buffer_key|
     |g:startify_enable_special|
     |g:startify_session_savevars|
     |g:startify_session_savecmds|
@@ -279,15 +278,6 @@ Example:
 >
     let g:startify_skiplist_server = [ 'GVIM' ]
 <
-------------------------------------------------------------------------------
-                                                   *g:startify_empty_buffer_key*
->
-    let g:startify_empty_buffer_key = 'o'
-<
-This creates an additional, hidden mapping for the empty buffer.
-
-Default: does not exist
-
 ------------------------------------------------------------------------------
                                                      *g:startify_enable_special*
 >
