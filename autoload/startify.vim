@@ -11,12 +11,11 @@ endif
 let g:autoloaded_startify = 1
 
 " Init: values {{{1
-let s:numfiles         = get(g:, 'startify_files_number', 10)
-let s:show_special     = get(g:, 'startify_enable_special', 1)
-let s:restore_position = get(g:, 'startify_restore_position')
-let s:delete_buffers   = get(g:, 'startify_session_delete_buffers')
-let s:relative_path    = get(g:, 'startify_relative_path')
-let s:session_dir      = resolve(expand(get(g:, 'startify_session_dir',
+let s:numfiles       = get(g:, 'startify_files_number', 10)
+let s:show_special   = get(g:, 'startify_enable_special', 1)
+let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
+let s:relative_path  = get(g:, 'startify_relative_path')
+let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
 let s:skiplist = get(g:, 'startify_skiplist', [
@@ -143,13 +142,9 @@ function! startify#insane_in_the_membrane(callingbuffer) abort
   nnoremap <buffer>         <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
-  autocmd startify CursorMoved <buffer> call s:set_cursor()
-  if s:restore_position
-    autocmd startify BufReadPost * call s:restore_position()
-  endif
-
   call cursor(s:firstline + (s:show_special ? 2 : 0), 5)
 
+  autocmd startify CursorMoved <buffer> call s:set_cursor()
   silent! doautocmd <nomodeline> User Startified
 endfunction
 
@@ -636,13 +631,6 @@ function! s:get_index_as_string(idx) abort
   endif
 endfunction
 
-" Function: s:restore_position {{{1
-function! s:restore_position() abort
-  autocmd! startify *
-  if line("'\"") > 0 && line("'\"") <= line('$')
-    call cursor(getpos("'\"")[1:])
-  endif
-endfunction
 
 " Function: s:print_section_header {{{1
 function! s:print_section_header() abort

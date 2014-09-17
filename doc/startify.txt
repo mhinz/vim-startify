@@ -100,7 +100,6 @@ default values.
     |g:startify_custom_indices|
     |g:startify_custom_header|
     |g:startify_custom_footer|
-    |g:startify_restore_position|
     |g:startify_enable_special|
     |g:startify_session_savevars|
     |g:startify_session_savecmds|
@@ -321,14 +320,6 @@ Example:
            \ 'silent !pdfreader ~/latexproject/main.pdf &'
            \ ]
 <
-------------------------------------------------------------------------------
-                                                   *g:startify_restore_position*
->
-    let g:startify_restore_position = 0
-<
-Jump to the last cursor position when opening a file. You don't need this, if
-you already have this in your vimrc: |last-position-jump|.
-
 ------------------------------------------------------------------------------
                                                      *g:startify_custom_indices*
 >
