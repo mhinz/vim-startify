@@ -234,7 +234,11 @@ function! startify#session_write(spath)
       unlet s:callingbuffer
     endif
     " prevent saving already deleted buffers that were in the arglist
-    silent! argdelete *
+    for arg in argv()
+      if !buflisted(arg)
+        execute 'argdelete' fnameescape(arg)
+      endif
+    endfor
     set sessionoptions-=options
     execute 'mksession!' a:spath
   catch
