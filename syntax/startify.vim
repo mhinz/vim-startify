@@ -37,10 +37,14 @@ if exists('g:startify_custom_footer')
 endif
 
 highlight default link StartifyBracket Delimiter
-highlight default link StartifyFooter  Normal
-highlight default link StartifyHeader  Normal
+highlight default link StartifyFile    Identifier
+highlight default link StartifyFooter  Title
+highlight default link StartifyHeader  Title
 highlight default link StartifyNumber  Number
-highlight default link StartifySection Special
+highlight default link StartifyPath    Directory
+highlight default link StartifySection Statement
 highlight default link StartifySelect  Title
+highlight default link StartifySlash   Delimiter
+highlight default link StartifySpecial SpecialKey
 
 let b:current_syntax = 'startify'
