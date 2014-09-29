@@ -38,6 +38,10 @@ endfunction
 
 " Function: #insane_in_the_membrane {{{1
 function! startify#insane_in_the_membrane(callingbuffer) abort
+  if &insertmode
+    return
+  endif
+
   if !empty(v:servername) && exists('g:startify_skiplist_server')
     for servname in g:startify_skiplist_server
       if servname == v:servername
@@ -52,8 +56,16 @@ function! startify#insane_in_the_membrane(callingbuffer) abort
 
   enew
   set filetype=startify
-  setlocal noswapfile nobuflisted buftype=nofile bufhidden=wipe
-  setlocal nonumber nocursorline nocursorcolumn nolist statusline=\ startify
+  setlocal
+        \ bufhidden=wipe
+        \ buftype=nofile
+        \ nobuflisted
+        \ nocursorcolumn
+        \ nocursorline
+        \ nolist
+        \ nonumber
+        \ noswapfile
+        \ statusline=\ startify
   if v:version >= 703
     setlocal norelativenumber
   endif
