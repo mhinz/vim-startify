@@ -598,11 +598,11 @@ How do I get both NERDTree and Startify working at startup?~
 Put this in your vimrc:
 >
     autocmd VimEnter *
-                \ if !argc() |
-                \   Startify |
-                \   NERDTree |
-                \   execute "normal \<c-w>w" |
-                \ endif
+                \   if !argc()
+                \ |   Startify
+                \ |   NERDTree
+                \ |   wincmd w
+                \ | endif
 <
 ------------------------------------------------------------------------------
                                                                *startify-faq-08*
