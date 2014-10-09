@@ -88,6 +88,7 @@ default values.
 
     |g:startify_bookmarks|
     |g:startify_change_to_dir|
+    |g:startify_change_to_vcs_root|
     |g:startify_custom_footer|
     |g:startify_custom_header|
     |g:startify_custom_indices|
