@@ -611,7 +611,7 @@ Startify prevents my statusline plugin from working!~
 
 airline:
 >
-    autocmd User Startified call AirlineRefresh
+    autocmd User Startified AirlineRefresh
 <
 lightline:
 >
