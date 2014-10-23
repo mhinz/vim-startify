@@ -521,7 +521,7 @@ I don't want the start screen to use cursorline!~
 Startify sets its own filetype "startify". Thus one could set buffer-local
 options like this:
 >
-    autocmd FileType startify setlocal nocursorline
+    autocmd User Startified setlocal nocursorline
 <
 ------------------------------------------------------------------------------
                                                                *startify-faq-02*
@@ -585,7 +585,7 @@ CtrlP or NERDTree open a split in Startify!~
 
 Put this in your vimrc:
 >
-    autocmd FileType startify setlocal buftype=
+    autocmd User Startified setlocal buftype=
 <
 If you're using CtrlP without NERDTree, there is an even more elegant
 solution:
@@ -630,7 +630,7 @@ EXAMPLE                                                       *startify-example*
 
 This is my configuration..
 >
-    autocmd FileType startify setlocal cursorline
+    autocmd User Startified setlocal cursorline
 
     let g:startify_enable_special         = 0
     let g:startify_files_number           = 8
