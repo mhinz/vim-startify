@@ -263,7 +263,7 @@ function! startify#session_write(spath)
     execute 'split' a:spath
 
     " put existing variables from savevars into session file
-    call append(line('$')-3, map(filter(get(g:, 'startify_session_savevars', []), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))'))
+    call append(line('$')-3, map(filter(copy(get(g:, 'startify_session_savevars', [])), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))'))
 
     " put commands from savecmds into session file
     call append(line('$')-3, get(g:, 'startify_session_savecmds', []))
