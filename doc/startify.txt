@@ -516,12 +516,12 @@ FAQ                                                               *startify-faq*
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
-I don't want the start screen to use cursorline!~
+I want to use cursorline!~
 
-Startify sets its own filetype "startify". Thus one could set buffer-local
-options like this:
+Startify issues a User event when it's finished. It can be used to set
+buffer-local options etc.
 >
-    autocmd User Startified setlocal nocursorline
+    autocmd User Startified setlocal cursorline
 <
 ------------------------------------------------------------------------------
                                                                *startify-faq-02*
