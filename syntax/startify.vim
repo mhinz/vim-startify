@@ -45,6 +45,6 @@ highlight default link StartifyPath    Directory
 highlight default link StartifySection Statement
 highlight default link StartifySelect  Title
 highlight default link StartifySlash   Delimiter
-highlight default link StartifySpecial SpecialKey
+highlight default link StartifySpecial Comment
 
 let b:current_syntax = 'startify'
