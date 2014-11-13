@@ -37,7 +37,7 @@ function! startify#get_lastline() abort
 endfunction
 
 " Function: #insane_in_the_membrane {{{1
-function! startify#insane_in_the_membrane(callingbuffer) abort
+function! startify#insane_in_the_membrane() abort
   if &insertmode
     return
   endif
@@ -48,10 +48,6 @@ function! startify#insane_in_the_membrane(callingbuffer) abort
         return
       endif
     endfor
-  endif
-
-  if a:callingbuffer != 0
-    let s:callingbuffer = a:callingbuffer
   endif
 
   enew
@@ -234,16 +230,14 @@ endfunction
 function! startify#session_write(spath)
   let ssop = &sessionoptions
   try
-    " if this function was called through :Startify instead of :SLoad
+    " if this function is called while being in the Startify buffer
+    " (by loading another session or running :SSave/:SLoad directly)
     " switch back to the previous buffer before saving the session
-    if exists('s:callingbuffer')
-      redir => callingbuffer
-      file
-      redir END
-      if callingbuffer !~# '\[No Name\]'
-        execute 'buffer' s:callingbuffer
+    if &filetype == 'startify'
+      let callingbuffer = bufnr('#')
+      if callingbuffer > 0
+        execute 'buffer' callingbuffer
       endif
-      unlet s:callingbuffer
     endif
     " prevent saving already deleted buffers that were in the arglist
     for arg in argv()

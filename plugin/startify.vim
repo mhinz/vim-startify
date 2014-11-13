@@ -14,7 +14,7 @@ augroup startify
   if !get(g:, 'startify_disable_at_vimenter')
     autocmd VimEnter *
           \   if !argc() && (line2byte('$') == -1) && (v:progname =~? '^[gmnq]\=vim\=x\=\%[\.exe]$')
-          \ |   call startify#insane_in_the_membrane(0)
+          \ |   call startify#insane_in_the_membrane()
           \ | endif
           \ | autocmd! startify VimEnter
   endif
@@ -30,4 +30,4 @@ augroup END
 command! -nargs=? -bar -complete=customlist,startify#session_list SSave   call startify#session_save(<f-args>)
 command! -nargs=? -bar -complete=customlist,startify#session_list SLoad   call startify#session_load(<f-args>)
 command! -nargs=? -bar -complete=customlist,startify#session_list SDelete call startify#session_delete(<f-args>)
-command! -nargs=0 -bar Startify call startify#insane_in_the_membrane(bufnr('%'))
+command! -nargs=0 -bar Startify call startify#insane_in_the_membrane()
