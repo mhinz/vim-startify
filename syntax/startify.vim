@@ -32,8 +32,13 @@ if exists('g:startify_custom_header')
 endif
 
 if exists('g:startify_custom_footer')
-  autocmd startify User Startified
-        \ execute 'syntax region StartifyFooter start=/\%'. (startify#get_lastline() + 1) .'l/ end=/*/'
+  execute 'syntax region StartifyFooter start=/\%'. startify#get_lastline() .'l/ end=/*/'
+endif
+
+if exists('w:startify_section_header_lines')
+  for line in w:startify_section_header_lines
+    execute 'syntax region StartifySection start=/\%'. line .'l/ end=/$/'
+  endfor
 endif
 
 highlight default link StartifyBracket Delimiter
