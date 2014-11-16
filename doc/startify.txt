@@ -511,8 +511,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-06|  CtrlP or NERDTree open a split in Startify!
     |startify-faq-07|  How do I get both NERDTree and Startify working at
                      startup?
-    |startify-faq-08|  Startify prevents my statusline plugin from working!
-    |startify-faq-09|  The session autoload feature is not working!
+    |startify-faq-08|  The session autoload feature is not working!
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -607,18 +606,6 @@ Put this in your vimrc:
 <
 ------------------------------------------------------------------------------
                                                                *startify-faq-08*
-Startify prevents my statusline plugin from working!~
-
-airline:
->
-    autocmd User Startified AirlineRefresh
-<
-lightline:
->
-    autocmd User Startified call lightline#update()
-<
-------------------------------------------------------------------------------
-                                                               *startify-faq-09*
 The session autoload feature is not working!~
 
 Do you have NERDTree installed by any chance? If so, try this:

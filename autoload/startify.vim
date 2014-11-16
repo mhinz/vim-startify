@@ -61,7 +61,9 @@ function! startify#insane_in_the_membrane() abort
         \ nolist
         \ nonumber
         \ noswapfile
-        \ statusline=\ startify
+  if empty(&statusline)
+    setlocal statusline=\ startify
+  endif
   if v:version >= 703
     setlocal norelativenumber
   endif
