@@ -41,6 +41,11 @@ if exists('w:startify_section_header_lines')
   endfor
 endif
 
+autocmd startify User Startified
+      \ for item in w:startify_section_header_lines
+      \ | execute 'syntax region StartifySection start=/\%'. item .'l/ end=/$/'
+      \ | endfor
+
 highlight default link StartifyBracket Delimiter
 highlight default link StartifyFile    Identifier
 highlight default link StartifyFooter  Title
