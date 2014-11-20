@@ -1,6 +1,7 @@
 *
 
 !.gitignore
+!.travis.yml
 !CONTRIBUTING.md
 !LICENSE
 !README.md
