@@ -9,3 +9,5 @@
 !plugin/startify.vim
 !startify.png
 !syntax/startify.vim
+!test/run
+!test/tests.vader
