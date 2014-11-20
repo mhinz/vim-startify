@@ -12,3 +12,4 @@
 !syntax/startify.vim
 !test/run
 !test/tests.vader
+!test/vimrc

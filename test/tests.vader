@@ -1,7 +1,7 @@
-Before (Check :Startify):
+Before (check :Startify):
   Startify
 
-Execute (Check options):
+Execute (check options):
   AssertEqual 'startify', &filetype
   AssertEqual 'wipe',     &bufhidden
   AssertEqual 'nofile',   &buftype
@@ -12,12 +12,19 @@ Execute (Check options):
   AssertEqual 0,          &number
   AssertEqual 0,          &swapfile
 
-Do (open new buffer in insert mode with 'i'):
+Do (open new buffer in insert mode via 'i'):
   ifoo
 Expect (only "foo"):
   foo
 
-Do (open new buffer in normal mode with 'e'):
+Do (open new buffer in normal mode via 'e'):
   eibar
 Expect (only "bar"):
   bar
+
+Given:
+  quux
+Do (quit Startify buffer via 'q'):
+  q
+Expect:
+  quux
