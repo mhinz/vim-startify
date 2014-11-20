@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 
-vim --nofork -XNu <(cat << EOF
-filetype off
-set runtimepath+=~/.vim/bundle/vader.vim
-set runtimepath+=..
-filetype plugin on
-syntax enable
-set hidden
-EOF) +Vader*
+vader="${HOME}/.vim/*bundle*/vader.vim"
+
+if [ -d $vader ]; then
+    [[ ! -L vader.vim ]] && ln -s $vader
+else
+    git clone https://github.com/junegunn/vader.vim.git
+fi
+
+echo '(Be patient.. testing can take a while.)'
+vim -XNu vimrc -i NONE -c 'Vader! *' >/dev/null

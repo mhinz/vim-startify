@@ -21,3 +21,10 @@ Do (open new buffer in normal mode with 'e'):
   eibar
 Expect (only "bar"):
   bar
+
+Given:
+  quux
+Do (quit startify buffer via 'q'):
+  q
+Expect:
+  quux

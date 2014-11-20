@@ -4,7 +4,7 @@ before_script: |
   git clone https://github.com/junegunn/vader.vim.git
 
 script: |
-  vim --nofork -XNu <(cat << EOF
+  vim -XNu <(cat << EOF
   filetype off
   set runtimepath+=vader.vim
   set runtimepath+=.
