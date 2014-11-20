@@ -4,4 +4,11 @@ before_script: |
   git clone https://github.com/junegunn/vader.vim.git
 
 script: |
-  vim -Nu test/vimrc -c 'Vader! test/*' >/dev/null
+  vim -XNu <(cat << EOF
+  filetype off
+  set runtimepath+=vader.vim
+  set runtimepath+=.
+  filetype plugin on
+  syntax enable
+  set hidden
+  EOF) -c 'Vader! test/*' >/dev/null

@@ -24,7 +24,7 @@ Expect (only "bar"):
 
 Given:
   quux
-Do (quit Startify buffer via 'q'):
+Do (quit startify buffer via 'q'):
   q
 Expect:
   quux

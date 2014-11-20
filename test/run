@@ -1,3 +1,12 @@
 #!/usr/bin/env bash
 
-vim -XNu vimrc -c 'Vader! *' >/dev/null
+vader="${HOME}/.vim/*bundle*/vader.vim"
+
+if [ -d $vader ]; then
+    [[ ! -L vader.vim ]] && ln -s $vader
+else
+    git clone https://github.com/junegunn/vader.vim.git
+fi
+
+echo '(Be patient.. testing can take a while.)'
+vim -XNu vimrc -i NONE -c 'Vader! *' >/dev/null
