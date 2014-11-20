@@ -163,10 +163,12 @@ function! startify#session_load(...) abort
     echomsg 'There are no sessions...'
     return
   endif
+  call inputsave()
   let spath = s:session_dir . s:sep . (exists('a:1')
         \ ? a:1
         \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
         \ | redraw
+  call inputrestore()
   if filereadable(spath)
     if get(g:, 'startify_session_persistence')
           \ && exists('v:this_session')
@@ -200,7 +202,9 @@ function! startify#session_save(...) abort
   if exists('a:1')
     let sname = a:1
   else
+    call inputsave()
     let sname = input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
+    call inputrestore()
     redraw
     if empty(sname)
       echo 'You gave an empty name!'
@@ -276,10 +280,12 @@ function! startify#session_delete(...) abort
     return
   endif
 
+  call inputsave()
   let spath = s:session_dir . s:sep . (exists('a:1')
         \ ? a:1
         \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
         \ | redraw
+  call inputrestore()
 
   echo 'Really delete '. spath .'? [y/n]' | redraw
   if (nr2char(getchar()) == 'y')
