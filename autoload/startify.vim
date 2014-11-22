@@ -143,8 +143,9 @@ function! startify#insane_in_the_membrane() abort
   nnoremap <buffer><silent> s             :call <sid>set_mark('S')<cr>
   nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
   nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
-  nnoremap <buffer>         <cr>          :call <sid>open_buffers(expand('<cword>'))<cr>
-  nnoremap <buffer>         <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
+  nnoremap <buffer><silent> o             :call <sid>open_buffers(expand('<cword>'))<cr>
+  nnoremap <buffer><silent> <cr>          :call <sid>open_buffers(expand('<cword>'))<cr>
+  nnoremap <buffer><silent> <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
   call cursor(s:firstline + (s:show_special ? 2 : 0), 5)
