@@ -469,6 +469,10 @@ in a vertical split window or in a new tab.
 Open all marked entries. If nothing was marked beforehand, just open the
 current entry.
 
+If you want to use another key instead of <cr>, put this in your vimrc:
+>
+    nmap o <plug>(startify-open-buffers)
+<
 ==============================================================================
 COLORS                                                         *startify-colors*
 

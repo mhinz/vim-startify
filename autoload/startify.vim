@@ -143,7 +143,7 @@ function! startify#insane_in_the_membrane() abort
   nnoremap <buffer><silent> s             :call <sid>set_mark('S')<cr>
   nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
   nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
-  nnoremap <buffer><silent> <cr>          :call <sid>open_buffers(expand('<cword>'))<cr>
+  nnoremap <buffer><silent> <cr>          :call startify#open_buffers()<cr>
   nnoremap <buffer><silent> <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
   nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
@@ -321,6 +321,52 @@ endfunction
 " Function: #session_list_as_string {{{1
 function! startify#session_list_as_string(lead, ...) abort
   return join(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), "\n")
+endfunction
+
+" Function: #open_buffers {{{1
+function! startify#open_buffers() abort
+  " markers found; open one or more buffers
+  if exists('s:marked') && !empty(s:marked)
+    enew
+    setlocal nobuflisted
+
+    for val in values(s:marked)
+      let [path, type] = val[1:2]
+      let path = fnameescape(path)
+
+      if line2byte('$') == -1
+        " open in current window
+        execute 'edit' path
+      elseif type == 'S'
+        " open in split
+        execute 'split' path
+      elseif type == 'V'
+        " open in vsplit
+        execute 'vsplit' path
+      elseif type == 'T'
+        " open in tab
+        execute 'tabnew' path
+      else
+        " open in current window
+        execute 'edit' path
+      endif
+
+      call s:check_user_options()
+    endfor
+
+    " remove markers for next instance of :Startify
+    if exists('s:marked')
+      unlet s:marked
+    endif
+  " no markers found; open a single buffer
+  else
+    try
+      execute 'normal' expand('<cword>')
+    catch /E832/  " don't ask for undo encryption key twice
+      edit
+    catch /E325/  " swap file found
+    endtry
+  endif
 endfunction
 
 " Function: s:show_dir {{{1
@@ -541,52 +587,6 @@ function! s:set_mark(type) abort
   endif
 
   setlocal nomodifiable nomodified
-endfunction
-
-" Function: s:open_buffers {{{1
-function! s:open_buffers(cword) abort
-  " markers found; open one or more buffers
-  if exists('s:marked') && !empty(s:marked)
-    enew
-    setlocal nobuflisted
-
-    for val in values(s:marked)
-      let [path, type] = val[1:2]
-      let path = fnameescape(path)
-
-      if line2byte('$') == -1
-        " open in current window
-        execute 'edit' path
-      elseif type == 'S'
-        " open in split
-        execute 'split' path
-      elseif type == 'V'
-        " open in vsplit
-        execute 'vsplit' path
-      elseif type == 'T'
-        " open in tab
-        execute 'tabnew' path
-      else
-        " open in current window
-        execute 'edit' path
-      endif
-
-      call s:check_user_options()
-    endfor
-
-    " remove markers for next instance of :Startify
-    if exists('s:marked')
-      unlet s:marked
-    endif
-  " no markers found; open a single buffer
-  else
-    try
-      execute 'normal' a:cword
-    catch /E832/  " don't ask for undo encryption key twice
-      edit
-    catch /E325/  " swap file found
-    endtry
-  endif
 endfunction
 
 " Function: s:check_user_options {{{1
