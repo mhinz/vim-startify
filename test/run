@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
-vader="${HOME}/.vim/*bundle*/vader.vim"
+# Look for existing vader installation.
+vader=( ${HOME}/.vim/*bundle*/vader*/plugin/vader.vim )
+if [ -f ${vader[0]} ]; then
+    # Remove "plugin/vader.vim" suffix.
+    vader=${vader[0]%/*/*}
+fi
 
 if [ -d $vader ]; then
     [[ ! -L vader.vim ]] && ln -s $vader
