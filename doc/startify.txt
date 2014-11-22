@@ -471,7 +471,7 @@ current entry.
 
 If you want to use another key instead of <cr>, put this in your vimrc:
 >
-    nmap o <plug>(startify-open-buffers)
+    autocmd FileType startify nmap <buffer> o <plug>(startify-open-buffers)
 <
 ==============================================================================
 COLORS                                                         *startify-colors*
