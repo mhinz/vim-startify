@@ -14,7 +14,7 @@ let g:autoloaded_startify = 1
 let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
 let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
-let s:relative_path  = get(g:, 'startify_relative_path')
+let s:relative_path  = get(g:, 'startify_relative_path') ? ':.' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
@@ -370,17 +370,16 @@ endfunction
 
 
 " Function: s:display_by_path {{{1
-function! s:display_by_path(prefix) abort
-  let files = s:filter_oldfiles(a:prefix)
-
-  if !empty(files)
+function! s:display_by_path(path_prefix, path_format) abort
+  let oldfiles = s:filter_oldfiles(a:path_prefix, a:path_format)
+  if !empty(oldfiles)
     if exists('s:last_message')
       call s:print_section_header()
     endif
-    for [abs_path, display_path] in files
+    for [absolute_path, entry_path] in oldfiles
       let index = s:get_index_as_string(s:entry_number)
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_path)
-      execute 'nnoremap <buffer><silent>' index ':edit' escape(abs_path, ' ') '<bar> call <sid>check_user_options()<cr>'
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
+      execute 'nnoremap <buffer><silent>' index ':edit' escape(absolute_path, ' ') '<bar> call <sid>check_user_options()<cr>'
       let s:entry_number += 1
     endfor
     call append('$', '')
@@ -388,10 +387,10 @@ function! s:display_by_path(prefix) abort
 endfunction
 
 " Function: s:filter_oldfiles {{{1
-function! s:filter_oldfiles(path_prefix) abort
-  let counter      = s:numfiles
-  let entries      = {}
-  let oldfiles     = []
+function! s:filter_oldfiles(path_prefix, path_format) abort
+  let counter  = s:numfiles
+  let entries  = {}
+  let oldfiles = []
 
   for fname in copy(v:oldfiles)
     if counter <= 0
@@ -412,7 +411,7 @@ function! s:filter_oldfiles(path_prefix) abort
       continue
     endif
 
-    let entry_path              = fnamemodify(absolute_path, s:relative_path ? ':.' : ':p:~')
+    let entry_path              = fnamemodify(absolute_path, a:path_format)
     let entries[absolute_path]  = 1
     let counter                -= 1
     let oldfiles               += [[absolute_path, entry_path]]
@@ -424,12 +423,12 @@ endfun
 " Function: s:show_dir {{{1
 function! s:show_dir() abort
   " let cwd = escape(getcwd(), '\')
-  return s:display_by_path(getcwd())
+  return s:display_by_path(getcwd(), ':.')
 endfunction
 
 " Function: s:show_files {{{1
 function! s:show_files() abort
-  return s:display_by_path('')
+  return s:display_by_path('', s:relative_path)
 endfunction
 
 " Function: s:show_sessions {{{1

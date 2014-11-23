@@ -402,7 +402,8 @@ Don't run Startify at Vim startup. You can still call it anytime via
     let g:startify_relative_path = 0
 <
 Show filenames relative to the current working directory instead of as
-absolute paths.
+absolute paths. This only applies to the "files" list, since the "dir" list is
+relative by nature.
 
 ==============================================================================
 AUTOCMD                                                       *startify-autocmd*
