@@ -369,72 +369,23 @@ function! startify#open_buffers() abort
   endif
 endfunction
 
-" Function: s:show_dir {{{1
-function! s:show_dir(cnt) abort
+" Function: s:_get_filtered_oldfiles {{{1
+function! s:_get_filtered_oldfiles(num, prefix)
+  let num = a:num
+  let filter_prefix = len(a:prefix) > 0
+  let entries = {}
+  let files   = []
+
   if empty(v:oldfiles)
-    return a:cnt
+    return files
   endif
 
-  let cnt     = a:cnt
-  let num     = s:numfiles
-  let entries = {}
-  let cwd     = escape(getcwd(), '\')
-  let files   = filter(map(copy(v:oldfiles),
-        \ 'glob(fnameescape(fnamemodify(resolve(v:val), ":p")))'), 'match(v:val, cwd) == 0')
-
-  if !empty(files)
-    if exists('s:last_message')
-      call s:print_section_header()
+  for fname in copy(v:oldfiles)
+    if num <= 0
+      break
     endif
 
-    for abs_path in files
-      let abs_path = glob(abs_path)
-
-      " filter duplicates, bookmarks and entries from the skiplist
-      if has_key(entries, abs_path)
-            \ || !filereadable(abs_path)
-            \ || s:is_in_skiplist(abs_path)
-            \ || (exists('g:startify_bookmarks') && s:is_bookmark(abs_path))
-        continue
-      endif
-
-      let entries[abs_path] = 1
-      let index             = s:get_index_as_string(cnt)
-      let display_path      = fnamemodify(abs_path, s:relative_path ? ':.' : ':p:~')
-
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_path)
-      execute 'nnoremap <buffer><silent>' index ':edit' escape(abs_path, ' ') '<bar> call <sid>check_user_options()<cr>'
-
-      let cnt += 1
-      let num -= 1
-
-      if !num
-        break
-      endif
-    endfor
-
-    call append('$', '')
-  endif
-
-  return cnt
-endfunction
-
-" Function: s:show_files {{{1
-function! s:show_files(cnt) abort
-  if empty(v:oldfiles)
-    return a:cnt
-  endif
-
-  if exists('s:last_message')
-    call s:print_section_header()
-  endif
-
-  let cnt     = a:cnt
-  let num     = s:numfiles
-  let entries = {}
-
-  for fname in v:oldfiles
-    let abs_path = glob(fnameescape(fnamemodify(resolve(fname), ':p')))
+    let abs_path = glob(fnameescape(fnamemodify(resolve(fname), ":p")))
 
     " filter duplicates, bookmarks and entries from the skiplist
     if has_key(entries, abs_path)
@@ -444,24 +395,52 @@ function! s:show_files(cnt) abort
       continue
     endif
 
-    let entries[abs_path] = 1
-    let index             = s:get_index_as_string(cnt)
-    let display_path      = fnamemodify(abs_path, s:relative_path ? ':.' : ':p:~')
-
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_path)
-    execute 'nnoremap <buffer><silent>' index ':edit' escape(abs_path, ' ') '<bar> call <sid>check_user_options()<cr>'
-
-    let cnt += 1
-    let num -= 1
-
-    if !num
-      break
+    if filter_prefix && match(abs_path, a:prefix) != 0
+      continue
     endif
-  endfor
 
-  call append('$', '')
+    let display_path = fnamemodify(abs_path, s:relative_path ? ':.' : ':p:~')
+    let entries[abs_path] = 1
+
+    let files += [[abs_path, display_path]]
+
+    let num -= 1
+  endfor
+  return files
+endfun
+
+" Function: s:_show_filtered_oldfiles {{{1
+function! s:_show_filtered_oldfiles(cnt, prefix) abort
+  let cnt     = a:cnt
+  let files   = s:_get_filtered_oldfiles(s:numfiles, a:prefix)
+
+  if !empty(files)
+    if exists('s:last_message')
+      call s:print_section_header()
+    endif
+
+    for [abs_path, display_path] in files
+      let index             = s:get_index_as_string(cnt)
+      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_path)
+      execute 'nnoremap <buffer><silent>' index ':edit' escape(abs_path, ' ') '<bar> call <sid>check_user_options()<cr>'
+      let cnt += 1
+    endfor
+
+    call append('$', '')
+  endif
 
   return cnt
+endfunction
+
+" Function: s:show_dir {{{1
+function! s:show_dir(cnt) abort
+  let cwd     = escape(getcwd(), '\')
+  return s:_show_filtered_oldfiles(a:cnt, cwd)
+endfunction
+
+" Function: s:show_files {{{1
+function! s:show_files(cnt) abort
+  return s:_show_filtered_oldfiles(a:cnt, '')
 endfunction
 
 " Function: s:show_sessions {{{1
