@@ -75,12 +75,11 @@ function! startify#insane_in_the_membrane() abort
     call append('$', ['   [e]  <empty buffer>', ''])
   endif
 
-  let cnt = 0
-
+  let s:entry_number = 0
   if filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
     execute 'nnoremap <buffer> 0 :call startify#session_delete_buffers() <bar> source Session.vim<cr>'
-    let cnt = 1
+    let s:entry_number = 1
     let l:show_session = 1
   endif
 
@@ -104,7 +103,7 @@ function! startify#insane_in_the_membrane() abort
 
   for item in s:lists
     if type(item) == 1
-      let cnt = s:show_{item}(cnt)
+      call s:show_{item}()
     else
       let s:last_message = item
     endif
@@ -370,123 +369,109 @@ function! startify#open_buffers() abort
 endfunction
 
 
-" Function: s:_get_filtered_oldfiles {{{1
-function! s:_get_filtered_oldfiles(num, prefix)
-  let num = a:num
-  let filter_prefix = len(a:prefix) > 0
-  let entries = {}
-  let files   = []
-
-  for fname in copy(v:oldfiles)
-    if num <= 0
-      break
-    endif
-
-    let abs_path = glob(fnameescape(fnamemodify(resolve(fname), ":p")))
-
-    " filter duplicates, bookmarks and entries from the skiplist
-    if has_key(entries, abs_path)
-          \ || !filereadable(abs_path)
-          \ || s:is_in_skiplist(abs_path)
-          \ || (exists('g:startify_bookmarks') && s:is_bookmark(abs_path))
-      continue
-    endif
-
-    if filter_prefix && match(abs_path, a:prefix) != 0
-      continue
-    endif
-
-    let display_path = fnamemodify(abs_path, s:relative_path ? ':.' : ':p:~')
-    let entries[abs_path] = 1
-
-    let files += [[abs_path, display_path]]
-
-    let num -= 1
-  endfor
-  return files
-endfun
-
-" Function: s:_show_filtered_oldfiles {{{1
-function! s:_show_filtered_oldfiles(cnt, prefix) abort
-  let cnt     = a:cnt
-  let files   = s:_get_filtered_oldfiles(s:numfiles, a:prefix)
+" Function: s:display_by_path {{{1
+function! s:display_by_path(prefix) abort
+  let files = s:filter_oldfiles(a:prefix)
 
   if !empty(files)
     if exists('s:last_message')
       call s:print_section_header()
     endif
-
     for [abs_path, display_path] in files
-      let index             = s:get_index_as_string(cnt)
+      let index = s:get_index_as_string(s:entry_number)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . display_path)
       execute 'nnoremap <buffer><silent>' index ':edit' escape(abs_path, ' ') '<bar> call <sid>check_user_options()<cr>'
-      let cnt += 1
+      let s:entry_number += 1
     endfor
-
     call append('$', '')
   endif
-
-  return cnt
 endfunction
 
+" Function: s:filter_oldfiles {{{1
+function! s:filter_oldfiles(path_prefix) abort
+  let counter      = s:numfiles
+  let entries      = {}
+  let oldfiles     = []
+
+  for fname in copy(v:oldfiles)
+    if counter <= 0
+      break
+    endif
+
+    let absolute_path = glob(fnameescape(fnamemodify(resolve(fname), ":p")))
+
+    " filter duplicates, bookmarks and entries from the skiplist
+    if has_key(entries, absolute_path)
+          \ || !filereadable(absolute_path)
+          \ || s:is_in_skiplist(absolute_path)
+          \ || (exists('g:startify_bookmarks') && s:is_bookmark(absolute_path))
+      continue
+    endif
+
+    if match(absolute_path, a:path_prefix)
+      continue
+    endif
+
+    let entry_path              = fnamemodify(absolute_path, s:relative_path ? ':.' : ':p:~')
+    let entries[absolute_path]  = 1
+    let counter                -= 1
+    let oldfiles               += [[absolute_path, entry_path]]
+  endfor
+
+  return oldfiles
+endfun
+
 " Function: s:show_dir {{{1
-function! s:show_dir(cnt) abort
-  let cwd = escape(getcwd(), '\')
-  return s:_show_filtered_oldfiles(a:cnt, cwd)
+function! s:show_dir() abort
+  " let cwd = escape(getcwd(), '\')
+  return s:display_by_path(getcwd())
 endfunction
 
 " Function: s:show_files {{{1
-function! s:show_files(cnt) abort
-  return s:_show_filtered_oldfiles(a:cnt, '')
+function! s:show_files() abort
+  return s:display_by_path('')
 endfunction
 
 " Function: s:show_sessions {{{1
-function! s:show_sessions(cnt) abort
+function! s:show_sessions() abort
   let sfiles = split(globpath(s:session_dir, '*'), '\n')
   if empty(sfiles)
     if exists('s:last_message')
       unlet s:last_message
     endif
-    return a:cnt
   endif
   if exists('s:last_message')
     call s:print_section_header()
   endif
-  let cnt  = a:cnt
   for i in range(len(sfiles))
-    let index = s:get_index_as_string(cnt)
+    let index = s:get_index_as_string(s:entry_number)
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t'))
     execute 'nnoremap <buffer><silent>' index ':SLoad' fnamemodify(sfiles[i], ':t') '<cr>'
-    let cnt += 1
+    let s:entry_number += 1
   endfor
   call append('$', '')
-  return cnt
 endfunction
 
 " Function: s:show_bookmarks {{{1
-function! s:show_bookmarks(cnt) abort
+function! s:show_bookmarks() abort
   if !exists('g:startify_bookmarks')
-    return a:cnt
+    return
   endif
 
   if exists('s:last_message')
     call s:print_section_header()
   endif
 
-  let cnt = a:cnt
-
   for fname in g:startify_bookmarks
-    let index = s:get_index_as_string(cnt)
+    let index = s:get_index_as_string()
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
 
-    let cnt += 1
+    let s:entry_number += 1
   endfor
 
   call append('$', '')
-
-  return cnt
 endfunction
 
 " Function: s:is_in_skiplist {{{1
