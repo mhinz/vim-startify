@@ -78,7 +78,7 @@ function! startify#insane_in_the_membrane() abort
   let s:entry_number = 0
   if filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
-    execute 'nnoremap <buffer> 0 :call startify#session_delete_buffers() <bar> source Session.vim<cr>'
+    execute 'nnoremap <silent><buffer> 0 :call startify#session_delete_buffers() <bar> source Session.vim<cr>'
     let s:entry_number = 1
     let l:show_session = 1
   endif
@@ -110,7 +110,7 @@ function! startify#insane_in_the_membrane() abort
     unlet item
   endfor
 
-  silent $delete _
+  silent $-1,$delete _
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
