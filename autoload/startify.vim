@@ -462,7 +462,7 @@ function! s:show_bookmarks() abort
   endif
 
   for fname in g:startify_bookmarks
-    let index = s:get_index_as_string()
+    let index = s:get_index_as_string(s:entry_number)
 
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
