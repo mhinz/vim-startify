@@ -625,7 +625,7 @@ endfunction
 " Function: s:close {{{1
 function! s:close() abort
   if len(filter(range(0, bufnr('$')), 'buflisted(v:val)'))
-    if bufloaded(bufnr('#'))
+    if bufloaded(bufnr('#')) && bufnr('#') != bufnr('%')
       buffer #
     else
       bnext
