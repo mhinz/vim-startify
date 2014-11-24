@@ -91,9 +91,9 @@ function! startify#insane_in_the_membrane() abort
 
   let w:startify_section_header_lines = []
   let s:lists = get(g:, 'startify_list_order', [
-        \ ['   Last recently opened files:'],
+        \ ['   Least recently opened files:'],
         \ 'files',
-        \ ['   Last recently modified files in the current directory:'],
+        \ ['   Least recently modified files in the current directory:'],
         \ 'dir',
         \ ['   My sessions:'],
         \ 'sessions',
