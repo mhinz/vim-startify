@@ -1,10 +1,12 @@
 language: vim
 
 before_script: |
+  hg clone https://vim.googlecode.com/hg vim
+  make -C ./vim
   git clone https://github.com/junegunn/vader.vim.git
 
 script: |
-  vim -XNu <(cat << EOF
+  VIMRUNTIME=vim/runtime vim/src/vim -XNu <(cat << EOF
   filetype off
   set runtimepath+=vader.vim
   set runtimepath+=.
