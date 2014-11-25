@@ -392,7 +392,7 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
   let entries  = {}
   let oldfiles = []
 
-  for fname in copy(v:oldfiles)
+  for fname in v:oldfiles
     if counter <= 0
       break
     endif
