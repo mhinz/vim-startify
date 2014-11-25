@@ -157,9 +157,9 @@ NOTE: The section header use the StartifySection highlight group.
 Section headers example:~
 >
     let g:startify_list_order = [
-            \ ['   My last recently', '   opened files'],
+            \ ['   My most recently', '   used files'],
             \ 'files',
-            \ ['   My last recently modified files in the current directory:'],
+            \ ['   My most recently used files in the current directory:'],
             \ 'dir',
             \ ['   These are my sessions:'],
             \ 'sessions',
@@ -330,12 +330,12 @@ Example:
 <
 This would result in:
 
-    [f]  /last/recently/used/file1
-    [g]  /last/recently/used/file2
-    [h]  /last/recently/used/file3
-    [0]  /last/recently/used/file4
-    [1]  /last/recently/used/file5
-    [2]  /last/recently/used/file6
+    [f]  /most/recently/used/file1
+    [g]  /most/recently/used/file2
+    [h]  /most/recently/used/file3
+    [0]  /most/recently/used/file4
+    [1]  /most/recently/used/file5
+    [2]  /most/recently/used/file6
     etc.
 
 If you want numbers to start at 1 instead of 0, you could use this:
@@ -509,7 +509,7 @@ FAQ                                                               *startify-faq*
 
     |startify-faq-01|  I don't want the start screen to use cursorline!
     |startify-faq-02|  Recent files aren't shown!
-    |startify-faq-03|  Last recently used files don't seem to get updated
+    |startify-faq-03|  Most recently used files don't seem to get updated
                      at :Startify!
     |startify-faq-04|  I have broken colors when using sessions!
     |startify-faq-05|  How to disable common but unimportant files?
@@ -553,7 +553,7 @@ exactly.
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-03*
-Last recently used files don't seem to get updated at :Startify!~
+Most recently used files don't seem to get updated at :Startify!~
 
 Vim loads the list from viminfo only once, at startup.
 

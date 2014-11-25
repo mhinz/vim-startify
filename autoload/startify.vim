@@ -85,15 +85,15 @@ function! startify#insane_in_the_membrane() abort
 
   if empty(v:oldfiles)
     echohl WarningMsg
-    echomsg "startify: Can't read viminfo file.  Read :help startify-faq"
+    echomsg "startify: Can't read viminfo file.  Read :help startify-faq-02"
     echohl None
   endif
 
   let w:startify_section_header_lines = []
   let s:lists = get(g:, 'startify_list_order', [
-        \ ['   Last recently opened files:'],
+        \ ['   Most recently used files:'],
         \ 'files',
-        \ ['   Last recently modified files in the current directory:'],
+        \ ['   Most recently used files in the current directory:'],
         \ 'dir',
         \ ['   My sessions:'],
         \ 'sessions',
