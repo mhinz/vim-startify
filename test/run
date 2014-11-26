@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# Change to current dir (POSIXly).
+cd -P -- "$(dirname -- "$0")"
+
 # Look for existing vader installation.
 vader=( ${HOME}/.vim/*bundle*/vader*/plugin/vader.vim )
 if [ -f ${vader[0]} ]; then
