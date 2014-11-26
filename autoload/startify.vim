@@ -110,7 +110,7 @@ function! startify#insane_in_the_membrane() abort
     unlet item
   endfor
 
-  silent $-1,$delete _
+  silent $delete _
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
@@ -372,16 +372,19 @@ endfunction
 " Function: s:display_by_path {{{1
 function! s:display_by_path(path_prefix, path_format) abort
   let oldfiles = s:filter_oldfiles(a:path_prefix, a:path_format)
+
   if !empty(oldfiles)
     if exists('s:last_message')
       call s:print_section_header()
     endif
+
     for [absolute_path, entry_path] in oldfiles
       let index = s:get_index_as_string(s:entry_number)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
       execute 'nnoremap <buffer><silent>' index ':edit' escape(absolute_path, ' ') '<bar> call <sid>check_user_options()<cr>'
       let s:entry_number += 1
     endfor
+
     call append('$', '')
   endif
 endfunction
@@ -438,22 +441,26 @@ function! s:show_sessions() abort
     if exists('s:last_message')
       unlet s:last_message
     endif
+    return
   endif
+
   if exists('s:last_message')
     call s:print_section_header()
   endif
+
   for i in range(len(sfiles))
     let index = s:get_index_as_string(s:entry_number)
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t'))
     execute 'nnoremap <buffer><silent>' index ':SLoad' fnamemodify(sfiles[i], ':t') '<cr>'
     let s:entry_number += 1
   endfor
+
   call append('$', '')
 endfunction
 
 " Function: s:show_bookmarks {{{1
 function! s:show_bookmarks() abort
-  if !exists('g:startify_bookmarks')
+  if !exists('g:startify_bookmarks') || empty(g:startify_bookmarks)
     return
   endif
 
@@ -463,10 +470,8 @@ function! s:show_bookmarks() abort
 
   for fname in g:startify_bookmarks
     let index = s:get_index_as_string(s:entry_number)
-
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
-
     let s:entry_number += 1
   endfor
 
