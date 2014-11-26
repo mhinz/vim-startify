@@ -14,4 +14,4 @@ else
 fi
 
 echo '(Be patient.. testing can take a while.)'
-vim -XNu vimrc -i NONE -c 'Vader! *' >/dev/null
+HOME=/dev/null vim -XNu vimrc -i NONE -c 'Vader! *' >/dev/null
