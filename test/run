@@ -11,7 +11,7 @@ if [ -f ${vader[0]} ]; then
 fi
 
 if [ -d $vader ]; then
-    [[ ! -L vader.vim ]] && ln -s $vader
+    [[ ! -L vader.vim ]] && ln -s $vader vader.vim
 else
     git clone https://github.com/junegunn/vader.vim.git
 fi
