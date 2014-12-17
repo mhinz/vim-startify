@@ -16,5 +16,9 @@ else
     git clone https://github.com/junegunn/vader.vim.git
 fi
 
+# Provide viminfo during tests, remove it on exit.
+cp viminfo viminfo.tmp
+trap "{ rm viminfo.tmp; }" EXIT
+
 echo '(Be patient.. testing can take a while.)'
-HOME=/dev/null vim -XNu vimrc -i NONE -c 'Vader! *' >/dev/null
+HOME=/dev/null vim -XNu vimrc -i viminfo.tmp -c 'Vader! *'
