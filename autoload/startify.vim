@@ -85,7 +85,7 @@ function! startify#insane_in_the_membrane() abort
 
   if empty(v:oldfiles)
     echohl WarningMsg
-    echomsg "startify: Can't read viminfo file.  Read :help startify-faq-02"
+    echomsg "startify: no v:oldfiles present (via viminfo file).  Read :help startify-faq-02"
     echohl None
   endif
 
