@@ -89,7 +89,7 @@ function! startify#insane_in_the_membrane() abort
     echohl None
   endif
 
-  let w:startify_section_header_lines = []
+  let b:startify_section_header_lines = []
   let s:lists = get(g:, 'startify_list_order', [
         \ ['   Most recently used files:'],
         \ 'files',
@@ -505,7 +505,7 @@ function! s:set_cursor() abort
   let movement = 2 * (s:newline > s:oldline) - 1
 
   " skip section headers lines until an entry is found
-  while index(w:startify_section_header_lines, s:newline) != -1
+  while index(b:startify_section_header_lines, s:newline) != -1
     let s:newline += movement
   endwhile
 
@@ -617,7 +617,7 @@ function! s:print_section_header() abort
   let curline = line('.')
 
   for lnum in range(curline, curline + len(s:last_message) + 1)
-    call add(w:startify_section_header_lines, lnum)
+    call add(b:startify_section_header_lines, lnum)
   endfor
 
   call append('$', s:last_message + [''])
