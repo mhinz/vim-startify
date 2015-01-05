@@ -79,6 +79,7 @@ Startify basically provides two things:
       :SLoad    load a session
       :SSave    save a session
       :SDelete  delete a session
+      :SClose   close a session
 
 ==============================================================================
 OPTIONS                                                       *startify-options*
@@ -426,6 +427,11 @@ it.
 
 Providing only a part of the session name works too, if you complete the
 argument with either <c-d> or <tab> afterwards.
+>
+    :SClose
+<
+Save and close the current session, close all listed buffers, and open the
+Startify buffer.
 >
     :Startify
 <
