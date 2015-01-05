@@ -227,6 +227,16 @@ function! startify#session_save(...) abort
   endif
 endfunction
 
+" Function: #session_close {{{1
+function! startify#session_close()
+  if exists('v:this_session') && filewritable(v:this_session)
+    call startify#session_write(fnameescape(v:this_session))
+    let v:this_session=''
+  endif
+  call startify#session_delete_buffers()
+  Startify
+endfunction
+
 " Function: #session_write {{{1
 function! startify#session_write(spath)
   let ssop = &sessionoptions
