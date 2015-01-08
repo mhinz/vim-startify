@@ -12,9 +12,13 @@ let g:loaded_startify = 1
 
 augroup startify
   if !get(g:, 'startify_disable_at_vimenter')
-    autocmd VimEnter *
+    autocmd VimEnter * nested
           \   if !argc() && (line2byte('$') == -1) && (v:progname =~? '^[gmnq]\=vim\=x\=\%[\.exe]$')
-          \ |   call startify#insane_in_the_membrane()
+          \ |   if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
+          \ |     source Session.vim
+          \ |   else
+          \ |     call startify#insane_in_the_membrane()
+          \ |   endif
           \ | endif
           \ | autocmd! startify VimEnter
   endif
