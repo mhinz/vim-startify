@@ -100,7 +100,7 @@ default values.
     |g:startify_relative_path|
     |g:startify_session_autoload|
     |g:startify_session_delete_buffers|
-	|g:startify_session_default_name|
+    |g:startify_session_default_name|
     |g:startify_session_dir|
     |g:startify_session_persistence|
     |g:startify_session_savecmds|
