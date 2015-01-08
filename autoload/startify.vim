@@ -197,18 +197,13 @@ function! startify#session_save(...) abort
       return
     endif
   endif
-
+  " If there is no name inputted, the session's name is ".session.vim"
   if exists('a:1')
     let sname = a:1
   else
     call inputsave()
-    let sname = input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
+    let sname = "Session.vim"
     call inputrestore()
-    redraw
-    if empty(sname)
-      echo 'You gave an empty name!'
-      return
-    endif
   endif
 
   let spath = s:session_dir . s:sep . sname
