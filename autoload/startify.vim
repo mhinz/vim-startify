@@ -17,12 +17,12 @@ let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
 let s:relative_path  = get(g:, 'startify_relative_path') ? ':.' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
-
 let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'COMMIT_EDITMSG',
       \ $VIMRUNTIME .'/doc',
       \ 'bundle/.*/doc',
       \ ])
+let s:session_default_name = get(g:, 'startify_session_default_name', "")
 
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
@@ -197,13 +197,14 @@ function! startify#session_save(...) abort
       return
     endif
   endif
-
+  
+  " When there was one argument to 'SSave'
   if exists('a:1')
     let sname = a:1
 
   " Case when there are no save arguments
-  elseif exists('g:startify_session_default_name')
-    let sname = g:startify_session_default_name
+  elseif s:session_default_name != ""
+    let sname = s:session_default_name
   else
     call inputsave()
     let sname = input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')

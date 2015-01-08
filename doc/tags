@@ -10,6 +10,7 @@ g:startify_files_number	startify.txt	/*g:startify_files_number*
 g:startify_list_order	startify.txt	/*g:startify_list_order*
 g:startify_relative_path	startify.txt	/*g:startify_relative_path*
 g:startify_session_autoload	startify.txt	/*g:startify_session_autoload*
+g:startify_session_default_name	startify.txt	/*g:startify_session_default_name*
 g:startify_session_delete_buffers	startify.txt	/*g:startify_session_delete_buffers*
 g:startify_session_dir	startify.txt	/*g:startify_session_dir*
 g:startify_session_persistence	startify.txt	/*g:startify_session_persistence*
