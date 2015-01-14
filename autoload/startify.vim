@@ -570,7 +570,9 @@ function! s:check_user_options() abort
   let session = path . s:sep .'Session.vim'
 
   " change to VCS root directory
-  if get(g:, 'startify_change_to_vcs_root')
+  if get(g:, 'startify_session_autoload') && filereadable(session)
+    execute 'source' session
+  elseif get(g:, 'startify_change_to_vcs_root')
     call s:cd_to_vcs_root(path)
   " change directory
   elseif get(g:, 'startify_change_to_dir', 1)

@@ -198,6 +198,8 @@ If you fire up "vim" in a directory that contains a "Session.vim", that session
 will be loaded automatically. Otherwise it will be shown as the top entry in
 the Startify buffer.
 
+This also works if you open a bookmarked directory.
+
 Great way to create a portable project folder.
 
 ------------------------------------------------------------------------------
