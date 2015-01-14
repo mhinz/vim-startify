@@ -100,6 +100,7 @@ default values.
     |g:startify_relative_path|
     |g:startify_session_autoload|
     |g:startify_session_delete_buffers|
+    |g:startify_session_default_name|
     |g:startify_session_dir|
     |g:startify_session_persistence|
     |g:startify_session_savecmds|
@@ -222,6 +223,14 @@ This also works for sessions started with:
     let g:startify_session_delete_buffers = 0
 <
 Delete open buffers before loading a new session.
+
+------------------------------------------------------------------------------
+                                               *g:startify_session_default_name*
+>
+    let g:startify_session_delete_buffers = ''
+<
+The default name for a session saved in a directory. If the empty string is
+set, then vim will prompt the user for a session name.
 
 ------------------------------------------------------------------------------
                                                       *g:startify_change_to_dir*
