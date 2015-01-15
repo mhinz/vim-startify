@@ -384,6 +384,9 @@ A hardcoded example:
             \ '',
             \ ]
 <
+
+Also have a look at |startify-faq-09|.
+
 ------------------------------------------------------------------------------
                                                       *g:startify_custom_footer*
 >
@@ -525,6 +528,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-07|  How do I get both NERDTree and Startify working at
                      startup?
     |startify-faq-08|  The session autoload feature is not working!
+    |startify-faq-09|  How do I center my header/footer?
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -624,6 +628,20 @@ The session autoload feature is not working!~
 Do you have NERDTree installed by any chance? If so, try this:
 >
     let NERDTreeHijackNetrw = 0
+<
+------------------------------------------------------------------------------
+                                                               *startify-faq-09*
+How do I center my header/footer?~
+
+Try something along these lines:
+>
+    function! s:filter_header(lines) abort
+        let longest_line   = max(map(copy(a:lines), 'len(v:val)'))
+        let centered_lines = map(copy(a:lines),
+            \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
+        return centered_lines
+    endfunction
+    let g:startify_custom_header = s:filter_header(['a', 'bb', 'ccc'])
 <
 ==============================================================================
 EXAMPLE                                                       *startify-example*
