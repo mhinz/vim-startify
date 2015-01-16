@@ -380,7 +380,7 @@ endfunction
 
 
 " Function: s:display_by_path {{{1
-function! s:display_by_path(path_prefix, path_format) abort
+function! s:display_by_path(path_prefix, path_format, edit_absolute_path) abort
   let oldfiles = s:filter_oldfiles(a:path_prefix, a:path_format)
 
   if !empty(oldfiles)
@@ -391,7 +391,12 @@ function! s:display_by_path(path_prefix, path_format) abort
     for [absolute_path, entry_path] in oldfiles
       let index = s:get_index_as_string(s:entry_number)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
-      execute 'nnoremap <buffer><silent>' index ':edit' escape(absolute_path, ' ') '<bar> call <sid>check_user_options()<cr>'
+      if a:edit_absolute_path
+        let edit_path = absolute_path
+      else
+        let edit_path = entry_path
+      endif
+      execute 'nnoremap <buffer><silent>' index ':edit' escape(edit_path, ' ') '<bar> call <sid>check_user_options()<cr>'
       let s:entry_number += 1
     endfor
 
@@ -436,12 +441,12 @@ endfun
 " Function: s:show_dir {{{1
 function! s:show_dir() abort
   " let cwd = escape(getcwd(), '\')
-  return s:display_by_path(getcwd(), ':.')
+  return s:display_by_path(getcwd(), ':.', 0)
 endfunction
 
 " Function: s:show_files {{{1
 function! s:show_files() abort
-  return s:display_by_path('', s:relative_path)
+  return s:display_by_path('', s:relative_path, 1)
 endfunction
 
 " Function: s:show_sessions {{{1
