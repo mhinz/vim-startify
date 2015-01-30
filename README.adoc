@@ -1,6 +1,6 @@
 image:https://travis-ci.org/mhinz/vim-startify.svg?branch=travis["Build Status", link="https://travis-ci.org/mhinz/vim-startify"]
 
-image:https://github.com/mhinz/vim-startify/raw/master/startify.png[Startify in action!]
+image:https://raw.githubusercontent.com/mhinz/vim-startify/102aa438b2d2a88e2b4e331d8ff5320eed52f0c4/startify.png[Startify in action!]
 
 That's it. A fancy start screen for Vim.  _(almost all visible features enabled - freely customizable)_
 
