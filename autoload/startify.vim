@@ -401,9 +401,10 @@ endfunction
 
 " Function: s:filter_oldfiles {{{1
 function! s:filter_oldfiles(path_prefix, path_format) abort
-  let counter  = s:numfiles
-  let entries  = {}
-  let oldfiles = []
+  let path_prefix = '\V'. escape(a:path_prefix, '\')
+  let counter     = s:numfiles
+  let entries     = {}
+  let oldfiles    = []
 
   for fname in v:oldfiles
     if counter <= 0
@@ -420,7 +421,7 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
       continue
     endif
 
-    if match(absolute_path, a:path_prefix)
+    if match(absolute_path, path_prefix)
       continue
     endif
 
