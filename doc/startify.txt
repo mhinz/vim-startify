@@ -385,7 +385,7 @@ A hardcoded example:
             \ ]
 <
 
-Also have a look at |startify-faq-09|.
+Also have a look at |startify-faq-08|.
 
 ------------------------------------------------------------------------------
                                                       *g:startify_custom_footer*
@@ -520,15 +520,13 @@ FAQ                                                               *startify-faq*
 
     |startify-faq-01|  I don't want the start screen to use cursorline!
     |startify-faq-02|  Recent files aren't shown!
-    |startify-faq-03|  Most recently used files don't seem to get updated
-                     at :Startify!
-    |startify-faq-04|  I have broken colors when using sessions!
-    |startify-faq-05|  How to disable common but unimportant files?
-    |startify-faq-06|  CtrlP or NERDTree open a split in Startify!
-    |startify-faq-07|  How do I get both NERDTree and Startify working at
+    |startify-faq-03|  I have broken colors when using sessions!
+    |startify-faq-04|  How to disable common but unimportant files?
+    |startify-faq-05|  CtrlP or NERDTree open a split in Startify!
+    |startify-faq-06|  How do I get both NERDTree and Startify working at
                      startup?
-    |startify-faq-08|  The session autoload feature is not working!
-    |startify-faq-09|  How do I center my header/footer?
+    |startify-faq-07|  The session autoload feature is not working!
+    |startify-faq-08|  How do I center my header/footer?
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -565,12 +563,6 @@ exactly.
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-03*
-Most recently used files don't seem to get updated at :Startify!~
-
-Vim loads the list from viminfo only once, at startup.
-
-------------------------------------------------------------------------------
-                                                               *startify-faq-04*
 I have broken colors when using sessions!~
 
 Nothing this plugin could do about. Try playing around with 'sessionoptions'.
@@ -583,7 +575,7 @@ Some people swear it works for them with these settings:
     set sessionoptions=blank,curdir,folds,help,tabpages,winpos
 <
 ------------------------------------------------------------------------------
-                                                               *startify-faq-05*
+                                                               *startify-faq-04*
 How to disable common but unimportant files?~
 
 Use the skiplist. Personally I use:
@@ -596,7 +588,7 @@ Use the skiplist. Personally I use:
            \ ]
 <
 ------------------------------------------------------------------------------
-                                                               *startify-faq-06*
+                                                               *startify-faq-05*
 CtrlP or NERDTree open a split in Startify!~
 
 Put this in your vimrc:
@@ -609,7 +601,7 @@ solution:
     let g:ctrlp_reuse_window = 'startify'
 <
 ------------------------------------------------------------------------------
-                                                               *startify-faq-07*
+                                                               *startify-faq-06*
 How do I get both NERDTree and Startify working at startup?~
 
 Put this in your vimrc:
@@ -622,7 +614,7 @@ Put this in your vimrc:
                 \ | endif
 <
 ------------------------------------------------------------------------------
-                                                               *startify-faq-08*
+                                                               *startify-faq-07*
 The session autoload feature is not working!~
 
 Do you have NERDTree installed by any chance? If so, try this:
@@ -630,7 +622,7 @@ Do you have NERDTree installed by any chance? If so, try this:
     let NERDTreeHijackNetrw = 0
 <
 ------------------------------------------------------------------------------
-                                                               *startify-faq-09*
+                                                               *startify-faq-08*
 How do I center my header/footer?~
 
 Try something along these lines:

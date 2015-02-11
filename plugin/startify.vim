@@ -12,24 +12,31 @@ let g:loaded_startify = 1
 
 augroup startify
   if !get(g:, 'startify_disable_at_vimenter')
-    autocmd VimEnter * nested
-          \   if !argc() && (line2byte('$') == -1) && (v:progname =~? '^[-gmnq]\=vim\=x\=\%[\.exe]$')
-          \ |   if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
-          \ |     source Session.vim
-          \ |   else
-          \ |     call startify#insane_in_the_membrane()
-          \ |   endif
-          \ | endif
-          \ | autocmd! startify VimEnter
+    autocmd VimEnter * nested call s:genesis()
   endif
 
   if get(g:, 'startify_session_persistence')
-    autocmd startify VimLeave *
-          \   if exists('v:this_session') && filewritable(v:this_session)
-          \ |   call startify#session_write(fnameescape(v:this_session))
-          \ | endif
+    autocmd VimLeave * call s:extinction()
   endif
 augroup END
+
+function! s:genesis()
+  if !argc() && (line2byte('$') == -1) && (v:progname =~? '^[-gmnq]\=vim\=x\=\%[\.exe]$')
+    if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
+      source Session.vim
+    else
+      call startify#insane_in_the_membrane()
+    endif
+  endif
+  autocmd startify BufRead * if exists('v:oldfiles') | call insert(v:oldfiles, expand('<afile>'), 0) | endif
+  autocmd! startify VimEnter
+endfunction
+
+function! s:extinction()
+  if exists('v:this_session') && filewritable(v:this_session)
+    call startify#session_write(fnameescape(v:this_session))
+  endif
+endfunction
 
 command! -nargs=? -bar -complete=customlist,startify#session_list SSave   call startify#session_save(<f-args>)
 command! -nargs=? -bar -complete=customlist,startify#session_list SLoad   call startify#session_load(<f-args>)
