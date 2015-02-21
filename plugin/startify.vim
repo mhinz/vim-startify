@@ -28,7 +28,7 @@ function! s:genesis()
       call startify#insane_in_the_membrane()
     endif
   endif
-  autocmd startify BufRead * if exists('v:oldfiles') | call insert(v:oldfiles, expand('<afile>'), 0) | endif
+  autocmd startify BufNewFile,BufRead * if exists('v:oldfiles') | call insert(v:oldfiles, expand('<afile>'), 0) | endif
   autocmd! startify VimEnter
 endfunction
 
