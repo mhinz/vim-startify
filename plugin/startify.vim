@@ -9,6 +9,7 @@ if exists('g:loaded_startify') || &cp
   finish
 endif
 let g:loaded_startify = 1
+let g:startify_locked = 0
 
 augroup startify
   if !get(g:, 'startify_disable_at_vimenter')
@@ -18,6 +19,9 @@ augroup startify
   if get(g:, 'startify_session_persistence')
     autocmd VimLeave * call s:extinction()
   endif
+
+  autocmd QuickFixCmdPre  *vimgrep* let g:startify_locked = 1
+  autocmd QuickFixCmdPost *vimgrep* let g:startify_locked = 0
 augroup END
 
 function! s:genesis()
@@ -28,7 +32,10 @@ function! s:genesis()
       call startify#insane_in_the_membrane()
     endif
   endif
-  autocmd startify BufNewFile,BufRead * if exists('v:oldfiles') | call insert(v:oldfiles, expand('<afile>'), 0) | endif
+  autocmd startify BufNewFile,BufRead *
+        \ if !g:startify_locked && exists('v:oldfiles') |
+        \   call insert(v:oldfiles, expand('<afile>'), 0) |
+        \ endif
   autocmd! startify VimEnter
 endfunction
 
