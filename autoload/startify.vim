@@ -381,7 +381,8 @@ endfunction
 
 " Function: s:display_by_path {{{1
 function! s:display_by_path(path_prefix, path_format) abort
-  let oldfiles = s:filter_oldfiles(a:path_prefix, a:path_format)
+  let oldfiles = call(get(g:, 'startify_enable_unsafe') ? 's:filter_oldfiles_unsafe' : 's:filter_oldfiles',
+        \ [a:path_prefix, a:path_format])
 
   if !empty(oldfiles)
     if exists('s:last_message')
@@ -418,10 +419,36 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
           \ || !filereadable(absolute_path)
           \ || s:is_in_skiplist(absolute_path)
           \ || (exists('g:startify_bookmarks') && s:is_bookmark(absolute_path))
+          \ || match(absolute_path, path_prefix)
       continue
     endif
 
-    if match(absolute_path, path_prefix)
+    let entry_path              = fnamemodify(absolute_path, a:path_format)
+    let entries[absolute_path]  = 1
+    let counter                -= 1
+    let oldfiles               += [[absolute_path, entry_path]]
+  endfor
+
+  return oldfiles
+endfun
+
+" Function: s:filter_oldfiles_unsafe {{{1
+function! s:filter_oldfiles_unsafe(path_prefix, path_format) abort
+  let path_prefix = '\V'. escape(a:path_prefix, '\')
+  let counter     = s:numfiles
+  let entries     = {}
+  let oldfiles    = []
+
+  for fname in v:oldfiles
+    if counter <= 0
+      break
+    endif
+
+    let absolute_path = glob(fnameescape(fnamemodify(fname, ":p")))
+    if empty(absolute_path)
+          \ || has_key(entries, absolute_path)
+          \ || s:is_in_skiplist(absolute_path)
+          \ || match(absolute_path, path_prefix)
       continue
     endif
 

@@ -95,6 +95,7 @@ default values.
     |g:startify_custom_indices|
     |g:startify_disable_at_vimenter|
     |g:startify_enable_special|
+    |g:startify_enable_unsafe|
     |g:startify_files_number|
     |g:startify_list_order|
     |g:startify_relative_path|
@@ -278,6 +279,27 @@ Example:
     let g:startify_enable_special = 1
 <
 Show <empty buffer> and <quit>.
+------------------------------------------------------------------------------
+                                                      *g:startify_enable_unsafe*
+>
+    let g:startify_enable_unsafe = 0
+<
+Enable the option only in case you think Vim starts too slowly (because of
+:Startify) or if you often edit files on remote filesystems.
+
+It's called unsafe because it improves the time :Startify needs to execute by
+reducing the amount of syscalls to the underlying operating system, but
+sacrifices the precision of shown entries.
+
+This could lead to inconsistences in the shown :Startify entries (e.g. the
+same file could be shown twice, because one time file was opened via absolute
+path and another time via symlink).
+
+Currently this option does this:
+
+    - don't resolves symlinks (readlink(2))
+    - don't check every file if it's readable (stat(2))
+    - don't filter through the bookmark list
 
 ------------------------------------------------------------------------------
                                                    *g:startify_session_savevars*
