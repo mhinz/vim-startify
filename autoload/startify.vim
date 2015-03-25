@@ -50,7 +50,6 @@ function! startify#insane_in_the_membrane() abort
     endfor
   endif
 
-  enew
   setlocal
         \ bufhidden=wipe
         \ buftype=nofile
