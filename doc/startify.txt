@@ -251,7 +251,12 @@ At the moment only git, hg, bzr and svn are supported.
         \ '.vimgolf',
         \ ]
 <
-A list of Vim regular expressions that filters recently used files.
+A list of Vim regular expressions that is used to filter recently used files.
+See |pattern.txt| for what patterns can be used.
+
+NOTE: Due to the nature of patterns, you can't just use something like
+"'~/mysecret'" but have to use "$HOME . '/mysecret.txt". The former would do
+something entirely different: |/\~|
 
 Example:
 >
@@ -259,6 +264,7 @@ Example:
            \ '\.vimgolf',
            \ '^/tmp',
            \ '/project/.*/documentation',
+           \ $HOME . '/mysecret.txt',
            \ ]
 <
 ------------------------------------------------------------------------------
