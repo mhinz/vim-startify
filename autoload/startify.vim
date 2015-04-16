@@ -197,17 +197,16 @@ function! startify#session_save(...) abort
     endif
   endif
 
-  if exists('a:1')
-    let sname = a:1
-  else
-    call inputsave()
-    let sname = input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
-    call inputrestore()
-    redraw
-    if empty(sname)
-      echo 'You gave an empty name!'
-      return
-    endif
+  call inputsave()
+  let sname = exists('a:1')
+        \ ? a:1
+        \ : input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
+        \ | redraw
+  call inputrestore()
+
+  if empty(sname)
+    echo 'You gave an empty name!'
+    return
   endif
 
   let spath = s:session_dir . s:sep . sname
