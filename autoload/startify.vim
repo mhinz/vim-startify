@@ -20,7 +20,7 @@ let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
 
 let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'COMMIT_EDITMSG',
-      \ $VIMRUNTIME .'/doc',
+      \ fnamemodify($VIMRUNTIME, ':p') .'/doc',
       \ 'bundle/.*/doc',
       \ ])
 

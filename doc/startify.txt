@@ -246,7 +246,7 @@ At the moment only git, hg, bzr and svn are supported.
 >
     let g:startify_skiplist = [
         \ 'COMMIT_EDITMSG',
-        \ $VIMRUNTIME .'/doc',
+        \ fnamemodify($VIMRUNTIME, ':p') .'/doc',
         \ 'bundle/.*/doc',
         \ '.vimgolf',
         \ ]
@@ -610,7 +610,7 @@ Use the skiplist. Personally I use:
 >
     let g:startify_skiplist = [
            \ 'COMMIT_EDITMSG',
-           \ $VIMRUNTIME .'/doc',
+           \ fnamemodify($VIMRUNTIME, ':p') .'/doc',
            \ 'bundle/.*/doc',
            \ '\.DS_Store'
            \ ]
@@ -691,7 +691,7 @@ This is my configuration..
 
     let g:startify_skiplist = [
                 \ 'COMMIT_EDITMSG',
-                \ $VIMRUNTIME .'/doc',
+                \ fnamemodify($VIMRUNTIME, ':p') .'/doc',
                 \ 'bundle/.*/doc',
                 \ '\.vimgolf',
                 \ ]
