@@ -134,20 +134,10 @@ function! startify#insane_in_the_membrane() abort
 
   setlocal nomodifiable nomodified
 
-  nnoremap <buffer><silent> e             :enew<cr>
-  nnoremap <buffer><silent> i             :enew <bar> startinsert<cr>
-  nnoremap <buffer><silent> <insert>      :enew <bar> startinsert<cr>
-  nnoremap <buffer><silent> b             :call <sid>set_mark('B')<cr>
-  nnoremap <buffer><silent> s             :call <sid>set_mark('S')<cr>
-  nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
-  nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
-  nnoremap <buffer><silent> <cr>          :call startify#open_buffers()<cr>
-  nnoremap <buffer><silent> <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
-  nnoremap <buffer><silent> q             :call <sid>close()<cr>
-
+  call s:set_mappings()
   call cursor(s:firstline + (s:show_special ? 2 : 0), 5)
-
   autocmd startify CursorMoved <buffer> call s:set_cursor()
+
   set filetype=startify
   silent! doautocmd <nomodeline> User Startified
 endfunction
@@ -554,6 +544,35 @@ function! s:set_cursor() abort
   let s:newline = max([s:firstline, min([s:lastline, s:newline])])
 
   call cursor(s:newline, 5)
+endfunction
+
+" Function: s:set_mappings {{{1
+function! s:set_mappings() abort
+  nnoremap <buffer><silent> e             :enew<cr>
+  nnoremap <buffer><silent> i             :enew <bar> startinsert<cr>
+  nnoremap <buffer><silent> <insert>      :enew <bar> startinsert<cr>
+  nnoremap <buffer><silent> b             :call <sid>set_mark('B')<cr>
+  nnoremap <buffer><silent> s             :call <sid>set_mark('S')<cr>
+  nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
+  nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
+  nnoremap <buffer><silent> <cr>          :call startify#open_buffers()<cr>
+  nnoremap <buffer><silent> <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
+  nnoremap <buffer><silent> q             :call <sid>close()<cr>
+
+  " Prevent 'nnoremap j gj' mappings, since they would break navigation.
+  " (One can't leave the [x].)
+  if !empty(mapcheck('h', 'n'))
+    nnoremap <buffer> h h
+  endif
+  if !empty(mapcheck('j', 'n'))
+    nnoremap <buffer> j j
+  endif
+  if !empty(mapcheck('k', 'n'))
+    nnoremap <buffer> k k
+  endif
+  if !empty(mapcheck('l', 'n'))
+    nnoremap <buffer> l l
+  endif
 endfunction
 
 " Function: s:set_mark {{{1
