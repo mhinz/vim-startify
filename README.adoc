@@ -151,4 +151,4 @@ _Thank you for flying mhi airlines. Get your Vim on!_
 
 == License
 
-MIT license. Copyright (c) 2014 Marco Hinz.
+MIT license. Copyright (c) 2015 Marco Hinz.

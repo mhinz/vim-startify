@@ -1,9 +1,8 @@
 " vim: et sw=2 sts=2
 
 " Plugin:      https://github.com/mhinz/vim-startify
-" Description: Start screen displaying recently used stuff.
+" Description: A fancy start screen for Vim.
 " Maintainer:  Marco Hinz <http://github.com/mhinz>
-" Version:     1.8
 
 if exists('g:loaded_startify') || &cp
   finish
