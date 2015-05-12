@@ -251,14 +251,27 @@ function! startify#session_write(spath)
     let &sessionoptions = ssop
   endtry
 
-  if exists('g:startify_session_savevars') || exists('g:startify_session_savecmds')
+  if exists('g:startify_session_remove_lines')
+        \ || exists('g:startify_session_savevars')
+        \ || exists('g:startify_session_savecmds')
     execute 'split' a:spath
 
+    " remove lines from the session file
+    if exists('g:startify_session_remove_lines')
+      for pattern in g:startify_session_remove_lines
+        execute 'silent global/'. pattern .'/delete'
+      endfor
+    endif
+
     " put existing variables from savevars into session file
-    call append(line('$')-3, map(filter(copy(get(g:, 'startify_session_savevars', [])), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))'))
+    if exists('g:startify_session_savevars')
+      call append(line('$')-3, map(filter(copy(g:startify_session_savevars), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))'))
+    endif
 
     " put commands from savecmds into session file
-    call append(line('$')-3, get(g:, 'startify_session_savecmds', []))
+    if exists('g:startify_session_savecmds')
+      call append(line('$')-3, g:startify_session_savecmds)
+    endif
 
     setlocal bufhidden=delete
     silent update

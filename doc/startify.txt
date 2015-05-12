@@ -103,6 +103,7 @@ default values.
     |g:startify_session_delete_buffers|
     |g:startify_session_dir|
     |g:startify_session_persistence|
+    |g:startify_session_remove_lines|
     |g:startify_session_savecmds|
     |g:startify_session_savevars|
     |g:startify_skiplist_server|
@@ -306,6 +307,28 @@ Currently this option does this:
     - don't resolves symlinks (readlink(2))
     - don't check every file if it's readable (stat(2))
     - don't filter through the bookmark list
+
+------------------------------------------------------------------------------
+                                               *g:startify_session_remove_lines*
+>
+    let g:startify_session_remove_lines = []
+<
+Lines matching any of the patterns in this list, will be removed from the
+session file.
+
+Example:
+>
+    let g:startify_session_remove_lines = ['setlocal', 'winheight']
+<
+Internally this simply does:
+>
+    :global/setlocal/delete
+    :global/winheight/delete
+<
+So you can use any |pattern|.
+
+NOTE: Take care not to mess up any expressions within the session file,
+otherwise you'll probably get problems when trying to load it.
 
 ------------------------------------------------------------------------------
                                                    *g:startify_session_savevars*
