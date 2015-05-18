@@ -392,7 +392,7 @@ function! s:display_by_path(path_prefix, path_format) abort
     for [absolute_path, entry_path] in oldfiles
       let index = s:get_index_as_string(s:entry_number)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
-      execute 'nnoremap <buffer><silent>' index ':edit' escape(absolute_path, ' ') '<bar> call <sid>check_user_options()<cr>'
+      execute 'nnoremap <buffer><silent>' index ':edit' absolute_path '<bar> call <sid>check_user_options()<cr>'
       let s:entry_number += 1
     endfor
 
@@ -412,7 +412,7 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
       break
     endif
 
-    let absolute_path = glob(fnameescape(fnamemodify(resolve(fname), ":p")))
+    let absolute_path = glob(fnamemodify(resolve(fname), ":p"))
 
     " filter duplicates, bookmarks and entries from the skiplist
     if has_key(entries, absolute_path)
@@ -426,7 +426,7 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
     let entry_path              = fnamemodify(absolute_path, a:path_format)
     let entries[absolute_path]  = 1
     let counter                -= 1
-    let oldfiles               += [[absolute_path, entry_path]]
+    let oldfiles               += [[fnameescape(absolute_path), entry_path]]
   endfor
 
   return oldfiles
@@ -444,7 +444,7 @@ function! s:filter_oldfiles_unsafe(path_prefix, path_format) abort
       break
     endif
 
-    let absolute_path = glob(fnameescape(fnamemodify(fname, ":p")))
+    let absolute_path = glob(fnamemodify(fname, ":p"))
     if empty(absolute_path)
           \ || has_key(entries, absolute_path)
           \ || s:is_in_skiplist(absolute_path)
@@ -455,7 +455,7 @@ function! s:filter_oldfiles_unsafe(path_prefix, path_format) abort
     let entry_path              = fnamemodify(absolute_path, a:path_format)
     let entries[absolute_path]  = 1
     let counter                -= 1
-    let oldfiles               += [[absolute_path, entry_path]]
+    let oldfiles               += [[fnameescape(absolute_path), entry_path]]
   endfor
 
   return oldfiles
@@ -463,7 +463,6 @@ endfun
 
 " Function: s:show_dir {{{1
 function! s:show_dir() abort
-  " let cwd = escape(getcwd(), '\')
   return s:display_by_path(getcwd(), ':.')
 endfunction
 
