@@ -367,14 +367,9 @@ function! startify#open_buffers()
     if exists('s:marked')
       unlet s:marked
     endif
-  " no markers found; open a single buffer
-  else
-    try
-      call feedkeys(expand('<cword>'))
-    catch /E832/  " don't ask for undo encryption key twice
-      edit
-    catch /E325/  " swap file found
-    endtry
+  else  " no markers found; open a single buffer
+    call s:set_mark('B')
+    return startify#open_buffers()
   endif
 endfunction
 
@@ -412,7 +407,7 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
       break
     endif
 
-    let absolute_path = glob(fnamemodify(resolve(fname), ":p"))
+    let absolute_path = fnamemodify(resolve(fname), ":p")
 
     " filter duplicates, bookmarks and entries from the skiplist
     if has_key(entries, absolute_path)
@@ -567,7 +562,7 @@ function! s:set_mappings() abort
   nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
   nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
   nnoremap <buffer><silent> <cr>          :call startify#open_buffers()<cr>
-  nnoremap <buffer><silent> <2-LeftMouse> :call feedkeys(expand('<cword>'))<cr>
+  nnoremap <buffer><silent> <2-LeftMouse> :call startify#open_buffers()<cr>
   nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
   " Prevent 'nnoremap j gj' mappings, since they would break navigation.
