@@ -370,7 +370,7 @@ function! startify#open_buffers()
   " no markers found; open a single buffer
   else
     try
-      call feedkeys(expand('<cword>'), 'nt')
+      call feedkeys(expand('<cword>'), 't')
     catch /E832/  " don't ask for undo encryption key twice
       edit
     catch /E325/  " swap file found
@@ -567,7 +567,7 @@ function! s:set_mappings() abort
   nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
   nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
   nnoremap <buffer><silent> <cr>          :call startify#open_buffers()<cr>
-  nnoremap <buffer><silent> <2-LeftMouse> :call feedkeys(expand('<cword>'), 'nt')<cr>
+  nnoremap <buffer><silent> <2-LeftMouse> :call feedkeys(expand('<cword>'), 't')<cr>
   nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
   " Prevent 'nnoremap j gj' mappings, since they would break navigation.
