@@ -333,7 +333,7 @@ function! startify#session_list_as_string(lead, ...) abort
 endfunction
 
 " Function: #open_buffers {{{1
-function! startify#open_buffers() abort
+function! startify#open_buffers()
   " markers found; open one or more buffers
   if exists('s:marked') && !empty(s:marked)
     enew
@@ -370,7 +370,7 @@ function! startify#open_buffers() abort
   " no markers found; open a single buffer
   else
     try
-      execute 'normal' expand('<cword>')
+      call feedkeys(expand('<cword>'), 'nt')
     catch /E832/  " don't ask for undo encryption key twice
       edit
     catch /E325/  " swap file found
@@ -567,7 +567,7 @@ function! s:set_mappings() abort
   nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
   nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
   nnoremap <buffer><silent> <cr>          :call startify#open_buffers()<cr>
-  nnoremap <buffer><silent> <2-LeftMouse> :execute 'normal' matchstr(getline('.'), '\w\+')<cr>
+  nnoremap <buffer><silent> <2-LeftMouse> :call feedkeys(expand('<cword>'), 'nt')<cr>
   nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
   " Prevent 'nnoremap j gj' mappings, since they would break navigation.
