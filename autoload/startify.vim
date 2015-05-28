@@ -99,6 +99,10 @@ function! startify#insane_in_the_membrane() abort
         \ 'bookmarks',
         \ ])
 
+  let s:tick = 0
+  let s:entries = {}
+  let s:markers = {}
+
   for item in s:lists
     if type(item) == 1
       call s:show_{item}()
@@ -333,49 +337,36 @@ function! startify#session_list_as_string(lead, ...) abort
 endfunction
 
 " Function: #open_buffers {{{1
-function! startify#open_buffers()
-  " markers found; open one or more buffers
-  if exists('s:marked') && !empty(s:marked)
+function! startify#open_buffers(...) abort
+  if exists('a:1')  " used in mappings
+    execute 'edit' s:entries[a:1]
+  elseif empty(s:markers)  " open the current entry
+    call s:set_mark('B')
+    return startify#open_buffers()
+  else  " open all marked entries in the order they were given
     enew
     setlocal nobuflisted
 
-    for val in values(s:marked)
-      let [path, type] = val[1:2]
-      let path = fnameescape(path)
-      if has('win32')
-        let path = substitute(path, '\[', '\[[]', 'g')
-      endif
+    for markers in sort(values(s:markers), 's:sort_by_tick')
+      let path = s:entries[markers.original_index]
+      let type = markers.type
 
       if line2byte('$') == -1
-        " open in current window
         execute 'edit' path
       elseif type == 'S'
-        " open in split
         execute 'split' path
       elseif type == 'V'
-        " open in vsplit
         execute 'vsplit' path
       elseif type == 'T'
-        " open in tab
         execute 'tabnew' path
       else
-        " open in current window
         execute 'edit' path
       endif
 
       call s:check_user_options()
     endfor
-
-    " remove markers for next instance of :Startify
-    if exists('s:marked')
-      unlet s:marked
-    endif
-  else  " no markers found; open a single buffer
-    call s:set_mark('B')
-    return startify#open_buffers()
   endif
 endfunction
-
 
 " Function: s:display_by_path {{{1
 function! s:display_by_path(path_prefix, path_format) abort
@@ -393,7 +384,7 @@ function! s:display_by_path(path_prefix, path_format) abort
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
-      execute 'nnoremap <buffer><silent>' index ':edit' absolute_path '<bar> call <sid>check_user_options()<cr>'
+      let s:entries[index] = absolute_path
       let s:entry_number += 1
     endfor
 
@@ -560,6 +551,10 @@ endfunction
 
 " Function: s:set_mappings {{{1
 function! s:set_mappings() abort
+  for index in keys(s:entries)
+    execute 'nnoremap <buffer><silent>' index ':call startify#open_buffers('. string(index) .')<cr>'
+  endfor
+
   nnoremap <buffer><silent> e             :enew<cr>
   nnoremap <buffer><silent> i             :enew <bar> startinsert<cr>
   nnoremap <buffer><silent> <insert>      :enew <bar> startinsert<cr>
@@ -573,52 +568,52 @@ function! s:set_mappings() abort
 
   " Prevent 'nnoremap j gj' mappings, since they would break navigation.
   " (One can't leave the [x].)
-  if !empty(mapcheck('h', 'n'))
-    nnoremap <buffer> h h
-  endif
-  if !empty(mapcheck('j', 'n'))
+  if !empty(maparg('j', 'n'))
     nnoremap <buffer> j j
   endif
-  if !empty(mapcheck('k', 'n'))
+  if !empty(maparg('k', 'n'))
     nnoremap <buffer> k k
-  endif
-  if !empty(mapcheck('l', 'n'))
-    nnoremap <buffer> l l
   endif
 endfunction
 
 " Function: s:set_mark {{{1
-"
-" Markers are saved in the s:marked dict using the follow format:
-"   - s:marked[0]: ID
-"   - s:marked[1]: path
-"   - s:marked[2]: type (buffer, split, vsplit)
-"
 function! s:set_mark(type) abort
-  if !exists('s:marked')
-    let s:marked = {}
-  endif
+  let index = expand('<cword>')
+  let line  = line('.')
 
-  let [id, path] = matchlist(getline('.'), '\v\[(.{-})\]\s+(.*)')[1:2]
-  let path = fnamemodify(path, ':p')
-
-  if path =~# '\V<empty buffer>\|<quit>' || path =~# '^\w\+$'
+  if index =~# '[eq]'
     return
   endif
 
   setlocal modifiable
 
-  " set markers
-  if id =~# '[BSTV]'
-    " replace marker by old ID
-    execute 'normal! ci]'. remove(s:marked, line('.'))[0]
-  else
-    " save ID and replace it by the marker of the given type
-    let s:marked[line('.')] = [id, path, a:type]
-    execute 'normal! ci]'. repeat(a:type, len(id))
+  if has_key(s:markers, line)
+    if s:markers[line].type == a:type  " remove type
+      execute 'normal! ci]'. s:markers[line].original_index
+      call remove(s:markers, line)
+    else  " update type
+      execute 'normal! ci]'. repeat(a:type, len(index))
+      let s:markers[line].type = a:type
+      let s:markers[line].tick = s:tick
+      let s:tick += 1
+    endif
+  else  " set type
+    let s:markers[line] = {
+          \ 'line': line,
+          \ 'type': a:type,
+          \ 'original_index': index,
+          \ 'tick': s:tick,
+          \ }
+    let s:tick += 1
+    execute 'normal! ci]'. repeat(a:type, len(index))
   endif
 
   setlocal nomodifiable nomodified
+endfunction
+
+" Function: s:sort_by_tick {{{1
+function! s:sort_by_tick(one, two)
+  return a:one.tick - a:two.tick
 endfunction
 
 " Function: s:check_user_options {{{1
