@@ -342,6 +342,9 @@ function! startify#open_buffers()
     for val in values(s:marked)
       let [path, type] = val[1:2]
       let path = fnameescape(path)
+      if has('win32')
+        let path = substitute(path, '\[', '\[[]', 'g')
+      endif
 
       if line2byte('$') == -1
         " open in current window
@@ -387,6 +390,9 @@ function! s:display_by_path(path_prefix, path_format) abort
     for [absolute_path, entry_path] in oldfiles
       let index = s:get_index_as_string(s:entry_number)
       call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
+      if has('win32')
+        let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
+      endif
       execute 'nnoremap <buffer><silent>' index ':edit' absolute_path '<bar> call <sid>check_user_options()<cr>'
       let s:entry_number += 1
     endfor
