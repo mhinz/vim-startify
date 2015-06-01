@@ -101,7 +101,6 @@ function! startify#insane_in_the_membrane() abort
 
   let s:tick = 0
   let s:entries = {}
-  let s:markers = {}
 
   for item in s:lists
     if type(item) == 1
@@ -336,36 +335,38 @@ function! startify#session_list_as_string(lead, ...) abort
   return join(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), "\n")
 endfunction
 
+" Function: startify#debug {{{1
+function! startify#debug()
+  for k in sort(keys(s:entries))
+    echomsg '['. k .'] = '. string(s:entries[k])
+  endfor
+endfunction
+
 " Function: #open_buffers {{{1
 function! startify#open_buffers(...) abort
-  if exists('a:1')  " used in mappings
-    execute 'edit' s:entries[a:1]
-  elseif empty(s:markers)  " open the current entry
+  if exists('a:1')
+    execute s:entries[a:1].cmd s:entries[a:1].path
+    return
+  endif
+
+  let marked = filter(copy(s:entries), 'v:val.marked')
+  if empty(marked)
     call s:set_mark('B')
     return startify#open_buffers()
-  else  " open all marked entries in the order they were given
-    enew
-    setlocal nobuflisted
-
-    for markers in sort(values(s:markers), 's:sort_by_tick')
-      let path = s:entries[markers.original_index]
-      let type = markers.type
-
-      if line2byte('$') == -1
-        execute 'edit' path
-      elseif type == 'S'
-        execute 'split' path
-      elseif type == 'V'
-        execute 'vsplit' path
-      elseif type == 'T'
-        execute 'tabnew' path
-      else
-        execute 'edit' path
-      endif
-
-      call s:check_user_options()
-    endfor
   endif
+
+  enew
+  setlocal nobuflisted
+
+  for entry in sort(values(marked), 's:sort_by_tick')
+    if line2byte('$') == -1
+      execute 'edit' entry.path
+    else
+      execute entry.cmd entry.path
+    endif
+
+    call s:check_user_options()
+  endfor
 endfunction
 
 " Function: s:display_by_path {{{1
@@ -384,7 +385,13 @@ function! s:display_by_path(path_prefix, path_format) abort
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
-      let s:entries[index] = absolute_path
+      let s:entries[line('$')] = {
+            \ 'index':  index,
+            \ 'type':   'file',
+            \ 'cmd':    'edit',
+            \ 'path':   absolute_path,
+            \ 'marked': 0,
+            \ }
       let s:entry_number += 1
     endfor
 
@@ -479,8 +486,18 @@ function! s:show_sessions() abort
 
   for i in range(len(sfiles))
     let index = s:get_index_as_string(s:entry_number)
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fnamemodify(sfiles[i], ':t'))
-    execute 'nnoremap <buffer><silent>' index ':SLoad' fnamemodify(sfiles[i], ':t') '<cr>'
+    let fname = fnamemodify(sfiles[i], ':t')
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+    if has('win32')
+      let fname = substitute(fname, '\[', '\[[]', 'g')
+    endif
+    let s:entries[line('$')] = {
+          \ 'index':  index,
+          \ 'type':   'session',
+          \ 'cmd':    'SLoad',
+          \ 'path':   fname,
+          \ 'marked': 0,
+          \ }
     let s:entry_number += 1
   endfor
 
@@ -503,7 +520,13 @@ function! s:show_bookmarks() abort
     if has('win32')
       let absolute_path = substitute(fname, '\[', '\[[]', 'g')
     endif
-    let s:entries[index] = fname
+    let s:entries[line('$')] = {
+          \ 'index':  index,
+          \ 'type':   'file',
+          \ 'cmd':    'edit',
+          \ 'path':   fname,
+          \ 'marked': 0,
+          \ }
     let s:entry_number += 1
   endfor
 
@@ -554,8 +577,9 @@ endfunction
 
 " Function: s:set_mappings {{{1
 function! s:set_mappings() abort
-  for index in keys(s:entries)
-    execute 'nnoremap <buffer><silent>' index ':call startify#open_buffers('. string(index) .')<cr>'
+  for k in keys(s:entries)
+    execute 'nnoremap <buffer><silent>' s:entries[k].index
+          \ ':call startify#open_buffers('. string(k) .')<cr>'
   endfor
 
   nnoremap <buffer><silent> e             :enew<cr>
@@ -582,31 +606,29 @@ endfunction
 " Function: s:set_mark {{{1
 function! s:set_mark(type) abort
   let index = expand('<cword>')
-  let line  = line('.')
+  let entry = s:entries[line('.')]
 
-  if index =~# '[eq]'
+  if (index =~# '^[eq]$') || (entry.type == 'session')
     return
   endif
 
+  let default_cmds = {
+        \ 'B': 'edit',
+        \ 'S': 'split',
+        \ 'V': 'vsplit',
+        \ 'T': 'tabnew',
+        \ }
+
   setlocal modifiable
 
-  if has_key(s:markers, line)
-    if s:markers[line].type == a:type  " remove type
-      execute 'normal! ci]'. s:markers[line].original_index
-      call remove(s:markers, line)
-    else  " update type
-      execute 'normal! ci]'. repeat(a:type, len(index))
-      let s:markers[line].type = a:type
-      let s:markers[line].tick = s:tick
-      let s:tick += 1
-    endif
-  else  " set type
-    let s:markers[line] = {
-          \ 'line': line,
-          \ 'type': a:type,
-          \ 'original_index': index,
-          \ 'tick': s:tick,
-          \ }
+  if entry.marked && index[0] == a:type
+    let entry.cmd = 'edit'
+    let entry.marked = 0
+    execute 'normal! ci]'. entry.index
+  else
+    let entry.cmd = default_cmds[a:type]
+    let entry.marked = 1
+    let entry.tick = s:tick
     let s:tick += 1
     execute 'normal! ci]'. repeat(a:type, len(index))
   endif

@@ -49,5 +49,6 @@ command! -nargs=? -bar -complete=customlist,startify#session_list SLoad   call s
 command! -nargs=? -bar -complete=customlist,startify#session_list SDelete call startify#session_delete(<f-args>)
 command! -nargs=0 -bar SClose call startify#session_close()
 command! -nargs=0 -bar Startify enew | call startify#insane_in_the_membrane()
+command! -nargs=0 -bar StartifyDebug call startify#debug()
 
 nnoremap <silent><plug>(startify-open-buffers) :<c-u>call startify#open_buffers()<cr>
