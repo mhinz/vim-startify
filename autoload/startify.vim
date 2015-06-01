@@ -344,13 +344,13 @@ endfunction
 
 " Function: #open_buffers {{{1
 function! startify#open_buffers(...) abort
-  if exists('a:1')
-    execute s:entries[a:1].cmd s:entries[a:1].path
-    return
+  if exists('a:1')  " used in mappings
+    call s:set_mark('B', a:1)
+    return startify#open_buffers()
   endif
 
   let marked = filter(copy(s:entries), 'v:val.marked')
-  if empty(marked)
+  if empty(marked)  " open current entry
     call s:set_mark('B')
     return startify#open_buffers()
   endif
@@ -358,6 +358,7 @@ function! startify#open_buffers(...) abort
   enew
   setlocal nobuflisted
 
+  " Open all marked entries.
   for entry in sort(values(marked), 's:sort_by_tick')
     if line2byte('$') == -1
       execute 'edit' entry.path
@@ -604,9 +605,10 @@ function! s:set_mappings() abort
 endfunction
 
 " Function: s:set_mark {{{1
-function! s:set_mark(type) abort
+function! s:set_mark(type, ...) abort
   let index = expand('<cword>')
-  let entry = s:entries[line('.')]
+  let line  = exists('a:1') ? a:1 : line('.')
+  let entry = s:entries[line]
 
   if (index =~# '^[eq]$') || (entry.type == 'session')
     return
