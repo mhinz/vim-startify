@@ -500,7 +500,10 @@ function! s:show_bookmarks() abort
   for fname in g:startify_bookmarks
     let index = s:get_index_as_string(s:entry_number)
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-    execute 'nnoremap <buffer><silent>' index ':edit' fnameescape(fname) '<bar> call <sid>check_user_options()<cr>'
+    if has('win32')
+      let absolute_path = substitute(fname, '\[', '\[[]', 'g')
+    endif
+    let s:entries[index] = fname
     let s:entry_number += 1
   endfor
 
