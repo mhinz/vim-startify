@@ -355,6 +355,7 @@ function! startify#open_buffers(...) abort
   if exists('a:1')  " used in mappings
     let entry = s:entries[a:1]
     execute entry.cmd entry.path
+    call s:check_user_options()
     return
   endif
 
@@ -362,6 +363,7 @@ function! startify#open_buffers(...) abort
   if empty(marked)  " open current entry
     let entry = s:entries[line('.')]
     execute entry.cmd entry.path
+    call s:check_user_options()
     return
   endif
 
