@@ -74,8 +74,8 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['   [e]  <empty buffer>', ''])
-    call s:register(line('$')-1, 'e', 'special', 'enew', '')
   endif
+  call s:register(line('$')-1, 'e', 'special', 'enew', '')
 
   let s:entry_number = 0
   if filereadable('Session.vim')
@@ -117,8 +117,8 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
-    call s:register(line('$'), 'q', 'special', 'call s:close()', '')
   endif
+  call s:register(line('$'), 'q', 'special', 'call s:close()', '')
 
   " compute first line offset
   let s:firstline = 2
