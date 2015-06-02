@@ -69,14 +69,30 @@ function! startify#insane_in_the_membrane() abort
     call append('$', g:startify_custom_header)
   endif
 
+  let s:tick = 0
+  let s:entries = {}
+
   if s:show_special
     call append('$', ['   [e]  <empty buffer>', ''])
+    let s:entries[line('$')-1] = {
+          \ 'index':  'e',
+          \ 'type':   'special',
+          \ 'cmd':    'enew',
+          \ 'path':   '',
+          \ 'marked': 0,
+          \ }
   endif
 
   let s:entry_number = 0
   if filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
-    execute 'nnoremap <silent><buffer> 0 :call startify#session_delete_buffers() <bar> source Session.vim<cr>'
+    let s:entries[line('$')-1] = {
+          \ 'index':  '0',
+          \ 'type':   'session',
+          \ 'cmd':    'call startify#session_delete_buffers() | source',
+          \ 'path':   'Session.vim',
+          \ 'marked': 0,
+          \ }
     let s:entry_number = 1
     let l:show_session = 1
   endif
@@ -99,9 +115,6 @@ function! startify#insane_in_the_membrane() abort
         \ 'bookmarks',
         \ ])
 
-  let s:tick = 0
-  let s:entries = {}
-
   for item in s:lists
     if type(item) == 1
       call s:show_{item}()
@@ -115,6 +128,13 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
+    let s:entries[line('$')] = {
+          \ 'index':  'q',
+          \ 'type':   'special',
+          \ 'cmd':    'call <sid>close()',
+          \ 'path':   '',
+          \ 'marked': 0,
+          \ }
   endif
 
   " compute first line offset
@@ -345,14 +365,16 @@ endfunction
 " Function: #open_buffers {{{1
 function! startify#open_buffers(...) abort
   if exists('a:1')  " used in mappings
-    call s:set_mark('B', a:1)
-    return startify#open_buffers()
+    let entry = s:entries[a:1]
+    execute entry.cmd entry.path
+    return
   endif
 
   let marked = filter(copy(s:entries), 'v:val.marked')
   if empty(marked)  " open current entry
-    call s:set_mark('B')
-    return startify#open_buffers()
+    let entry = s:entries[line('.')]
+    execute entry.cmd entry.path
+    return
   endif
 
   enew
@@ -360,13 +382,19 @@ function! startify#open_buffers(...) abort
 
   " Open all marked entries.
   for entry in sort(values(marked), 's:sort_by_tick')
-    if line2byte('$') == -1
-      execute 'edit' entry.path
-    else
+    if entry.type == 'special'
+      execute entry.cmd
+    elseif entry.type == 'session'
       execute entry.cmd entry.path
-    endif
+    elseif entry.type == 'file'
+      if line2byte('$') == -1
+        execute 'edit' entry.path
+      else
+        execute entry.cmd entry.path
+      endif
 
-    call s:check_user_options()
+      call s:check_user_options()
+    endif
   endfor
 endfunction
 
@@ -583,7 +611,6 @@ function! s:set_mappings() abort
           \ ':call startify#open_buffers('. string(k) .')<cr>'
   endfor
 
-  nnoremap <buffer><silent> e             :enew<cr>
   nnoremap <buffer><silent> i             :enew <bar> startinsert<cr>
   nnoremap <buffer><silent> <insert>      :enew <bar> startinsert<cr>
   nnoremap <buffer><silent> b             :call <sid>set_mark('B')<cr>
@@ -592,7 +619,6 @@ function! s:set_mappings() abort
   nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
   nnoremap <buffer><silent> <cr>          :call startify#open_buffers()<cr>
   nnoremap <buffer><silent> <2-LeftMouse> :call startify#open_buffers()<cr>
-  nnoremap <buffer><silent> q             :call <sid>close()<cr>
 
   " Prevent 'nnoremap j gj' mappings, since they would break navigation.
   " (One can't leave the [x].)
@@ -610,7 +636,7 @@ function! s:set_mark(type, ...) abort
   let line  = exists('a:1') ? a:1 : line('.')
   let entry = s:entries[line]
 
-  if (index =~# '^[eq]$') || (entry.type == 'session')
+  if entry.type != 'file'
     return
   endif
 
