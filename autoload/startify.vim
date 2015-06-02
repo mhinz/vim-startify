@@ -341,7 +341,7 @@ function! startify#session_list_as_string(lead, ...) abort
   return join(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), "\n")
 endfunction
 
-" Function: startify#debug {{{1
+" Function: #debug {{{1
 function! startify#debug()
   if exists('s:entries')
     for k in sort(keys(s:entries))
@@ -523,7 +523,7 @@ function! s:show_bookmarks() abort
     let index = s:get_index_as_string(s:entry_number)
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     if has('win32')
-      let absolute_path = substitute(fname, '\[', '\[[]', 'g')
+      let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
     call s:register(line('$'), index, 'file', 'edit', fname)
     let s:entry_number += 1
