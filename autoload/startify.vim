@@ -117,8 +117,11 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
+    call s:register(line('$'), 'q', 'special', 'call s:close()', '')
+  else
+    " Don't overwrite the last regular entry, thus +1
+    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '')
   endif
-  call s:register(line('$'), 'q', 'special', 'call s:close()', '')
 
   " compute first line offset
   let s:firstline = 2
