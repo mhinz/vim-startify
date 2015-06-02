@@ -340,9 +340,11 @@ endfunction
 
 " Function: startify#debug {{{1
 function! startify#debug()
-  for k in sort(keys(s:entries))
-    echomsg '['. k .'] = '. string(s:entries[k])
-  endfor
+  if exists('s:entries')
+    for k in sort(keys(s:entries))
+      echomsg '['. k .'] = '. string(s:entries[k])
+    endfor
+  endif
 endfunction
 
 " Function: #open_buffers {{{1
