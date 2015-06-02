@@ -74,25 +74,14 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['   [e]  <empty buffer>', ''])
-    let s:entries[line('$')-1] = {
-          \ 'index':  'e',
-          \ 'type':   'special',
-          \ 'cmd':    'enew',
-          \ 'path':   '',
-          \ 'marked': 0,
-          \ }
+    call s:register(line('$')-1, 'e', 'special', 'enew', '')
   endif
 
   let s:entry_number = 0
   if filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
-    let s:entries[line('$')-1] = {
-          \ 'index':  '0',
-          \ 'type':   'session',
-          \ 'cmd':    'call startify#session_delete_buffers() | source',
-          \ 'path':   'Session.vim',
-          \ 'marked': 0,
-          \ }
+    call s:register(line('$')-1, '0', 'session',
+          \ 'call startify#session_delete_buffers() | source', 'Session.vim')
     let s:entry_number = 1
     let l:show_session = 1
   endif
@@ -128,13 +117,7 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
-    let s:entries[line('$')] = {
-          \ 'index':  'q',
-          \ 'type':   'special',
-          \ 'cmd':    'call <sid>close()',
-          \ 'path':   '',
-          \ 'marked': 0,
-          \ }
+    call s:register(line('$'), 'q', 'special', 'call s:close()', '')
   endif
 
   " compute first line offset
@@ -414,13 +397,7 @@ function! s:display_by_path(path_prefix, path_format) abort
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
-      let s:entries[line('$')] = {
-            \ 'index':  index,
-            \ 'type':   'file',
-            \ 'cmd':    'edit',
-            \ 'path':   absolute_path,
-            \ 'marked': 0,
-            \ }
+      call s:register(line('$'), index, 'file', 'edit', absolute_path)
       let s:entry_number += 1
     endfor
 
@@ -520,13 +497,7 @@ function! s:show_sessions() abort
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
-    let s:entries[line('$')] = {
-          \ 'index':  index,
-          \ 'type':   'session',
-          \ 'cmd':    'SLoad',
-          \ 'path':   fname,
-          \ 'marked': 0,
-          \ }
+    call s:register(line('$'), index, 'session', 'SLoad', fname)
     let s:entry_number += 1
   endfor
 
@@ -549,13 +520,7 @@ function! s:show_bookmarks() abort
     if has('win32')
       let absolute_path = substitute(fname, '\[', '\[[]', 'g')
     endif
-    let s:entries[line('$')] = {
-          \ 'index':  index,
-          \ 'type':   'file',
-          \ 'cmd':    'edit',
-          \ 'path':   fname,
-          \ 'marked': 0,
-          \ }
+    call s:register(line('$'), index, 'file', 'edit', fname)
     let s:entry_number += 1
   endfor
 
@@ -736,4 +701,15 @@ function! s:print_section_header() abort
 
   call append('$', s:last_message + [''])
   unlet s:last_message
+endfunction
+
+" Function: s:register {{{1
+function! s:register(line, index, type, cmd, path)
+  let s:entries[a:line] = {
+        \ 'index':  a:index,
+        \ 'type':   a:type,
+        \ 'cmd':    a:cmd,
+        \ 'path':   a:path,
+        \ 'marked': 0,
+        \ }
 endfunction
