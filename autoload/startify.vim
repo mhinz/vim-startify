@@ -353,17 +353,13 @@ endfunction
 " Function: #open_buffers {{{1
 function! startify#open_buffers(...) abort
   if exists('a:1')  " used in mappings
-    let entry = s:entries[a:1]
-    execute entry.cmd entry.path
-    call s:check_user_options()
+    call s:open_buffer(s:entries[a:1])
     return
   endif
 
   let marked = filter(copy(s:entries), 'v:val.marked')
   if empty(marked)  " open current entry
-    let entry = s:entries[line('.')]
-    execute entry.cmd entry.path
-    call s:check_user_options()
+    call s:open_buffer(s:entries[line('.')])
     return
   endif
 
@@ -372,20 +368,24 @@ function! startify#open_buffers(...) abort
 
   " Open all marked entries.
   for entry in sort(values(marked), 's:sort_by_tick')
-    if entry.type == 'special'
-      execute entry.cmd
-    elseif entry.type == 'session'
-      execute entry.cmd entry.path
-    elseif entry.type == 'file'
-      if line2byte('$') == -1
-        execute 'edit' entry.path
-      else
-        execute entry.cmd entry.path
-      endif
-
-      call s:check_user_options()
-    endif
+    call s:open_buffer(entry)
   endfor
+endfunction
+
+" Function: s:open_buffer {{{1
+function! s:open_buffer(entry)
+  if a:entry.type == 'special'
+    execute a:entry.cmd
+  elseif a:entry.type == 'session'
+    execute a:entry.cmd a:entry.path
+  elseif a:entry.type == 'file'
+    if line2byte('$') == -1
+      execute 'edit' a:entry.path
+    else
+      execute a:entry.cmd a:entry.path
+    endif
+    call s:check_user_options()
+  endif
 endfunction
 
 " Function: s:display_by_path {{{1
@@ -656,7 +656,7 @@ function! s:check_user_options() abort
     if isdirectory(path)
       lcd %
     else
-      lcd %:h
+      lcd %:p:h
     endif
   endif
 endfunction
