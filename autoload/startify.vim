@@ -268,7 +268,7 @@ function! startify#session_write(spath)
     " remove lines from the session file
     if exists('g:startify_session_remove_lines')
       for pattern in g:startify_session_remove_lines
-        execute 'silent global/'. pattern .'/delete'
+        execute 'silent global/'. pattern .'/delete _'
       endfor
     endif
 
