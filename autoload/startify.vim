@@ -19,7 +19,7 @@ let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
 
 let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'COMMIT_EDITMSG',
-      \ fnamemodify($VIMRUNTIME, ':p') .'/doc',
+      \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') .'doc',
       \ 'bundle/.*/doc',
       \ ])
 
@@ -89,7 +89,7 @@ function! startify#insane_in_the_membrane() abort
   if empty(v:oldfiles)
     echohl WarningMsg
     echomsg "startify: Can't read viminfo file.  Read :help startify-faq-02"
-    echohl None
+    echohl NONE
   endif
 
   let b:startify_section_header_lines = []
@@ -537,9 +537,15 @@ endfunction
 " Function: s:is_in_skiplist {{{1
 function! s:is_in_skiplist(arg) abort
   for regexp in s:skiplist
-    if (a:arg =~# regexp)
-      return 1
-    endif
+    try
+      if a:arg =~# regexp
+        return 1
+      endif
+    catch
+      echohl WarningMsg
+      echomsg 'startify: Pattern '. string(regexp) .' threw an exception. Read :help g:startify_skiplist'
+      echohl NONE
+    endtry
   endfor
 endfunction
 

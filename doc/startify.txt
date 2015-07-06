@@ -247,17 +247,18 @@ At the moment only git, hg, bzr and svn are supported.
 >
     let g:startify_skiplist = [
         \ 'COMMIT_EDITMSG',
-        \ fnamemodify($VIMRUNTIME, ':p') .'/doc',
+        \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') .'doc',
         \ 'bundle/.*/doc',
-        \ '.vimgolf',
         \ ]
 <
 A list of Vim regular expressions that is used to filter recently used files.
 See |pattern.txt| for what patterns can be used.
 
-NOTE: Due to the nature of patterns, you can't just use something like
-"'~/mysecret'" but have to use "$HOME . '/mysecret.txt". The former would do
-something entirely different: |/\~|
+NOTE: Due to the nature of patterns, you can't just use "~/mysecret" but have
+to use "$HOME .'/mysecret.txt'". The former would do something entirely
+different: |/\~|. When using backslashes as path separators, escape them.
+Otherwise using "C:\this\vim\path\is\problematic" would not match what you
+expect, since |/\v| is a pattern, too.
 
 Example:
 >
@@ -265,7 +266,7 @@ Example:
            \ '\.vimgolf',
            \ '^/tmp',
            \ '/project/.*/documentation',
-           \ $HOME . '/mysecret.txt',
+           \ escape(fnamemodify($HOME, ':p'), '\') .'mysecret.txt',
            \ ]
 <
 ------------------------------------------------------------------------------
@@ -629,15 +630,8 @@ Some people swear it works for them with these settings:
                                                                *startify-faq-04*
 How to disable common but unimportant files?~
 
-Use the skiplist. Personally I use:
->
-    let g:startify_skiplist = [
-           \ 'COMMIT_EDITMSG',
-           \ fnamemodify($VIMRUNTIME, ':p') .'/doc',
-           \ 'bundle/.*/doc',
-           \ '\.DS_Store'
-           \ ]
-<
+Use |g:startify_skiplist|.
+
 ------------------------------------------------------------------------------
                                                                *startify-faq-05*
 CtrlP or NERDTree open a split in Startify!~
@@ -714,9 +708,9 @@ This is my configuration..
 
     let g:startify_skiplist = [
                 \ 'COMMIT_EDITMSG',
-                \ fnamemodify($VIMRUNTIME, ':p') .'/doc',
                 \ 'bundle/.*/doc',
-                \ '\.vimgolf',
+                \ '/data/repo/neovim/runtime/doc',
+                \ '/Users/mhi/local/vim/share/vim/vim74/doc',
                 \ ]
 
     let g:startify_bookmarks = [
