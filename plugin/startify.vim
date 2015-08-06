@@ -31,7 +31,7 @@ function! s:genesis()
       call startify#insane_in_the_membrane()
     endif
   endif
-  autocmd startify BufNewFile,BufRead *
+  autocmd startify BufNewFile,BufRead,BufFilePre *
         \ if !g:startify_locked && exists('v:oldfiles') |
         \   call insert(v:oldfiles, expand('<afile>'), 0) |
         \ endif
