@@ -374,6 +374,8 @@ function! startify#open_buffers(...) abort
   for entry in sort(values(marked), 's:sort_by_tick')
     call s:open_buffer(entry)
   endfor
+
+  wincmd =
 endfunction
 
 " Function: s:open_buffer {{{1
@@ -386,6 +388,9 @@ function! s:open_buffer(entry)
     if line2byte('$') == -1
       execute 'edit' a:entry.path
     else
+      if a:entry.cmd == 'tabnew'
+        wincmd =
+      endif
       execute a:entry.cmd a:entry.path
     endif
     call s:check_user_options()
