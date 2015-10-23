@@ -594,18 +594,18 @@ endfunction
 " Function: s:set_mappings {{{1
 function! s:set_mappings() abort
   for k in keys(s:entries)
-    execute 'nnoremap <buffer><silent>' s:entries[k].index
+    execute 'nnoremap <buffer><silent><nowait>' s:entries[k].index
           \ ':call startify#open_buffers('. string(k) .')<cr>'
   endfor
 
-  nnoremap <buffer><silent> i             :enew <bar> startinsert<cr>
-  nnoremap <buffer><silent> <insert>      :enew <bar> startinsert<cr>
-  nnoremap <buffer><silent> b             :call <sid>set_mark('B')<cr>
-  nnoremap <buffer><silent> s             :call <sid>set_mark('S')<cr>
-  nnoremap <buffer><silent> t             :call <sid>set_mark('T')<cr>
-  nnoremap <buffer><silent> v             :call <sid>set_mark('V')<cr>
-  nnoremap <buffer><silent> <cr>          :call startify#open_buffers()<cr>
-  nnoremap <buffer><silent> <2-LeftMouse> :call startify#open_buffers()<cr>
+  nnoremap <buffer><silent><nowait> i             :enew <bar> startinsert<cr>
+  nnoremap <buffer><silent><nowait> <insert>      :enew <bar> startinsert<cr>
+  nnoremap <buffer><silent><nowait> b             :call <sid>set_mark('B')<cr>
+  nnoremap <buffer><silent><nowait> s             :call <sid>set_mark('S')<cr>
+  nnoremap <buffer><silent><nowait> t             :call <sid>set_mark('T')<cr>
+  nnoremap <buffer><silent><nowait> v             :call <sid>set_mark('V')<cr>
+  nnoremap <buffer><silent><nowait> <cr>          :call startify#open_buffers()<cr>
+  nnoremap <buffer><silent><nowait> <2-LeftMouse> :call startify#open_buffers()<cr>
 
   " Prevent 'nnoremap j gj' mappings, since they would break navigation.
   " (One can't leave the [x].)
