@@ -529,14 +529,19 @@ function! s:show_bookmarks() abort
     call s:print_section_header()
   endif
 
-  for fname in g:startify_bookmarks
-    let index = s:get_index_as_string(s:entry_number)
+  for bookmark in g:startify_bookmarks
+    if type(bookmark) == 4  " dict?
+      let [index, fname] = items(bookmark)[0]
+    else  " string
+      let [index, fname] = [s:get_index_as_string(s:entry_number), bookmark]
+      let s:entry_number += 1
+    endif
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
     call s:register(line('$'), index, 'file', 'edit', fname)
-    let s:entry_number += 1
+    unlet bookmark  " avoid type mismatch for heterogeneous lists
   endfor
 
   call append('$', '')

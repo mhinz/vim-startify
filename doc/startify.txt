@@ -177,12 +177,13 @@ Feel free to add some cool ASCII action!
 >
     let g:startify_bookmarks = []
 <
-A list of files to bookmark. Those files will always be shown at the bottom of
-the start screen.
+A list of files or directories to bookmark. The list can contain two kinds of
+types. Either a path or a dictionary whereas the key is the custom index and
+the value the path.
 
 Example:
 >
-    let g:startify_bookmarks = [ '~/.vimrc' ]
+    let g:startify_bookmarks = [ {'v': '~/.vimrc'}, '~/.zshrc' ]
 <
 ------------------------------------------------------------------------------
                                                        *g:startify_files_number*
@@ -714,7 +715,8 @@ This is my configuration..
                 \ ]
 
     let g:startify_bookmarks = [
-                \ '~/.vim/vimrc',
+                \ { 'v': '~/.vim/vimrc' },
+                \ { 't': '/tmp' },
                 \ '/data/vim/golfing',
                 \ ]
 
