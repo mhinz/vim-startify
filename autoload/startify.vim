@@ -402,6 +402,13 @@ function! s:display_by_path(path_prefix, path_format) abort
   let oldfiles = call(get(g:, 'startify_enable_unsafe') ? 's:filter_oldfiles_unsafe' : 's:filter_oldfiles',
         \ [a:path_prefix, a:path_format])
 
+  let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
+  if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
+    let entry_format .= ". '('. WebDevIconsGetFileTypeSymbol(entry_path) .') '. entry_path"
+  else
+    let entry_format .= '. entry_path'
+  endif
+
   if !empty(oldfiles)
     if exists('s:last_message')
       call s:print_section_header()
@@ -409,7 +416,7 @@ function! s:display_by_path(path_prefix, path_format) abort
 
     for [absolute_path, entry_path] in oldfiles
       let index = s:get_index_as_string(s:entry_number)
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
+      call append('$', eval(entry_format))
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
