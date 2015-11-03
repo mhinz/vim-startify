@@ -24,7 +24,7 @@ augroup startify
 augroup END
 
 function! s:genesis()
-  if !argc() && (line2byte('$') == -1) && (v:progname =~? '^[-gmnq]\=vim\=x\=\%[\.exe]$')
+  if !argc() && (line2byte('$') == -1)
     if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
       source Session.vim
     else
