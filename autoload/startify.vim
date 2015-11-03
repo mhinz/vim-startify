@@ -439,7 +439,6 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
     if has_key(entries, absolute_path)
           \ || !filereadable(absolute_path)
           \ || s:is_in_skiplist(absolute_path)
-          \ || (exists('g:startify_bookmarks') && s:is_bookmark(absolute_path))
           \ || match(absolute_path, path_prefix)
       continue
     endif
@@ -555,15 +554,6 @@ function! s:is_in_skiplist(arg) abort
       echomsg 'startify: Pattern '. string(regexp) .' threw an exception. Read :help g:startify_skiplist'
       echohl NONE
     endtry
-  endfor
-endfunction
-
-" Function: s:is_bookmark {{{1
-function! s:is_bookmark(arg) abort
-  for foo in map(filter(copy(g:startify_bookmarks), '!isdirectory(v:val)'), 'resolve(fnamemodify(v:val, ":p"))')
-    if foo == a:arg
-      return 1
-    endif
   endfor
 endfunction
 
