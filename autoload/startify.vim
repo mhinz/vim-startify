@@ -494,7 +494,7 @@ endfunction
 
 " Function: s:show_sessions {{{1
 function! s:show_sessions() abort
-  let sfiles = split(globpath(s:session_dir, '*'), '\n')
+  let sfiles = filter(split(globpath(s:session_dir, '*'), '\n'), 'v:val !~# "x\.vim$"')
   if empty(sfiles)
     if exists('s:last_message')
       unlet s:last_message
