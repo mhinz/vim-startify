@@ -593,11 +593,6 @@ endfunction
 
 " Function: s:set_mappings {{{1
 function! s:set_mappings() abort
-  for k in keys(s:entries)
-    execute 'nnoremap <buffer><nowait><silent>' s:entries[k].index
-          \ ':call startify#open_buffers('. string(k) .')<cr>'
-  endfor
-
   nnoremap <buffer><nowait><silent> i             :enew <bar> startinsert<cr>
   nnoremap <buffer><nowait><silent> <insert>      :enew <bar> startinsert<cr>
   nnoremap <buffer><nowait><silent> b             :call <sid>set_mark('B')<cr>
@@ -606,6 +601,11 @@ function! s:set_mappings() abort
   nnoremap <buffer><nowait><silent> v             :call <sid>set_mark('V')<cr>
   nnoremap <buffer><nowait><silent> <cr>          :call startify#open_buffers()<cr>
   nnoremap <buffer><nowait><silent> <2-LeftMouse> :call startify#open_buffers()<cr>
+
+  for k in keys(s:entries)
+    execute 'nnoremap <buffer><nowait><silent>' s:entries[k].index
+          \ ':call startify#open_buffers('. string(k) .')<cr>'
+  endfor
 
   " Prevent 'nnoremap j gj' mappings, since they would break navigation.
   " (One can't leave the [x].)
