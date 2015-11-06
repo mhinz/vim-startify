@@ -248,7 +248,7 @@ At the moment only git, hg, bzr and svn are supported.
 >
     let g:startify_skiplist = [
         \ 'COMMIT_EDITMSG',
-        \ escape(fnamemodify($VIMRUNTIME, ':p'), '\') .'doc',
+        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
         \ 'bundle/.*/doc',
         \ ]
 <
