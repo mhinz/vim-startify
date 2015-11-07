@@ -93,6 +93,7 @@ default values.
     |g:startify_custom_footer|
     |g:startify_custom_header|
     |g:startify_custom_indices|
+    |g:startify_custom_file_entry_display|
     |g:startify_disable_at_vimenter|
     |g:startify_enable_special|
     |g:startify_enable_unsafe|
@@ -446,6 +447,33 @@ Also have a look at |startify-faq-08|.
     let g:startify_custom_footer = ''
 <
 Same as the custom header, but shown at the bottom of the startify buffer.
+
+------------------------------------------------------------------------------
+                                          *g:startify_custom_file_entry_display*
+>
+    let g:startify_custom_file_entry_display =
+            \ "repeat(' ', (3 - strlen(index))) . entry_path"
+<
+Use any list of strings as indices instead of increasing numbers. If there are
+more startify entries than actual items in the custom list, the remaining
+entries will be filled using the default numbering scheme starting from 0.
+
+Thus you can create your own indexing scheme that fits your keyboard layout.
+You don't want to leave the home row, do you?!
+
+Example:
+>
+    let g:startify_custom_file_entry_display =
+            \ "' >' . repeat(' ', (3 - strlen(index))) . entry_path"
+<
+This would result in:
+
+    [0] >  /most/recently/used/file1
+    [1] >  /most/recently/used/file2
+    [2] >  /most/recently/used/file3
+    etc.
+
+NOTE: There is no sanitizing going on, so you should know what you're doing!
 
 ------------------------------------------------------------------------------
                                                 *g:startify_disable_at_vimenter*

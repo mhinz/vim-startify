@@ -16,6 +16,8 @@ let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
 let s:relative_path  = get(g:, 'startify_relative_path') ? ':.' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
+let s:file_entry_display  = get(g:, 'startify_custom_file_entry_display', 
+      \ "repeat(' ', (3 - strlen(index))) . entry_path")
 
 let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'COMMIT_EDITMSG',
@@ -409,7 +411,7 @@ function! s:display_by_path(path_prefix, path_format) abort
 
     for [absolute_path, entry_path] in oldfiles
       let index = s:get_index_as_string(s:entry_number)
-      call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
+      call append('$', '   ['. index .']' . eval(s:file_entry_display))
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
