@@ -605,7 +605,7 @@ function! s:set_mappings() abort
   nnoremap <buffer><nowait><silent> <2-LeftMouse> :call startify#open_buffers()<cr>
 
   for k in keys(s:entries)
-    execute 'nnoremap <buffer><nowait><silent>' s:entries[k].index
+    execute 'nnoremap <buffer><silent>' s:entries[k].index
           \ ':call startify#open_buffers('. string(k) .')<cr>'
   endfor
 
