@@ -75,7 +75,7 @@ function! startify#insane_in_the_membrane() abort
   if s:show_special
     call append('$', ['   [e]  <empty buffer>', ''])
   endif
-  call s:register(line('$')-1, 'e', 'special', 'enew', '')
+  call s:register(line('$')-1, 'e', 'special', 'enew', '', 1)
 
   let s:entry_number = 0
   if filereadable('Session.vim')
@@ -117,10 +117,10 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
-    call s:register(line('$'), 'q', 'special', 'call s:close()', '')
+    call s:register(line('$'), 'q', 'special', 'call s:close()', '', 1)
   else
     " Don't overwrite the last regular entry, thus +1
-    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '')
+    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '', 1)
   endif
 
   " compute first line offset
@@ -605,7 +605,7 @@ function! s:set_mappings() abort
   nnoremap <buffer><nowait><silent> <2-LeftMouse> :call startify#open_buffers()<cr>
 
   for k in keys(s:entries)
-    execute 'nnoremap <buffer><silent>' s:entries[k].index
+    execute 'nnoremap <buffer><silent>'. s:entries[k].nowait s:entries[k].index
           \ ':call startify#open_buffers('. string(k) .')<cr>'
   endfor
 
@@ -728,12 +728,13 @@ function! s:print_section_header() abort
 endfunction
 
 " Function: s:register {{{1
-function! s:register(line, index, type, cmd, path)
+function! s:register(line, index, type, cmd, path, ...)
   let s:entries[a:line] = {
         \ 'index':  a:index,
         \ 'type':   a:type,
         \ 'cmd':    a:cmd,
         \ 'path':   a:path,
         \ 'marked': 0,
+        \ 'nowait': a:0 ? '<nowait>' : '',
         \ }
 endfunction
