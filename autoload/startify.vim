@@ -159,20 +159,31 @@ function! startify#session_load(...) abort
     echomsg 'There are no sessions...'
     return
   endif
-  call inputsave()
-  let spath = s:session_dir . s:sep . (exists('a:1')
-        \ ? a:1
-        \ : input('Load this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
-        \ | redraw
-  call inputrestore()
+
+  let spath = s:session_dir . s:sep
+
+  if a:0
+    let spath .= a:1
+  else
+    if has('win32')
+      call inputsave()
+      let spath .= input(
+            \ 'Load this session: ',
+            \ fnamemodify(v:this_session, ':t'),
+            \ 'custom,startify#session_list_as_string') | redraw
+      call inputrestore()
+    else
+      let spath .= '__LAST__'
+    endif
+  endif
+
   if filereadable(spath)
-    if get(g:, 'startify_session_persistence')
-          \ && exists('v:this_session')
-          \ && filewritable(v:this_session)
+    if get(g:, 'startify_session_persistence') && filewritable(v:this_session)
       call startify#session_write(fnameescape(v:this_session))
     endif
     call startify#session_delete_buffers()
     execute 'source '. fnameescape(spath)
+    call s:create_last_session_link(spath)
   else
     echo 'No such file: '. spath
   endif
@@ -290,6 +301,8 @@ function! startify#session_write(spath)
     silent update
     silent hide
   endif
+
+  call s:create_last_session_link(a:spath)
 endfunction
 
 " Function: #session_delete {{{1
@@ -337,12 +350,12 @@ endfunction
 
 " Function: #session_list {{{1
 function! startify#session_list(lead, ...) abort
-  return map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")')
+  return filter(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), 'v:val !=# "__LAST__"')
 endfunction
 
 " Function: #session_list_as_string {{{1
 function! startify#session_list_as_string(lead, ...) abort
-  return join(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), "\n")
+  return join(filter(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), 'v:val !=# "__LAST__"'), "\n")
 endfunction
 
 " Function: #debug {{{1
@@ -500,7 +513,8 @@ endfunction
 
 " Function: s:show_sessions {{{1
 function! s:show_sessions() abort
-  let sfiles = filter(split(globpath(s:session_dir, '*'), '\n'), 'v:val !~# "x\.vim$"')
+  let sfiles = filter(split(globpath(s:session_dir, '*'), '\n'),
+        \ 'v:val !~# "x\.vim$" && v:val !~# "__LAST__$"')
   if empty(sfiles)
     if exists('s:last_message')
       unlet s:last_message
@@ -737,4 +751,17 @@ function! s:register(line, index, type, cmd, path, ...)
         \ 'marked': 0,
         \ 'nowait': a:0 ? '<nowait>' : '',
         \ }
+endfunction
+
+" Function: s:create_last_session_link {{{1
+function! s:create_last_session_link(spath)
+  if !has('win32') && a:spath !~# '__LAST__$'
+    call system('cd '. shellescape(s:session_dir)
+          \ .' && ln -sf '. shellescape(fnamemodify(a:spath, ':t')) .' __LAST__')
+    if v:shell_error
+      echohl WarningMsg
+      echomsg "startify: Can't create 'last used session' symlink."
+      echohl NONE
+    endif
+  endif
 endfunction

@@ -475,13 +475,16 @@ user autocmd is issued. You can hook into it like this:
 ==============================================================================
 COMMANDS                                                     *startify-commands*
 >
-    :SLoad
-    :SSave
-    :SDelete
+    :SSave [session]
+    :SDelete [session]
 <
-Commands to load, save or delete a session. These take either 0 or 1 argument.
-If you don't specify the session name as an argument, they will just ask for
-it.
+Save or delete a session. If you don't specify a session name, it will prompt
+you for one.
+>
+    :SLoad [session]
+<
+Load a session. If you don't specify a session name, it will either prompt you
+for one (Windows) or load the last used session (Unix).
 
 Providing only a part of the session name works too, if you complete the
 argument with either <c-d> or <tab> afterwards.
