@@ -583,6 +583,7 @@ FAQ                                                               *startify-faq*
                      startup?
     |startify-faq-07|  The session autoload feature is not working!
     |startify-faq-08|  How do I center my header/footer?
+    |startify-faq-09|  tmux-resurrect?
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -683,6 +684,15 @@ Try something along these lines:
         return centered_lines
     endfunction
     let g:startify_custom_header = s:filter_header(['a', 'bb', 'ccc'])
+<
+------------------------------------------------------------------------------
+                                                               *startify-faq-09*
+tmux-resurrect?~
+
+If you use tmux-resurrect to restore your tmux environment, you can use :SLoad
+to load your last used session right away:
+>
+    set -g @resurrect-processes '"vim->vim +SLoad"'
 <
 ==============================================================================
 EXAMPLE                                                       *startify-example*
