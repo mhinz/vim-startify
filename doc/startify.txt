@@ -464,6 +464,14 @@ Show filenames relative to the current working directory instead of as
 absolute paths. This only applies to the "files" list, since the "dir" list is
 relative by nature.
 
+-----------------------------------------------------------------------------
+                                                     *g:startify_nowait_all*
+>
+    let g:startify_nowait_all = 1
+<
+Force the usage of nowait in all mappings. Leads to broken shortcuts if the
+indexes are numbers, such as in having shortcuts for "1" and "11".
+
 ==============================================================================
 AUTOCMD                                                       *startify-autocmd*
 

@@ -22,6 +22,7 @@ let s:skiplist = get(g:, 'startify_skiplist', [
       \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
       \ 'bundle/.*/doc',
       \ ])
+let s:nowait_all = get(g:, 'nowait_all', 0)
 
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
@@ -81,7 +82,7 @@ function! startify#insane_in_the_membrane() abort
   if filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
     call s:register(line('$')-1, '0', 'session',
-          \ 'call startify#session_delete_buffers() | source', 'Session.vim')
+          \ 'call startify#session_delete_buffers() | source', 'Session.vim', s:nowait_all)
     let s:entry_number = 1
     let l:show_session = 1
   endif
@@ -433,7 +434,7 @@ function! s:display_by_path(path_prefix, path_format) abort
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
-      call s:register(line('$'), index, 'file', 'edit', absolute_path)
+      call s:register(line('$'), index, 'file', 'edit', absolute_path, s:nowait_all)
       let s:entry_number += 1
     endfor
 
@@ -533,7 +534,7 @@ function! s:show_sessions() abort
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
-    call s:register(line('$'), index, 'session', 'SLoad', fname)
+    call s:register(line('$'), index, 'session', 'SLoad', fname, s:nowait_all)
     let s:entry_number += 1
   endfor
 
@@ -561,7 +562,7 @@ function! s:show_bookmarks() abort
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
-    call s:register(line('$'), index, 'file', 'edit', fname)
+    call s:register(line('$'), index, 'file', 'edit', fname, s:nowait_all)
     unlet bookmark  " avoid type mismatch for heterogeneous lists
   endfor
 
