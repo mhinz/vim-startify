@@ -12,6 +12,7 @@ let g:autoloaded_startify = 1
 " Init: values {{{1
 let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
+let s:nowait         = get(g:, 'startify_mapping_nowait')
 let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
 let s:relative_path  = get(g:, 'startify_relative_path') ? ':.' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
@@ -81,7 +82,8 @@ function! startify#insane_in_the_membrane() abort
   if filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
     call s:register(line('$')-1, '0', 'session',
-          \ 'call startify#session_delete_buffers() | source', 'Session.vim')
+          \ 'call startify#session_delete_buffers() | source', 'Session.vim',
+          \ s:nowait)
     let s:entry_number = 1
     let l:show_session = 1
   endif
@@ -433,7 +435,7 @@ function! s:display_by_path(path_prefix, path_format) abort
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
-      call s:register(line('$'), index, 'file', 'edit', absolute_path)
+      call s:register(line('$'), index, 'file', 'edit', absolute_path, s:nowait)
       let s:entry_number += 1
     endfor
 
@@ -533,7 +535,7 @@ function! s:show_sessions() abort
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
-    call s:register(line('$'), index, 'session', 'SLoad', fname)
+    call s:register(line('$'), index, 'session', 'SLoad', fname, s:nowait)
     let s:entry_number += 1
   endfor
 
@@ -561,7 +563,7 @@ function! s:show_bookmarks() abort
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
-    call s:register(line('$'), index, 'file', 'edit', fname)
+    call s:register(line('$'), index, 'file', 'edit', fname, s:nowait)
     unlet bookmark  " avoid type mismatch for heterogeneous lists
   endfor
 
