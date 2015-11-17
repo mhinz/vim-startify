@@ -14,7 +14,7 @@ let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
 let s:nowait         = get(g:, 'startify_mapping_nowait')
 let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
-let s:relative_path  = get(g:, 'startify_relative_path') ? ':.' : ':p:~'
+let s:relative_path  = get(g:, 'startify_relative_path') ? ':.:~' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
 
