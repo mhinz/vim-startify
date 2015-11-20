@@ -12,7 +12,7 @@ let g:autoloaded_startify = 1
 " Init: values {{{1
 let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
-let s:nowait         = get(g:, 'startify_mapping_nowait')
+let s:nowait         = get(g:, 'startify_mapping_nowait') ? '<nowait>' : ''
 let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
 let s:relative_path  = get(g:, 'startify_relative_path') ? ':.:~' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
@@ -76,7 +76,7 @@ function! startify#insane_in_the_membrane() abort
   if s:show_special
     call append('$', ['   [e]  <empty buffer>', ''])
   endif
-  call s:register(line('$')-1, 'e', 'special', 'enew', '', 1)
+  call s:register(line('$')-1, 'e', 'special', 'enew', '', '<nowait>')
 
   let s:entry_number = 0
   if filereadable('Session.vim')
@@ -119,10 +119,10 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
-    call s:register(line('$'), 'q', 'special', 'call s:close()', '', 1)
+    call s:register(line('$'), 'q', 'special', 'call s:close()', '', '<nowait>')
   else
     " Don't overwrite the last regular entry, thus +1
-    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '', 1)
+    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '', '<nowait>')
   endif
 
   " compute first line offset
@@ -744,14 +744,14 @@ function! s:print_section_header() abort
 endfunction
 
 " Function: s:register {{{1
-function! s:register(line, index, type, cmd, path, ...)
+function! s:register(line, index, type, cmd, path, wait)
   let s:entries[a:line] = {
         \ 'index':  a:index,
         \ 'type':   a:type,
         \ 'cmd':    a:cmd,
         \ 'path':   a:path,
+        \ 'nowait': a:wait,
         \ 'marked': 0,
-        \ 'nowait': a:0 ? '<nowait>' : '',
         \ }
 endfunction
 
