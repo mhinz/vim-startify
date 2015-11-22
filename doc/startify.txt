@@ -483,6 +483,8 @@ will be opened right way.
 
 Only use this when you know what you're doing.
 
+NOTE: This option needs at least Vim 7.3.1261. It gets ignored otherwise.
+
 ==============================================================================
 AUTOCMD                                                       *startify-autocmd*
 

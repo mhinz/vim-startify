@@ -10,9 +10,10 @@ endif
 let g:autoloaded_startify = 1
 
 " Init: values {{{1
+let s:nowait_string  = v:version >= 704 || (v:version == 703 && has('patch1261')) ? '<nowait>' : ''
+let s:nowait         = get(g:, 'startify_mapping_nowait') ? s:nowait_string : ''
 let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
-let s:nowait         = get(g:, 'startify_mapping_nowait') ? '<nowait>' : ''
 let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
 let s:relative_path  = get(g:, 'startify_relative_path') ? ':.:~' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
@@ -76,7 +77,7 @@ function! startify#insane_in_the_membrane() abort
   if s:show_special
     call append('$', ['   [e]  <empty buffer>', ''])
   endif
-  call s:register(line('$')-1, 'e', 'special', 'enew', '', '<nowait>')
+  call s:register(line('$')-1, 'e', 'special', 'enew', '', s:nowait_string)
 
   let s:entry_number = 0
   if filereadable('Session.vim')
@@ -119,10 +120,10 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', '   [q]  <quit>'])
-    call s:register(line('$'), 'q', 'special', 'call s:close()', '', '<nowait>')
+    call s:register(line('$'), 'q', 'special', 'call s:close()', '', s:nowait_string)
   else
     " Don't overwrite the last regular entry, thus +1
-    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '', '<nowait>')
+    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '', s:nowait_string)
   endif
 
   " compute first line offset
@@ -611,14 +612,14 @@ endfunction
 
 " Function: s:set_mappings {{{1
 function! s:set_mappings() abort
-  nnoremap <buffer><nowait><silent> i             :enew <bar> startinsert<cr>
-  nnoremap <buffer><nowait><silent> <insert>      :enew <bar> startinsert<cr>
-  nnoremap <buffer><nowait><silent> b             :call <sid>set_mark('B')<cr>
-  nnoremap <buffer><nowait><silent> s             :call <sid>set_mark('S')<cr>
-  nnoremap <buffer><nowait><silent> t             :call <sid>set_mark('T')<cr>
-  nnoremap <buffer><nowait><silent> v             :call <sid>set_mark('V')<cr>
-  nnoremap <buffer><nowait><silent> <cr>          :call startify#open_buffers()<cr>
-  nnoremap <buffer><nowait><silent> <2-LeftMouse> :call startify#open_buffers()<cr>
+  execute "nnoremap <buffer>". s:nowait_string ."<silent> i             :enew <bar> startinsert<cr>"
+  execute "nnoremap <buffer>". s:nowait_string ."<silent> <insert>      :enew <bar> startinsert<cr>"
+  execute "nnoremap <buffer>". s:nowait_string ."<silent> b             :call <sid>set_mark('B')<cr>"
+  execute "nnoremap <buffer>". s:nowait_string ."<silent> s             :call <sid>set_mark('S')<cr>"
+  execute "nnoremap <buffer>". s:nowait_string ."<silent> t             :call <sid>set_mark('T')<cr>"
+  execute "nnoremap <buffer>". s:nowait_string ."<silent> v             :call <sid>set_mark('V')<cr>"
+  execute "nnoremap <buffer>". s:nowait_string ."<silent> <cr>          :call startify#open_buffers()<cr>"
+  execute "nnoremap <buffer>". s:nowait_string ."<silent> <2-LeftMouse> :call startify#open_buffers()<cr>"
 
   for k in keys(s:entries)
     execute 'nnoremap <buffer><silent>'. s:entries[k].nowait s:entries[k].index
