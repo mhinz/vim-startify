@@ -118,6 +118,9 @@ works for both ways of handling sessions.
 TIP: Read `:help startify-options` to learn more about how to configure session
 handling to your liking.
 
+My own configuration can be found
+https://github.com/mhinz/dotfiles/blob/7e1989e902e5d9d25af5e15c2064f47a33e9d86b/vim/vimrc#L612-L642[here].
+
 == Installation and Documentation
 
 Use your favorite plugin manager.
