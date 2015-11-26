@@ -120,17 +120,15 @@ handling to your liking.
 
 == Installation and Documentation
 
-If you have no preferred installation method, I suggest using tpope's
-https://github.com/tpope/vim-pathogen[vim-pathogen]. Afterwards installing
-vim-startify is as easy as pie:
+Use your favorite plugin manager.
 
-    $ git clone https://github.com/mhinz/vim-startify ~/.vim/bundle/vim-startify
-    $ vim
+Using https://github.com/junegunn/vim-plug[vim-plug]:
+
+    Plug 'mhinz/vim-startify'
 
 It works without any configuration, but you might want to look into the
 documentation for further customization:
 
-    :Helptags  " rebuilding tags files
     :h startify
     :h startify-faq
 
