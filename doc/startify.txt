@@ -605,6 +605,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-07|  The session autoload feature is not working!
     |startify-faq-08|  How do I center my header/footer?
     |startify-faq-09|  tmux-resurrect?
+    |startify-faq-10|  Temporarily skip Startify at start?
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -714,6 +715,18 @@ If you use tmux-resurrect to restore your tmux environment, you can use :SLoad
 to load your last used session right away:
 >
     set -g @resurrect-processes '"vim->vim +SLoad"'
+<
+------------------------------------------------------------------------------
+                                                               *startify-faq-10*
+Temporarily skip Startify at start?~
+
+In some cases you might need to skip Startify at start. E.g.
+>
+    vim +VimwikiMakeDiaryNote
+<
+Startify would interfere in this case. A simple way to avoid that would be:
+>
+    vim --cmd 'let g:startify_disable_at_vimenter = 1' +VimwikiMakeDiaryNote
 <
 ==============================================================================
 EXAMPLE                                                       *startify-example*
