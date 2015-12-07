@@ -135,6 +135,13 @@ documentation for further customization:
     :h startify
     :h startify-faq
 
+=== Temporary disable plugin
+
+If you want to temporary disable startify ( --cmd is executed before processing .vimrc )
+
+    vim --cmd 'let g:startify_disable_at_vimenter = 1' +VimwikiMakeDiaryNote
+
+
 == Author and Feedback
 
 If you like my plugins, please star them on Github. It's a great way of getting
