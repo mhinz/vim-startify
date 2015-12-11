@@ -759,8 +759,10 @@ endfunction
 " Function: s:create_last_session_link {{{1
 function! s:create_last_session_link(spath)
   if !has('win32') && a:spath !~# '__LAST__$'
-    silent! call system('cd '. shellescape(s:session_dir)
-          \ .' && ln -sf '. shellescape(fnamemodify(a:spath, ':t')) .' __LAST__')
+    let cmd = printf('ln -sf %s %s',
+          \ shellescape(a:spath),
+          \ shellescape(fnamemodify(a:spath, ':h') .'/__LAST__'))
+    silent! call system(cmd)
     if v:shell_error
       echomsg "startify: Can't create 'last used session' symlink."
     endif
