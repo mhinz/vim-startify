@@ -23,6 +23,17 @@ augroup startify
   autocmd QuickFixCmdPost *vimgrep* let g:startify_locked = 0
 augroup END
 
+function! s:update_oldfiles(file)
+  if g:startify_locked || !exists('v:oldfiles')
+    return
+  endif
+  let idx = index(v:oldfiles, a:file)
+  if idx != -1
+    call remove(v:oldfiles, idx)
+  endif
+  call insert(v:oldfiles, a:file, 0)
+endfunction
+
 function! s:genesis()
   if !argc() && (line2byte('$') == -1)
     if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
@@ -32,9 +43,7 @@ function! s:genesis()
     endif
   endif
   autocmd startify BufNewFile,BufRead,BufFilePre *
-        \ if !g:startify_locked && exists('v:oldfiles') |
-        \   call insert(v:oldfiles, expand('<afile>'), 0) |
-        \ endif
+        \ call s:update_oldfiles(expand('<afile>'))
   autocmd! startify VimEnter
 endfunction
 
