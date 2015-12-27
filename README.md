@@ -19,8 +19,9 @@ options for fine-grained customization.
 ---
 
 - [Installation & Documentation](#installation-and-documentation)
+- [Plugin features in detail](https://github.com/mhinz/vim-startify/wiki/Plugin-features-in-detail)
 - [Screenshot](#screenshot)
-- [Author and Feedback](#author-and-feedback)
+- [Author & Feedback](#author-and-feedback)
 
 ---
 
