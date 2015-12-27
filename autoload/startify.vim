@@ -97,14 +97,10 @@ function! startify#insane_in_the_membrane() abort
 
   let b:startify_section_header_lines = []
   let s:lists = get(g:, 'startify_list_order', [
-        \ ['   Most recently used files:'],
-        \ 'files',
-        \ ['   Most recently used files in the current directory:'],
-        \ 'dir',
-        \ ['   My sessions:'],
-        \ 'sessions',
-        \ ['   My bookmarks:'],
-        \ 'bookmarks',
+        \ ['   MRU'],            'files',
+        \ ['   MRU '. getcwd()], 'dir',
+        \ ['   Sessions'],       'sessions',
+        \ ['   Bookmarks'],      'bookmarks',
         \ ])
 
   for item in s:lists
