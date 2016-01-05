@@ -606,6 +606,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-08|  How do I center my header/footer?
     |startify-faq-09|  tmux-resurrect?
     |startify-faq-10|  Temporarily skip Startify at start?
+    |startify-faq-11|  How to use the output of a command as header?
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -728,6 +729,23 @@ Startify would interfere in this case. A simple way to avoid that would be:
 >
     vim --cmd 'let g:startify_disable_at_vimenter = 1' +VimwikiMakeDiaryNote
 <
+------------------------------------------------------------------------------
+                                                               *startify-faq-11*
+How to use the output of a command as header?~
+>
+    redir => test
+      silent echo 'one'
+      silent echo 'two'
+      silent echo 'three'
+    redir END
+
+    let g:startify_custom_header =
+        \ map(split(test), 'repeat(" ", 10) . v:val') + ['']
+<
+|:redir| puts a string into 'test'. Then we turn it into a list of strings.
+Then we shift each string to the right by 10 spaces. Afterwards we add an
+empty string to the list, which results in an empty line in the header.
+
 ==============================================================================
 EXAMPLE                                                       *startify-example*
 
