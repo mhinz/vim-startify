@@ -76,10 +76,12 @@ Startify basically provides two things:
 2) It eases handling of loading and saving sessions by only working with a
    certain directory. These commands are used for convenience:
 
-      :SLoad    load a session
-      :SSave    save a session
-      :SDelete  delete a session
-      :SClose   close a session
+      :SLoad       load a session
+      :SSave       save a session
+      :SDelete[!]  delete a session
+      :SClose      close a session
+
+    If ! is given, you won't get prompted.
 
 ==============================================================================
 OPTIONS                                                       *startify-options*

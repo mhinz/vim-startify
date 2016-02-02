@@ -309,7 +309,7 @@ function! startify#session_write(spath)
 endfunction
 
 " Function: #session_delete {{{1
-function! startify#session_delete(...) abort
+function! startify#session_delete(bang, ...) abort
   if !isdirectory(s:session_dir)
     echo 'The session directory does not exist: '. s:session_dir
     return
@@ -326,7 +326,7 @@ function! startify#session_delete(...) abort
   call inputrestore()
 
   echo 'Really delete '. spath .'? [y/n]' | redraw
-  if (nr2char(getchar()) == 'y')
+  if a:bang || nr2char(getchar()) == 'y'
     if delete(spath) == 0
       echo 'Deleted session '. spath .'!'
     else
@@ -338,14 +338,20 @@ function! startify#session_delete(...) abort
 endfunction
 
 " Function: #session_delete_buffers {{{1
-function! startify#session_delete_buffers() abort
+function! startify#session_delete_buffers()
   if !s:delete_buffers
     return
   endif
   let n = 1
   while n <= bufnr('$')
     if buflisted(n)
-      silent execute 'bdelete' n
+      try
+        silent execute 'bdelete' n
+      catch
+        echohl ErrorMsg
+        echomsg v:exception
+        echohl NONE
+      endtry
     endif
     let n += 1
   endwhile

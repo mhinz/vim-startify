@@ -55,7 +55,7 @@ endfunction
 
 command! -nargs=? -bar -complete=customlist,startify#session_list SSave   call startify#session_save(<f-args>)
 command! -nargs=? -bar -complete=customlist,startify#session_list SLoad   call startify#session_load(<f-args>)
-command! -nargs=? -bar -complete=customlist,startify#session_list SDelete call startify#session_delete(<f-args>)
+command! -nargs=? -bar -bang -complete=customlist,startify#session_list SDelete call startify#session_delete(<bang>0, <f-args>)
 command! -nargs=0 -bar SClose call startify#session_close()
 command! -nargs=0 -bar Startify enew | call startify#insane_in_the_membrane()
 command! -nargs=0 -bar StartifyDebug call startify#debug()
