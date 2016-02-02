@@ -4,3 +4,4 @@ Execute (:Startify command available):
 Include: feature/buffer.vader
 Include: feature/mapping.vader
 Include: feature/session.vader
+Include: feature/syntax.vader
