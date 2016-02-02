@@ -1,0 +1,18 @@
+Execute (Session: :SSave foo):
+  edit include/testfile.txt
+  SSave foo
+  SClose
+Do:
+  e
+Expect:
+  
+Execute (Session: :SLoad foo):
+  silent SLoad foo
+Expect:
+  This is just a simple test file.
+  Foo, bar, quux.
+
+Execute (Session: :SDelete foo):
+  Assert 1 == filereadable(g:startify_session_dir.'/foo')
+  SDelete foo
+  Assert 0 == filereadable(g:startify_session_dir.'/foo')

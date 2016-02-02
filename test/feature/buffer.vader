@@ -1,7 +1,7 @@
 Before:
   Startify
 
-Execute (Check set options):
+Execute (Check buffer options):
   AssertEqual 'startify', &filetype
   AssertEqual 'wipe',     &bufhidden
   AssertEqual 'nofile',   &buftype
