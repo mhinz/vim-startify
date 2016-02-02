@@ -206,9 +206,13 @@ function! startify#session_save(...) abort
   endif
 
   call inputsave()
+  let vsession = fnamemodify(v:this_session, ':t')
+  if vsession ==# '__LAST__'
+    let vsession = ''
+  endif
   let sname = exists('a:1')
         \ ? a:1
-        \ : input('Save under this session name: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string')
+        \ : input('Save under this session name: ', vsession, 'custom,startify#session_list_as_string')
         \ | redraw
   call inputrestore()
 
