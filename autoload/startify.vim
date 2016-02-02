@@ -325,6 +325,11 @@ function! startify#session_delete(bang, ...) abort
         \ | redraw
   call inputrestore()
 
+  if !filereadable(spath)
+    echomsg 'No such session: '. spath
+    return
+  endif
+
   echo 'Really delete '. spath .'? [y/n]' | redraw
   if a:bang || nr2char(getchar()) == 'y'
     if delete(spath) == 0
