@@ -21,4 +21,4 @@ cp viminfo viminfo.tmp
 trap "{ rm viminfo.tmp; }" EXIT
 
 echo '(Be patient.. testing can take a while.)'
-HOME=/dev/null vim -XNu vimrc -i viminfo.tmp -c 'Vader! *'
+HOME=/dev/null vim -XNu vimrc -i viminfo.tmp -c 'Vader! vader.vader'
