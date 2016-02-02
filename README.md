@@ -1,8 +1,7 @@
-![vim-startify](https://raw.githubusercontent.com/mhinz/vim-startify/master/pictures/startify-logo.png)
-
 [![Build Status](https://travis-ci.org/mhinz/vim-startify.svg?branch=master)](https://travis-ci.org/mhinz/vim-startify)
-[![Join the chat at https://gitter.im/mhinz/mhinz](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mhinz/mhinz?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![LICENSE](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/mhinz/vim-startify/master/LICENSE)
+
+![vim-startify](https://raw.githubusercontent.com/mhinz/vim-startify/master/pictures/startify-logo.png)
 
 ---
 
