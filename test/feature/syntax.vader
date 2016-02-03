@@ -2,23 +2,23 @@ Before:
   Startify
   doautocmd CursorMoved
 
-Execute (Syntax: between brackets -> StartifyNumber):
-  Assert SyntaxAt() == 'StartifyNumber'
+Execute (Between brackets -> StartifyNumber):
+  AssertEqual SyntaxAt(), 'StartifyNumber'
 
-Execute (Syntax: brackets -> StartifyBracket):
-  Assert SyntaxAt(3) == 'StartifyBracket'
+Execute (Brackets -> StartifyBracket):
+  AssertEqual SyntaxAt(3), 'StartifyBracket'
 
-Execute (Syntax: first entry -> StartifySpecial):
-  Assert SyntaxAt(9) == 'StartifySpecial'
+Execute (First entry -> StartifySpecial):
+  AssertEqual SyntaxAt(9), 'StartifySpecial'
 
-Execute (Syntax: section header -> StartifySection):
+Execute (Section header -> StartifySection):
   normal! 2j
-  Assert SyntaxAt(9) == 'StartifySection'
+  AssertEqual SyntaxAt(9), 'StartifySection'
 
-Execute (Syntax: second entry (separator) -> StartifySlash):
+Execute (Second entry (separator) -> StartifySlash):
   normal! 4j
-  Assert SyntaxAt(9) == 'StartifySlash'
+  AssertEqual SyntaxAt(9), 'StartifySlash'
 
-Execute (Syntax: second entry (path) -> StartifyFile):
+Execute (Second entry (path) -> StartifyFile):
   normal! 4j
-  Assert SyntaxAt(10) == 'StartifyFile'
+  AssertEqual SyntaxAt(10), 'StartifyFile'

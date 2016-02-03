@@ -1,7 +1,0 @@
-Execute (:Startify command available):
-  Assert 2 == exists(':Startify')
-
-Include: feature/buffer.vader
-Include: feature/mapping.vader
-Include: feature/session.vader
-Include: feature/syntax.vader
