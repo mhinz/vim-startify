@@ -1,12 +1,16 @@
-language: vim
+sudo: false
 
 os:
   - linux
   - osx
 
+addons:
+  apt:
+    packages:
+      - vim-gtk
+
 before_script:
-  - if [[ "$TRAVIS_OS_NAME" == linux ]]; then sudo apt-get -qq update && sudo apt-get install -y vim-gtk; fi
   - if [[ "$TRAVIS_OS_NAME" == osx ]]; then brew update && brew install vim; fi
 
 script:
-    - test/run
+  - test/run
