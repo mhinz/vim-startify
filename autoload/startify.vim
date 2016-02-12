@@ -486,7 +486,7 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
   if get(g:, 'startify_use_env')
     call s:init_env()
     for i in range(len(oldfiles))
-      for [k,v] in s:env_by_len
+      for [k,v] in s:env
         let p = oldfiles[i][1]
         if !stridx(tolower(p), tolower(v))
           let oldfiles[i][1] = printf('$%s%s', k, p[len(v):])
@@ -795,14 +795,17 @@ endfunction
 
 " Function: s:init_env {{{1
 function! s:init_env()
-  let env = []
+  let s:env = []
   let ignore = { 'PWD': 1, 'OLDPWD': 1 }
 
   function! s:get_env()
     silent execute "normal! :return $\<c-a>')\<c-b>\<c-right>\<right>\<del>split('\<cr>"
   endfunction
 
-  function! s:compare(foo, bar)
+  function! s:compare_by_key_len(foo, bar)
+    return len(a:foo[0]) - len(a:bar[0])
+  endfunction
+  function! s:compare_by_val_len(foo, bar)
     return len(a:bar[1]) - len(a:foo[1])
   endfunction
 
@@ -813,8 +816,9 @@ function! s:init_env()
           \ || len(k) > len(v)
       continue
     endif
-    call insert(env, [k,v], 0)
+    call insert(s:env, [k,v], 0)
   endfor
 
-  let s:env_by_len = sort(env, 's:compare')
+  let s:env = sort(s:env, 's:compare_by_key_len')
+  let s:env = sort(s:env, 's:compare_by_val_len')
 endfunction
