@@ -107,6 +107,7 @@ default values.
     |g:startify_files_number|
     |g:startify_mapping_nowait|
     |g:startify_skiplist_server|
+    |g:startify_use_env|
 
     Sessions:~
     |g:startify_session_autoload|
@@ -470,6 +471,15 @@ Don't run Startify at Vim startup. You can still call it anytime via
 Show filenames relative to the current working directory instead of as
 absolute paths. This only applies to the "files" list, since the "dir" list is
 relative by nature.
+
+-----------------------------------------------------------------------------
+                                                           *g:startify_use_env*
+>
+    let g:startify_use_env = 0
+<
+Show environment variables in path, if their name is shorter than their value.
+
+$PWD and $OLDPWD are ignored.
 
 -----------------------------------------------------------------------------
                                                     *g:startify_mapping_nowait*

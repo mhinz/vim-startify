@@ -483,6 +483,19 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
     let oldfiles               += [[fnameescape(absolute_path), entry_path]]
   endfor
 
+  if get(g:, 'startify_use_env')
+    call s:init_env()
+    for i in range(len(oldfiles))
+      for [k,v] in s:env_by_len
+        let p = oldfiles[i][1]
+        if !stridx(p, v)
+          let oldfiles[i][1] = printf('$%s%s', k, p[len(v):])
+          break
+        endif
+      endfor
+    endfor
+  endif
+
   return oldfiles
 endfun
 
@@ -778,4 +791,28 @@ function! s:create_last_session_link(spath)
       echomsg "startify: Can't create 'last used session' symlink."
     endif
   endif
+endfunction
+
+" Function: s:init_env {{{1
+function! s:init_env()
+  let env = []
+  let ignore = { 'PWD': 1, 'OLDPWD': 1 }
+
+  function! s:get_env()
+    silent execute "normal! :return $\<c-a>')\<c-b>\<c-right>\<right>\<del>split('\<cr>"
+  endfunction
+
+  function! s:compare(foo, bar)
+    return len(a:bar[1]) - len(a:foo[1])
+  endfunction
+
+  for k in s:get_env()
+    let v = eval('$'.k)
+    if v[0] != '/' || has_key(ignore, k) || len(k) > len(v)
+      continue
+    endif
+    call insert(env, [k,v], 0)
+  endfor
+
+  let s:env_by_len = sort(env, 's:compare')
 endfunction
