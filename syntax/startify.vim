@@ -18,13 +18,14 @@ syntax match StartifyBracket /.*\%9c/ contains=
 syntax match StartifySpecial /\V<empty buffer>\|<quit>/
 syntax match StartifyNumber  /^\s*\[\zs[^BSVT]\{-}\ze\]/
 syntax match StartifySelect  /^\s*\[\zs[BSVT]\{-}\ze\]/
+syntax match StartifyVar     /\$[^\/]\+/
 syntax match StartifyFile    /.*/ contains=
       \ StartifyBracket,
       \ StartifyPath,
       \ StartifySpecial,
 
 execute 'syntax match StartifySlash /\'. s:sep .'/'
-execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash'
+execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash,StartifyVar'
 
 if exists('g:startify_custom_header')
   execute 'syntax region StartifyHeader start=/\%1l/ end=/\%'. (len(g:startify_custom_header) + 2) .'l/'
@@ -50,5 +51,6 @@ highlight default link StartifySection Statement
 highlight default link StartifySelect  Title
 highlight default link StartifySlash   Delimiter
 highlight default link StartifySpecial Comment
+highlight default link StartifyVar     StartifyPath
 
 let b:current_syntax = 'startify'
