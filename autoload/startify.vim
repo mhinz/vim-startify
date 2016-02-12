@@ -488,7 +488,7 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
     for i in range(len(oldfiles))
       for [k,v] in s:env_by_len
         let p = oldfiles[i][1]
-        if !stridx(p, v)
+        if !stridx(tolower(p), tolower(v))
           let oldfiles[i][1] = printf('$%s%s', k, p[len(v):])
           break
         endif
@@ -807,8 +807,10 @@ function! s:init_env()
   endfunction
 
   for k in s:get_env()
-    let v = eval('$'.k)
-    if v[0] != '/' || has_key(ignore, k) || len(k) > len(v)
+    silent! execute "let v = eval('$'.k)"
+    if has('win32') ? (v[1] != ':') : (v[0] != '/')
+          \ || has_key(ignore, k)
+          \ || len(k) > len(v)
       continue
     endif
     call insert(env, [k,v], 0)
