@@ -425,9 +425,9 @@ function! s:open_buffer(entry)
 endfunction
 
 " Function: s:display_by_path {{{1
-function! s:display_by_path(path_prefix, path_format) abort
+function! s:display_by_path(path_prefix, path_format, use_env) abort
   let oldfiles = call(get(g:, 'startify_enable_unsafe') ? 's:filter_oldfiles_unsafe' : 's:filter_oldfiles',
-        \ [a:path_prefix, a:path_format])
+        \ [a:path_prefix, a:path_format, a:use_env])
 
   let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
   if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
@@ -456,7 +456,7 @@ function! s:display_by_path(path_prefix, path_format) abort
 endfunction
 
 " Function: s:filter_oldfiles {{{1
-function! s:filter_oldfiles(path_prefix, path_format) abort
+function! s:filter_oldfiles(path_prefix, path_format, use_env) abort
   let path_prefix = '\V'. escape(a:path_prefix, '\')
   let counter     = s:numfiles
   let entries     = {}
@@ -483,7 +483,7 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
     let oldfiles               += [[fnameescape(absolute_path), entry_path]]
   endfor
 
-  if get(g:, 'startify_use_env')
+  if a:use_env
     call s:init_env()
     for i in range(len(oldfiles))
       for [k,v] in s:env
@@ -500,7 +500,7 @@ function! s:filter_oldfiles(path_prefix, path_format) abort
 endfun
 
 " Function: s:filter_oldfiles_unsafe {{{1
-function! s:filter_oldfiles_unsafe(path_prefix, path_format) abort
+function! s:filter_oldfiles_unsafe(path_prefix, path_format, use_env) abort
   let path_prefix = '\V'. escape(a:path_prefix, '\')
   let counter     = s:numfiles
   let entries     = {}
@@ -530,12 +530,12 @@ endfun
 
 " Function: s:show_dir {{{1
 function! s:show_dir() abort
-  return s:display_by_path(getcwd(), ':.')
+  return s:display_by_path(getcwd(), ':.', 0)
 endfunction
 
 " Function: s:show_files {{{1
 function! s:show_files() abort
-  return s:display_by_path('', s:relative_path)
+  return s:display_by_path('', s:relative_path, get(g:, 'startify_use_env'))
 endfunction
 
 " Function: s:show_sessions {{{1
