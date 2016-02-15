@@ -799,7 +799,10 @@ function! s:init_env()
   let ignore = { 'PWD': 1, 'OLDPWD': 1 }
 
   function! s:get_env()
-    silent execute "normal! :return $\<c-a>')\<c-b>\<c-right>\<right>\<del>split('\<cr>"
+    redir => s
+      silent! execute "norm!:ec$\<c-a>'\<c-b>\<right>\<right>\<del>'\<cr>"
+    redir END
+    return split(s)
   endfunction
 
   function! s:compare_by_key_len(foo, bar)
