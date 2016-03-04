@@ -621,6 +621,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-09|  tmux-resurrect?
     |startify-faq-10|  Temporarily skip Startify at start?
     |startify-faq-11|  How to use the output of a command as header?
+    |startify-faq-12|  There is an empty window with vim-plug!
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -759,6 +760,39 @@ How to use the output of a command as header?~
 |:redir| puts a string into 'test'. Then we turn it into a list of strings.
 Then we shift each string to the right by 10 spaces. Afterwards we add an
 empty string to the list, which results in an empty line in the header.
+
+------------------------------------------------------------------------------
+                                                               *startify-faq-12*
+There is an empty window with vim-plug!~
+
+After start there might be only the Startify buffer which is marked as
+|unlisted-buffer|. The problem arises if you use :PlugUpdate followed by 'D'
+to see the changes. An empty window!
+
+The actual problem is that Vim won't close the last listed buffer. Try this:
+>
+    $ vim -u NONE -N
+    :set nobuflisted
+    :new
+    :bd
+<
+It won't close the buffer and therefore the window. This also happens in
+vim-plug. Note that this is no bug in neither plugin, it's a Vim weirdness.
+
+Workaround #1:~
+>
+    autocmd User Startified setlocal buflisted
+<
+In some cases this could break other plugins at start (I look at you
+NERDTree), but works well most of the time.
+
+Workaround #2:~
+>
+    let g:plug_window = 'enew'  " or maybe 'tabnew'
+<
+This will open the plug buffer in the current window instead of creating a new
+window on the left side. Mind that this will also close the Startify buffer
+since it will be hidden.
 
 ==============================================================================
 EXAMPLE                                                       *startify-example*
