@@ -98,6 +98,7 @@ default values.
     |g:startify_list_order|
     |g:startify_relative_path|
     |g:startify_skiplist|
+    |g:startify_update_oldfiles|
 
     Misc options:~
     |g:startify_custom_footer|
@@ -199,6 +200,15 @@ Example:
     let g:startify_files_number = 10
 <
 The number of files to list.
+
+------------------------------------------------------------------------------
+                                                    *g:startify_update_oldfiles*
+>
+    let g:startify_update_oldfiles = 0
+<
+
+Usually |v:oldfiles| only gets updated when Vim exits. Using this option updates
+it on-the-fly, so that :Startify is always up-to-date.
 
 ------------------------------------------------------------------------------
                                                    *g:startify_session_autoload*
@@ -805,6 +815,7 @@ This is my configuration..
     let g:startify_files_number           = 8
     let g:startify_relative_path          = 1
     let g:startify_change_to_dir          = 1
+    let g:startify_update_oldfiles        = 1
     let g:startify_session_autoload       = 1
     let g:startify_session_persistence    = 1
     let g:startify_session_delete_buffers = 1
