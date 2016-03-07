@@ -42,8 +42,9 @@ function! s:genesis()
       call startify#insane_in_the_membrane()
     endif
   endif
+  call map(v:oldfiles, 'fnamemodify(v:val, ":p")')
   autocmd startify BufNewFile,BufRead,BufFilePre *
-        \ call s:update_oldfiles(expand('<afile>'))
+        \ call s:update_oldfiles(expand('<afile>:p'))
   autocmd! startify VimEnter
 endfunction
 
