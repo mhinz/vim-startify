@@ -802,6 +802,7 @@ function! s:init_env()
     redir => s
       silent! execute "norm!:ec$\<c-a>'\<c-b>\<right>\<right>\<del>'\<cr>"
     redir END
+    redraw
     return split(s)
   endfunction
 
