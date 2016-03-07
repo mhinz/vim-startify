@@ -519,6 +519,10 @@ user autocmd is issued. You can hook into it like this:
 ==============================================================================
 COMMANDS                                                     *startify-commands*
 >
+    :Startify
+<
+Open the startify buffer.
+>
     :SSave [session]
     :SDelete [session]
 <
@@ -537,10 +541,6 @@ argument with either <c-d> or <tab> afterwards.
 <
 Save and close the current session, close all listed buffers, and open the
 Startify buffer.
->
-    :Startify
-<
-Open the startify buffer.
 
 ==============================================================================
 MAPPINGS                                                     *startify-mappings*
