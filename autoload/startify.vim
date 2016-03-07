@@ -281,7 +281,7 @@ function! startify#session_write(spath)
   if exists('g:startify_session_remove_lines')
         \ || exists('g:startify_session_savevars')
         \ || exists('g:startify_session_savecmds')
-    execute 'split' a:spath
+    silent execute 'split' a:spath
 
     " remove lines from the session file
     if exists('g:startify_session_remove_lines')
