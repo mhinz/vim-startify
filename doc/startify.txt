@@ -192,8 +192,10 @@ the value the path.
 
 Example:
 >
-    let g:startify_bookmarks = [ {'v': '~/.vimrc'}, '~/.zshrc' ]
+    let g:startify_bookmarks = [ {'c': '~/.vimrc'}, '~/.zshrc' ]
 <
+NOTE: Avoid using keys from |startify-mappings| if providing custom indices.
+
 ------------------------------------------------------------------------------
                                                        *g:startify_files_number*
 >
@@ -417,14 +419,7 @@ If you want numbers to start at 1 instead of 0, you could use this:
     let g:startify_custom_indices = map(range(1,100), 'string(v:val)')
 <
 NOTE: There is no sanitizing going on, so you should know what you're doing!
-
-Best practices:
-
-- do not use 'e', 'i' or 'q'  (they will be overwritten anyway)
-- do not use 'b', 's', 't', 'v'  (used for opening several files at once)
-- do not use duplicates  (previous mappings will be overwritten)
-- do not uses empty strings  (creates unreachable entries)
-- you might want to keep 'j' and 'k'  (for navigation)
+      Avoid using keys from |startify-mappings|.
 
 ------------------------------------------------------------------------------
                                                       *g:startify_custom_header*
@@ -839,9 +834,8 @@ This is my configuration..
                 \ ]
 
     let g:startify_bookmarks = [
-                \ { 'v': '~/.vim/vimrc' },
-                \ { 't': '/tmp' },
-                \ '/data/vim/golfing',
+                \ { 'c': '~/.vim/vimrc' },
+                \ '~/golfing',
                 \ ]
 
     let g:startify_custom_footer =
