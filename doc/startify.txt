@@ -623,6 +623,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-10|  Temporarily skip Startify at start?
     |startify-faq-11|  How to use the output of a command as header?
     |startify-faq-12|  There is an empty window with vim-plug!
+    |startify-faq-13|  How to disable random quotes header?
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -794,6 +795,14 @@ Workaround #2:~
 This will open the plug buffer in the current window instead of creating a new
 window on the left side. Mind that this will also close the Startify buffer
 since it will be hidden.
+
+------------------------------------------------------------------------------
+                                                               *startify-faq-13*
+How to disable random quotes header?~
+>
+    let g:startify_custom_header = []
+<
+See |g:startify_custom_header|.
 
 ==============================================================================
 EXAMPLE                                                       *startify-example*
