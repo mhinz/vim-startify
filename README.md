@@ -48,9 +48,6 @@ That's it. A fancy start screen for Vim.  _(almost all visible features enabled 
 If you like my plugins, please star them on Github. It's a great way of getting
 feedback. Same goes for issues reports or feature requests.
 
-Contact:
-[Mail](mailto:mh.codebro@gmail.com) |
-[Twitter](https://twitter.com/_mhinz_) |
-[Gitter](https://gitter.im/mhinz/mhinz)
+Contact: [Twitter](https://twitter.com/_mhinz_)
 
 _Get your Vim on!_
