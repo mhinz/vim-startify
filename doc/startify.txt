@@ -98,6 +98,7 @@ default values.
 
     Misc options:~
     |g:startify_custom_footer|
+    |g:startify_custom_header_quotes|
     |g:startify_custom_indices|
     |g:startify_disable_at_vimenter|
     |g:startify_enable_unsafe|
@@ -449,6 +450,19 @@ Programmatic example:~
 <
 Also have a look at |startify-faq-08|.
 
+------------------------------------------------------------------------------
+                                               *g:startify_custom_header_quotes*
+
+If you don't set |g:startify_custom_header|, the internal cowsay implementation
+with shipped random quotes will be used.
+
+If you want to use your own quotes, add a list of lists, like this:
+>
+    let g:startify_custom_header_quotes = [
+        \ ['line 1', '', 'line 3'],
+        \ ['quote #2']
+        \ ]
+<
 ------------------------------------------------------------------------------
                                                       *g:startify_custom_footer*
 >
