@@ -11,3 +11,4 @@ set sessionoptions-=tabpages
 
 let g:startify_session_dir = 'include'
 let g:startify_relative_path = 1
+let g:startify_custom_header = []
