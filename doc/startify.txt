@@ -1,4 +1,4 @@
-*startify.txt*  Showing recently used stuff like a boss.
+*startify.txt*  The fancy start screen.
 *startify*
                 __                    __           ___
                /\ \__                /\ \__  __  /'___\
@@ -10,10 +10,6 @@
                                                              /\___/
                                                              \/__/
   by Marco Hinz~
-
-  Twitter: https://twitter.com/_mhinz_
-  Github:  http://github.com/mhinz
-  IRC:     mhi^ (Freenode)
 >
   If you use any of my plugins, please star them on github. It's a great way
   of getting feedback and gives me the kick to put more time into their
@@ -424,19 +420,17 @@ NOTE: There is no sanitizing going on, so you should know what you're doing!
 ------------------------------------------------------------------------------
                                                       *g:startify_custom_header*
 >
-    let g:startify_custom_header = ''
+    let g:startify_custom_header = startify#fortune#get_random_quote()
 <
-This is a list of single-quoted strings to be shown before everything else.
-Every string will be written on its own line.
+This is a list of strings to be shown before everything else. Every string
+will be written on its own line, hence you can use empty strings for blank
+lines.
 
-NOTE: If a string contains ', you have to quote it with another '.
-
-A programmatic example:
+Simple example:~
 >
-    let g:startify_custom_header =
-      \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
+    let g:startify_custom_header = ['line 1', '', 'line 3']
 <
-A hardcoded example:
+More complex example:~
 >
     let g:startify_custom_header = [
             \ '                                 ________  __ __        ',
@@ -446,11 +440,13 @@ A hardcoded example:
             \ '   \ \ \_/ |\ \ \/\ \/\ \/\ \      /'' /''__  \ \__ ,__\',
             \ '    \ \___/  \ \_\ \_\ \_\ \_\    /\_/ /\_\  \/_/\_\_/  ',
             \ '     \/__/    \/_/\/_/\/_/\/_/    \//  \/_/     \/_/    ',
-            \ '',
-            \ '',
             \ ]
 <
-
+Programmatic example:~
+>
+    let g:startify_custom_header =
+            \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val')
+<
 Also have a look at |startify-faq-08|.
 
 ------------------------------------------------------------------------------
@@ -760,7 +756,7 @@ How to use the output of a command as header?~
     redir END
 
     let g:startify_custom_header =
-        \ map(split(test), 'repeat(" ", 10) . v:val') + ['']
+        \ map(split(test), 'repeat(" ", 10) . v:val')
 <
 |:redir| puts a string into 'test'. Then we turn it into a list of strings.
 Then we shift each string to the right by 10 spaces. Afterwards we add an
@@ -840,9 +836,6 @@ This is my configuration..
 
     let g:startify_custom_footer =
           \ ['', "   Vim is charityware. Please read ':help uganda'.", '']
-
-    let g:startify_custom_header =
-          \ map(split(system('tips | cowsay -f apt'), '\n'), '"   ". v:val') + ['']
 
     hi StartifyBracket ctermfg=240
     hi StartifyFile    ctermfg=147

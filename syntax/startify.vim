@@ -27,9 +27,7 @@ syntax match StartifyFile    /.*/ contains=
 execute 'syntax match StartifySlash /\'. s:sep .'/'
 execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash,StartifyVar'
 
-if exists('g:startify_custom_header')
-  execute 'syntax region StartifyHeader start=/\%1l/ end=/\%'. (len(g:startify_custom_header) + 2) .'l/'
-endif
+execute 'syntax region StartifyHeader start=/\%1l/ end=/\%'. (len(g:startify_header) + 2) .'l/'
 
 if exists('g:startify_custom_footer')
   execute 'syntax region StartifyFooter start=/\%'. startify#get_lastline() .'l/ end=/*/'

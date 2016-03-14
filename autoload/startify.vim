@@ -67,9 +67,12 @@ function! startify#insane_in_the_membrane() abort
     setlocal norelativenumber
   endif
 
-  if exists('g:startify_custom_header')
-    call append('$', g:startify_custom_header)
-  endif
+  " Must be global so that it can be read by syntax/startify.vim.
+  let g:startify_header = exists('g:startify_custom_header')
+        \ ? copy(g:startify_custom_header)
+        \ : startify#fortune#get_random_quote()
+  let g:startify_header += ['']  " add blank line
+  call append('$', g:startify_header)
 
   let s:tick = 0
   let s:entries = {}
@@ -124,10 +127,7 @@ function! startify#insane_in_the_membrane() abort
 
   " compute first line offset
   let s:firstline = 2
-  " increase offset if there is a custom header
-  if exists('g:startify_custom_header')
-    let s:firstline += len(g:startify_custom_header)
-  endif
+  let s:firstline += len(g:startify_header)
   " no special, no local Session.vim, but a section header
   if !s:show_special && !exists('l:show_session') && type(s:lists[0]) == 3
     let s:firstline += len(s:lists[0]) + 1
@@ -826,3 +826,4 @@ function! s:init_env()
   let s:env = sort(s:env, 's:compare_by_key_len')
   let s:env = sort(s:env, 's:compare_by_val_len')
 endfunction
+
