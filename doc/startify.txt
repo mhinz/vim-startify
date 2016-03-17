@@ -427,11 +427,11 @@ This is a list of strings to be shown before everything else. Every string
 will be written on its own line, hence you can use empty strings for blank
 lines.
 
-Simple example:~
+Static example:~
 >
     let g:startify_custom_header = ['line 1', '', 'line 3']
 <
-More complex example:~
+Static example #2:~
 >
     let g:startify_custom_header = [
             \ '                                 ________  __ __        ',
@@ -443,11 +443,52 @@ More complex example:~
             \ '     \/__/    \/_/\/_/\/_/\/_/    \//  \/_/     \/_/    ',
             \ ]
 <
-Programmatic example:~
+Dynamic example:~
 >
     let g:startify_custom_header =
             \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val')
 <
+If you go for a dynamic header, you might find the following functions useful:
+
+    startify#fortune#quote()    raw random quote
+    startify#fortune#boxed()    formatted random quote in a box
+    startify#fortune#cowsay()   formatted random quote in a box + cow
+
+Try them like this:
+>
+    :echo join(startify#fortune#cowsay(), "\n")
+<
+Let's assume you like the default boxed random quote, but not the ASCII art
+cow. You'd rather have another small ASCII art come before the quote. No
+problem!
+>
+    let g:ascii = [
+          \ '        __',
+          \ '.--.--.|__|.--------.',
+          \ '|  |  ||  ||        |',
+          \ ' \___/ |__||__|__|__|',
+          \ ''
+          \]
+    let g:startify_custom_header = g:ascii + startify#fortune#boxed()
+<
+Looks great! But it's not on the same column as the indices below which makes
+it look awkward. Let's indent the header by 3 spaces:
+>
+    let g:startify_custom_header =
+          \ map(g:ascii + startify#fortune#boxed(), '"   ".v:val')
+<
+Ah, much better! There's only one issue left. If you set
+g:startify_custom_header this way, it will only be done once. Hence spamming
+:Startify will always show the same quote.
+
+If you provide a string to it instead, Startify will evaluate it every time
+:Startify is run:
+>
+    let g:startify_custom_header =
+          \ 'map(g:ascii + startify#fortune#boxed(), "\"   \".v:val")'
+<
+Happy customizing!
+
 Also have a look at |startify-faq-08|.
 
 ------------------------------------------------------------------------------
