@@ -68,9 +68,15 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   " Must be global so that it can be read by syntax/startify.vim.
-  let g:startify_header = exists('g:startify_custom_header')
-        \ ? copy(g:startify_custom_header)
-        \ : startify#fortune#cowsay()
+  if exists('g:startify_custom_header')
+    if type(g:startify_custom_header) == type([])
+      let g:startify_header = copy(g:startify_custom_header)
+    else
+      let g:startify_header = eval(g:startify_custom_header)
+    endif
+  else
+    let g:startify_header = startify#fortune#cowsay()
+  endif
   let g:startify_header += ['']  " add blank line
   call append('$', g:startify_header)
 
