@@ -564,16 +564,20 @@ user autocmd is issued. You can hook into it like this:
 <
 ==============================================================================
 COMMANDS                                                     *startify-commands*
+                                                            *startify-:Startify*
 >
     :Startify
 <
 Open the startify buffer.
+                                                               *startify-:SSave*
+                                                             *startify-:SDelete*
 >
     :SSave [session]
     :SDelete [session]
 <
 Save or delete a session. If you don't specify a session name, it will prompt
 you for one.
+                                                               *startify-:SLoad*
 >
     :SLoad [session]
 <
@@ -582,6 +586,7 @@ for one (Windows) or load the last used session (Unix).
 
 Providing only a part of the session name works too, if you complete the
 argument with either <c-d> or <tab> afterwards.
+                                                              *startify-:SClose*
 >
     :SClose
 <
