@@ -70,7 +70,7 @@ function! startify#insane_in_the_membrane() abort
   " Must be global so that it can be read by syntax/startify.vim.
   let g:startify_header = exists('g:startify_custom_header')
         \ ? copy(g:startify_custom_header)
-        \ : startify#fortune#get_random_quote()
+        \ : startify#fortune#cowsay()
   let g:startify_header += ['']  " add blank line
   call append('$', g:startify_header)
 

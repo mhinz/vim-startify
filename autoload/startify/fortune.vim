@@ -11,6 +11,7 @@ let s:cow = [
 let s:quotes = exists('g:startify_custom_header_quotes')
       \ ? g:startify_custom_header_quotes
       \ : [
+      \ ["If you don't fail at least 90% of the time, you're not aiming high enough.", '', '- Alan Kay'],
       \ ['I think a lot of new programmers like to use advanced data structures and advanced language features as a way of demonstrating their ability. I call it the lion-tamer syndrome. Such demonstrations are impressive, but unless they actually translate into real wins for the project, avoid them.', '', '- Glyn Williams'],
       \ ['I would rather die of passion than of boredom.', '', '- Vincent Van Gogh'],
       \ ['If a system is to serve the creative spirit, it must be entirely comprehensible to a single individual.'],
@@ -128,14 +129,25 @@ function! s:draw_box(lines) abort
   return lines
 endfunction
 
-" Function: #get_random_quote {{{1
-function! startify#fortune#get_random_quote() abort
-  let quote = s:quotes[s:get_random_offset(len(s:quotes))]
+" Function: #quote {{{1
+function! startify#fortune#quote() abort
+  return s:quotes[s:get_random_offset(len(s:quotes))]
+endfunction
+
+" Function: #boxed {{{1
+function! startify#fortune#boxed() abort
   let wrapped_quote = []
+  let quote = startify#fortune#quote()
   for line in quote
     let wrapped_quote += split(line, '\%50c.\{-}\zs\s', 1)
   endfor
   let wrapped_quote = s:draw_box(wrapped_quote)
-  let wrapped_quote += s:cow
-  return map(wrapped_quote, '"   ". v:val')
+  return wrapped_quote
+endfunction
+
+" Function: #cowsay {{{1
+function! startify#fortune#cowsay() abort
+  let boxed_quote = startify#fortune#boxed()
+  let boxed_quote += s:cow
+  return map(boxed_quote, '"   ". v:val')
 endfunction
