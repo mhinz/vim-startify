@@ -25,6 +25,17 @@ let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'bundle/.*/doc',
       \ ])
 
+let s:transformations = {}
+if exists('g:startify_transformations')
+  for [k,V] in items(g:startify_transformations)
+    call extend(s:transformations, { fnamemodify(resolve(expand(k)), ':p'): V })
+    unlet V  " avoid type mismatch dict <-> string
+  endfor
+  let s:tf = 1
+else
+  let s:tf = 0
+endif
+
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
@@ -483,7 +494,10 @@ function! s:filter_oldfiles(path_prefix, path_format, use_env) abort
       continue
     endif
 
-    let entry_path              = fnamemodify(absolute_path, a:path_format)
+    let entry_path = s:tf
+          \ ? s:transform(absolute_path)
+          \ : fnamemodify(absolute_path, a:path_format)
+
     let entries[absolute_path]  = 1
     let counter                -= 1
     let oldfiles               += [[fnameescape(absolute_path), entry_path]]
@@ -584,17 +598,25 @@ function! s:show_bookmarks() abort
   endif
 
   for bookmark in g:startify_bookmarks
-    if type(bookmark) == 4  " dict?
-      let [index, fname] = items(bookmark)[0]
+    if type(bookmark) == type({})
+      let [index, path] = items(bookmark)[0]
     else  " string
-      let [index, fname] = [s:get_index_as_string(s:entry_number), bookmark]
+      let [index, path] = [s:get_index_as_string(s:entry_number), bookmark]
       let s:entry_number += 1
     endif
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
-    if has('win32')
-      let fname = substitute(fname, '\[', '\[[]', 'g')
+
+    if s:tf
+      let entry_path = s:transform(fnamemodify(resolve(expand(path)), ':p'))
+    else
+      let entry_path = path
     endif
-    call s:register(line('$'), index, 'file', 'edit', fname, s:nowait)
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
+
+    if has('win32')
+      let path = substitute(path, '\[', '\[[]', 'g')
+    endif
+    call s:register(line('$'), index, 'file', 'edit', path, s:nowait)
+
     unlet bookmark  " avoid type mismatch for heterogeneous lists
   endfor
 
@@ -831,5 +853,14 @@ function! s:init_env()
 
   let s:env = sort(s:env, 's:compare_by_key_len')
   let s:env = sort(s:env, 's:compare_by_val_len')
+endfunction
+
+" Function: s:transform {{{1
+function s:transform(absolute_path)
+  if has_key(s:transformations, a:absolute_path)
+    let V = s:transformations[a:absolute_path]
+    return type(V) == type('') ? V : V(a:absolute_path)
+  endif
+  return a:absolute_path
 endfunction
 
