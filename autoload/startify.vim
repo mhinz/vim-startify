@@ -88,7 +88,9 @@ function! startify#insane_in_the_membrane() abort
   else
     let g:startify_header = startify#fortune#cowsay()
   endif
-  let g:startify_header += ['']  " add blank line
+  if !empty(g:startify_header)
+    let g:startify_header += ['']  " add blank line
+  endif
   call append('$', g:startify_header)
 
   let s:tick = 0
