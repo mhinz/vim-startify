@@ -18,23 +18,13 @@ let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
 let s:relative_path  = get(g:, 'startify_relative_path') ? ':.:~' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
+let s:tf             = exists('g:startify_transformations')
 
 let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'COMMIT_EDITMSG',
       \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
       \ 'bundle/.*/doc',
       \ ])
-
-let s:transformations = {}
-if exists('g:startify_transformations')
-  for [k,V] in items(g:startify_transformations)
-    call extend(s:transformations, { fnamemodify(resolve(expand(k)), ':p'): V })
-    unlet V  " avoid type mismatch dict <-> string
-  endfor
-  let s:tf = 1
-else
-  let s:tf = 0
-endif
 
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
@@ -859,10 +849,12 @@ endfunction
 
 " Function: s:transform {{{1
 function s:transform(absolute_path)
-  if has_key(s:transformations, a:absolute_path)
-    let V = s:transformations[a:absolute_path]
-    return type(V) == type('') ? V : V(a:absolute_path)
-  endif
+  for [k,V] in g:startify_transformations
+    if a:absolute_path =~ k
+      return type(V) == type('') ? V : V(a:absolute_path)
+    endif
+    unlet V
+  endfor
   return a:absolute_path
 endfunction
 
