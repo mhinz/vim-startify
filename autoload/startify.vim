@@ -486,9 +486,13 @@ function! s:filter_oldfiles(path_prefix, path_format, use_env) abort
       continue
     endif
 
-    let entry_path = s:tf
-          \ ? s:transform(absolute_path)
-          \ : fnamemodify(absolute_path, a:path_format)
+    let entry_path = ''
+    if s:tf
+      let entry_path = s:transform(absolute_path)
+    endif
+    if empty(entry_path)
+      let entry_path = fnamemodify(absolute_path, a:path_format)
+    endif
 
     let entries[absolute_path]  = 1
     let counter                -= 1
@@ -597,9 +601,11 @@ function! s:show_bookmarks() abort
       let s:entry_number += 1
     endif
 
+    let entry_path = ''
     if s:tf
       let entry_path = s:transform(fnamemodify(resolve(expand(path)), ':p'))
-    else
+    endif
+    if empty(entry_path)
       let entry_path = path
     endif
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
@@ -855,6 +861,6 @@ function s:transform(absolute_path)
     endif
     unlet V
   endfor
-  return a:absolute_path
+  return ''
 endfunction
 
