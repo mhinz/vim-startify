@@ -1,5 +1,4 @@
 [![Build Status](https://travis-ci.org/mhinz/vim-startify.svg?branch=master)](https://travis-ci.org/mhinz/vim-startify)
-[![LICENSE](https://img.shields.io/badge/license-MIT-lightgrey.svg)](https://raw.githubusercontent.com/mhinz/vim-startify/master/LICENSE)
 
 ![vim-startify](https://raw.githubusercontent.com/mhinz/vim-startify/master/pictures/startify-logo.png)
 
