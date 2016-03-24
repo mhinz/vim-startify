@@ -138,7 +138,7 @@ function! startify#insane_in_the_membrane() abort
   let s:firstline = 2
   let s:firstline += len(g:startify_header)
   " no special, no local Session.vim, but a section header
-  if !s:show_special && !exists('l:show_session') && type(s:lists[0]) == 3
+  if !s:show_special && !exists('l:show_session') && type(s:lists[0]) == type([])
     let s:firstline += len(s:lists[0]) + 1
   endif
 
@@ -151,7 +151,7 @@ function! startify#insane_in_the_membrane() abort
   setlocal nomodifiable nomodified
 
   call s:set_mappings()
-  call cursor(s:firstline + (s:show_special ? 2 : 0), 5)
+  call cursor(s:firstline, 5)
   autocmd startify CursorMoved <buffer> call s:set_cursor()
 
   set filetype=startify
