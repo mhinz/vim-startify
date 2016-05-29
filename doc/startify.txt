@@ -36,8 +36,8 @@ CONTENTS                                                     *startify-contents*
 ==============================================================================
 INTRO                                                           *startify-intro*
 
-Startify is a plugin that shows recently used files, bookmarks and
-sessions that were saved to a certain directory.
+Startify is a plugin that shows recently used files, bookmarks, ex commands
+and sessions that were saved to a certain directory.
 
 ==============================================================================
 USAGE                                                           *startify-usage*
@@ -48,8 +48,8 @@ Startify basically provides two things:
    it reads from STDIN), startify will show a small but pretty start screen
    that shows recently used files (using viminfo) and sessions by default.
 
-   Additionally, you can define bookmarks, thus entries for files that always
-   should be available on the start screen.
+   Additionally, you can define bookmarks (thus entries for files) and ex
+   commands that always should be available on the start screen.
 
    You can either navigate to a certain menu entry and hit enter or you just
    key in whatever is written between the square brackets on that line. You
@@ -87,6 +87,7 @@ default values.
 
     Most used options:~
     |g:startify_bookmarks|
+    |g:startify_ex_commands|
     |g:startify_change_to_dir|
     |g:startify_change_to_vcs_root|
     |g:startify_custom_header|
@@ -128,7 +129,8 @@ The default for Windows systems is '$HOME\vimfiles\session'.
 ------------------------------------------------------------------------------
                                                          *g:startify_list_order*
 >
-    let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions']
+    let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions',
+        \ 'ex_commands']
 <
 At the moment startify supports these lists:~
 
@@ -150,6 +152,10 @@ At the moment startify supports these lists:~
 4) "sessions"
 
    This lists all the sessions saved in the directory |g:startify_session_dir|.
+
+5) "ex_commands"
+
+    This lists ex commands defined in |g:startify_ex_commands|.
 
 Section headers:~
 
@@ -174,6 +180,8 @@ Section headers example:~
             \ 'sessions',
             \ ['   These are my bookmarks:'],
             \ 'bookmarks',
+            \ ['   These are my ex commands:'],
+            \ 'ex_commands',
             \ ]
 <
 Feel free to add some cool ASCII action!
@@ -190,6 +198,22 @@ the value the path.
 Example:
 >
     let g:startify_bookmarks = [ {'c': '~/.vimrc'}, '~/.zshrc' ]
+<
+NOTE: Avoid using keys from |startify-mappings| if providing custom indices.
+
+------------------------------------------------------------------------------
+                                                        *g:startify_ex_commands*
+>
+    let g:startify_ex_commands = []
+<
+A list of ex commands (without the colon) to display on the start screen. The
+list can contain two kinds of types. Either an ex command or a dictionary
+whereas the key is the custom index and the value the ex command.
+
+Example:
+>
+    let g:startify_ex_commands = [ {'s': 'enew | set ft=sql'},
+        \ 'colorscheme bclear' ]
 <
 NOTE: Avoid using keys from |startify-mappings| if providing custom indices.
 
@@ -889,6 +913,8 @@ This is my configuration..
       \ 'sessions',
       \ ['   Bookmarks:'],
       \ 'bookmarks',
+      \ ['   Ex commands:'],
+      \ 'ex_commands',
       \ ]
 
     let g:startify_skiplist = [
@@ -901,6 +927,11 @@ This is my configuration..
     let g:startify_bookmarks = [
                 \ { 'c': '~/.vim/vimrc' },
                 \ '~/golfing',
+                \ ]
+
+    let g:startify_ex_commands = [
+                \ { 's': 'enew | set ft=sql' },
+                \ 'colorscheme bclear',
                 \ ]
 
     let g:startify_custom_footer =
