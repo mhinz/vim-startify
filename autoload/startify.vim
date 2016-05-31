@@ -54,7 +54,6 @@ function! startify#insane_in_the_membrane() abort
 
   setlocal
         \ bufhidden=wipe
-        \ buftype=nofile
         \ nobuflisted
         \ nocursorcolumn
         \ nocursorline
@@ -155,6 +154,7 @@ function! startify#insane_in_the_membrane() abort
   call cursor(s:firstline, 5)
   autocmd startify CursorMoved <buffer> call s:set_cursor()
 
+  silent file Startify
   set filetype=startify
   silent! doautocmd <nomodeline> User Startified
 endfunction
