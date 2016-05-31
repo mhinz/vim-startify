@@ -113,6 +113,7 @@ function! startify#insane_in_the_membrane() abort
         \ ['   MRU '. getcwd()], 'dir',
         \ ['   Sessions'],       'sessions',
         \ ['   Bookmarks'],      'bookmarks',
+        \ ['   Ex commands'],    'ex_commands',
         \ ])
 
   for item in s:lists
@@ -616,6 +617,33 @@ function! s:show_bookmarks() abort
     call s:register(line('$'), index, 'file', 'edit', path, s:nowait)
 
     unlet bookmark  " avoid type mismatch for heterogeneous lists
+  endfor
+
+  call append('$', '')
+endfunction
+
+" Function: s:show_ex_commands {{{1
+function! s:show_ex_commands() abort
+  if !exists('g:startify_ex_commands') || empty(g:startify_ex_commands)
+    return
+  endif
+
+  if exists('s:last_message')
+    call s:print_section_header()
+  endif
+
+  for ex_command_item in g:startify_ex_commands
+    if type(ex_command_item) == type({})
+      let [index, ex_command_str] = items(ex_command_item)[0]
+    else  " string
+      let [index, ex_command_str] = [s:get_index_as_string(s:entry_number), ex_command_item]
+      let s:entry_number += 1
+    endif
+
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . ex_command_str)
+    call s:register(line('$'), index, 'special', ex_command_str, '', s:nowait_string)
+
+    unlet ex_command_item  " avoid type mismatch for heterogeneous lists
   endfor
 
   call append('$', '')
