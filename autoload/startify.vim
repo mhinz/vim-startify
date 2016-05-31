@@ -113,6 +113,7 @@ function! startify#insane_in_the_membrane() abort
         \ ['   MRU '. getcwd()], 'dir',
         \ ['   Sessions'],       'sessions',
         \ ['   Bookmarks'],      'bookmarks',
+        \ ['   Commands'],       'commands',
         \ ])
 
   for item in s:lists
@@ -616,6 +617,36 @@ function! s:show_bookmarks() abort
     call s:register(line('$'), index, 'file', 'edit', path, s:nowait)
 
     unlet bookmark  " avoid type mismatch for heterogeneous lists
+  endfor
+
+  call append('$', '')
+endfunction
+
+" Function: s:show_commands {{{1
+function! s:show_commands() abort
+  if !exists('g:startify_commands') || empty(g:startify_commands)
+    return
+  endif
+
+  if exists('s:last_message')
+    call s:print_section_header()
+  endif
+
+  for entry in g:startify_commands
+    if type(entry) == type({})  " with custom index
+      let [index, command] = items(entry)[0]
+    else
+      let command = entry
+      let index = s:get_index_as_string(s:entry_number)
+      let s:entry_number += 1
+    endif
+    " If no list is given, the description is the command itself.
+    let [desc, cmd] = type(command) == type([]) ? command : [command, command]
+
+    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . desc)
+    call s:register(line('$'), index, 'special', cmd, '', s:nowait_string)
+
+    unlet entry command
   endfor
 
   call append('$', '')
