@@ -274,6 +274,10 @@ function! startify#session_write(spath)
       execute 'silent! argdelete' fnameescape(arg)
     endif
   endfor
+  " clean up session before saving it
+  for cmd in get(g:, 'startify_session_before_save', [])
+    execute cmd
+  endfor
 
   let ssop = &sessionoptions
   set sessionoptions-=options

@@ -110,6 +110,7 @@ default values.
 
     Sessions:~
     |g:startify_session_autoload|
+    |g:startify_session_before_save|
     |g:startify_session_delete_buffers|
     |g:startify_session_dir|
     |g:startify_session_persistence|
@@ -233,7 +234,6 @@ The number of files to list.
 >
     let g:startify_update_oldfiles = 0
 <
-
 Usually |v:oldfiles| only gets updated when Vim exits. Using this option updates
 it on-the-fly, so that :Startify is always up-to-date.
 
@@ -250,6 +250,20 @@ This also works if you open a bookmarked directory.
 
 Great way to create a portable project folder.
 
+------------------------------------------------------------------------------
+                                                *g:startify_session_before_save*
+>
+    let g:startify_session_before_save = []
+<
+This is a list of commands to be executed before saving a session.
+
+Example:
+>
+    let g:startify_session_before_save = [
+        \ 'echo "Cleaning up before saving.."',
+        \ 'silent! NERDTreeTabsClose'
+        \ ]
+<
 ------------------------------------------------------------------------------
                                                 *g:startify_session_persistence*
 >
