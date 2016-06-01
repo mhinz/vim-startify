@@ -702,6 +702,11 @@ function! s:set_mappings() abort
   execute "nnoremap <buffer>". s:nowait_string ."<silent> <cr>          :call startify#open_buffers()<cr>"
   execute "nnoremap <buffer>". s:nowait_string ."<silent> <2-LeftMouse> :call startify#open_buffers()<cr>"
 
+  " Without these mappings n/N wouldn't work properly, since autocmds always
+  " force the cursor back on the index.
+  nnoremap <buffer><expr> n ' j'[v:searchforward].'n'
+  nnoremap <buffer><expr> N 'j '[v:searchforward].'N'
+
   for k in keys(s:entries)
     execute 'nnoremap <buffer><silent>'. s:entries[k].nowait s:entries[k].index
           \ ':call startify#open_buffers('. string(k) .')<cr>'
