@@ -420,17 +420,17 @@ function! s:open_buffer(entry)
   if a:entry.type == 'special'
     execute a:entry.cmd
   elseif a:entry.type == 'session'
-    execute a:entry.cmd a:entry.path
+    execute a:entry.cmd fnameescape(a:entry.path)
   elseif a:entry.type == 'file'
     if line2byte('$') == -1
-      execute 'edit' a:entry.path
+      execute 'edit' fnameescape(a:entry.path)
     else
       if a:entry.cmd == 'tabnew'
         wincmd =
       endif
-      execute a:entry.cmd a:entry.path
+      execute a:entry.cmd fnameescape(a:entry.path)
     endif
-    call s:check_user_options()
+    call s:check_user_options(a:entry.path)
   endif
 endfunction
 
@@ -757,22 +757,15 @@ function! s:sort_by_tick(one, two)
 endfunction
 
 " Function: s:check_user_options {{{1
-function! s:check_user_options() abort
-  let path    = expand('%')
-  let session = path . s:sep .'Session.vim'
+function! s:check_user_options(path) abort
+  let session = a:path . s:sep .'Session.vim'
 
-  " change to VCS root directory
   if get(g:, 'startify_session_autoload') && filereadable(session)
     execute 'source' session
   elseif get(g:, 'startify_change_to_vcs_root')
-    call s:cd_to_vcs_root(path)
-  " change directory
+    call s:cd_to_vcs_root(a:path)
   elseif get(g:, 'startify_change_to_dir', 1)
-    if isdirectory(path)
-      lcd %
-    else
-      lcd %:p:h
-    endif
+    execute 'lcd' fnameescape(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':h'))
   endif
 endfunction
 
@@ -782,7 +775,7 @@ function! s:cd_to_vcs_root(path) abort
   for vcs in [ '.git', '.hg', '.bzr', '.svn' ]
     let root = finddir(vcs, dir .';')
     if !empty(root)
-      execute 'cd '. fnamemodify(root, ':h')
+      execute 'cd '. fnameescape(fnamemodify(root, ':h'))
       return
     endif
   endfor
