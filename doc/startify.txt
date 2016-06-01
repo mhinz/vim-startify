@@ -116,6 +116,7 @@ default values.
     |g:startify_session_remove_lines|
     |g:startify_session_savecmds|
     |g:startify_session_savevars|
+    |g:startify_session_sort|
 
 ------------------------------------------------------------------------------
                                                         *g:startify_session_dir*
@@ -412,6 +413,14 @@ Example:
            \ 'silent !pdfreader ~/latexproject/main.pdf &'
            \ ]
 <
+------------------------------------------------------------------------------
+                                                       *g:startify_session_sort*
+>
+    let g:startify_session_sort = 0
+<
+Sort sessions by modification time (when the session files were written)
+rather than alphabetically.
+
 ------------------------------------------------------------------------------
                                                      *g:startify_custom_indices*
 >

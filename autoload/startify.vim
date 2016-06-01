@@ -570,6 +570,13 @@ function! s:show_sessions() abort
     call s:print_section_header()
   endif
 
+  if get(g:, 'startify_session_sort')
+    function! s:sort_by_mtime(foo, bar)
+      return getftime(a:foo) <= getftime(a:bar)
+    endfunction
+    call sort(sfiles, 's:sort_by_mtime')
+  endif
+
   for i in range(len(sfiles))
     let index = s:get_index_as_string(s:entry_number)
     let fname = fnamemodify(sfiles[i], ':t')
