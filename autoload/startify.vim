@@ -423,15 +423,15 @@ function! s:open_buffer(entry)
   if a:entry.type == 'special'
     execute a:entry.cmd
   elseif a:entry.type == 'session'
-    execute a:entry.cmd fnameescape(a:entry.path)
+    execute a:entry.cmd a:entry.path
   elseif a:entry.type == 'file'
     if line2byte('$') == -1
-      execute 'edit' fnameescape(a:entry.path)
+      execute 'edit' a:entry.path
     else
       if a:entry.cmd == 'tabnew'
         wincmd =
       endif
-      execute a:entry.cmd fnameescape(a:entry.path)
+      execute a:entry.cmd a:entry.path
     endif
     call s:check_user_options(a:entry.path)
   endif
