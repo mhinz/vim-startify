@@ -624,7 +624,7 @@ function! s:show_bookmarks() abort
     if has('win32')
       let path = substitute(path, '\[', '\[[]', 'g')
     endif
-    call s:register(line('$'), index, 'file', 'edit', path, s:nowait)
+    call s:register(line('$'), index, 'file', 'edit', fnameescape(path), s:nowait)
 
     unlet bookmark  " avoid type mismatch for heterogeneous lists
   endfor
@@ -780,7 +780,7 @@ function! s:check_user_options(path) abort
   elseif get(g:, 'startify_change_to_vcs_root')
     call s:cd_to_vcs_root(a:path)
   elseif get(g:, 'startify_change_to_dir', 1)
-    execute 'lcd' fnameescape(isdirectory(a:path) ? a:path : fnamemodify(a:path, ':h'))
+    execute 'lcd' isdirectory(a:path) ? a:path : fnamemodify(a:path, ':h')
   endif
 endfunction
 
