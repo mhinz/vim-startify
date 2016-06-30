@@ -777,6 +777,7 @@ function! s:check_user_options(path) abort
 
   if get(g:, 'startify_session_autoload') && filereadable(session)
     execute 'silent bwipeout' a:path
+    call startify#session_delete_buffers()
     execute 'source' session
   elseif get(g:, 'startify_change_to_vcs_root')
     call s:cd_to_vcs_root(a:path)
