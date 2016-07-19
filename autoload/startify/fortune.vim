@@ -95,7 +95,7 @@ let s:quotes = exists('g:startify_custom_header_quotes')
       \ ['Minimize coupling between modules.', '', 'Avoid coupling by writing "shy" code and applying the Law of Demeter.'],
       \ ['Put abstractions in code, details in metadata.', '', 'Program for the general case, and put the specifics outside the compiled code base.'],
       \ ['Design using services.', '', 'Design in terms of services-independent, concurrent objects behind well-defined, consistent interfaces.'],
-      \ ['Separate vIews from models.', '', 'Gain flexibility at low cost by designing your application in terms of models and views.'],
+      \ ['Separate views from models.', '', 'Gain flexibility at low cost by designing your application in terms of models and views.'],
       \ ["Don't program by coincidence.", '', "Rely only on reliable things. Beware of accidental complexity, and don't confuse a happy coincidence with a purposeful plan."],
       \ ['Test your estimates.', '', "Mathematical analysis of algorithms doesn't tell you everything. Try timing your code in its target environment."],
       \ ['Design to test.', '', 'Start thinking about testing before you write a line of code.'],
