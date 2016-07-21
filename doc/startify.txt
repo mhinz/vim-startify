@@ -612,6 +612,9 @@ user autocmd is issued. You can hook into it like this:
 >
     autocmd User Startified let &l:stl = ' This statusline rocks!'
 <
+NOTE: Autocmds don't nest by default. If you use any command that triggers new
+events, be sure to add "nested": |autocmd-nested|.
+
 ==============================================================================
 COMMANDS                                                     *startify-commands*
                                                             *startify-:Startify*
