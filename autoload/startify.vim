@@ -155,7 +155,13 @@ function! startify#insane_in_the_membrane() abort
 
   silent file Startify
   set filetype=startify
-  silent! doautocmd <nomodeline> User Startified
+  if exists('#User#Startified')
+    if v:version > 703 || v:version == 703 && has('patch442')
+      doautocmd <nomodeline> User Startified
+    else
+      doautocmd User Startified
+    endif
+  endif
 endfunction
 
 " Function: #session_load {{{1
