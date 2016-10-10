@@ -119,13 +119,14 @@ endfunction
 " Function: s:draw_box {{{1
 function! s:draw_box(lines) abort
   let longest_line = max(map(copy(a:lines), 'len(v:val)'))
-  let topbottom = '*'. repeat('-', longest_line + 2) .'*'
-  let lines = [topbottom]
+  let top = '╭'. repeat('─', longest_line + 2) .'╮'
+  let bottom = '╰'. repeat('─', longest_line + 2) .'╯'
+  let lines = [top]
   for l in a:lines
     let offset = longest_line - len(l)
-    let lines += ['| '. l . repeat(' ', offset) .' |']
+    let lines += ['│ '. l . repeat(' ', offset) .' │']
   endfor
-  let lines += [topbottom]
+  let lines += [bottom]
   return lines
 endfunction
 
