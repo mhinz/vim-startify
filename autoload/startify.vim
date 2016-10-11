@@ -62,6 +62,7 @@ function! startify#insane_in_the_membrane() abort
         \ norelativenumber
         \ nospell
         \ noswapfile
+        \ colorcolumn=
   if empty(&statusline)
     setlocal statusline=\ startify
   endif
