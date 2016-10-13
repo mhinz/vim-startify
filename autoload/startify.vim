@@ -488,7 +488,6 @@ function! s:filter_oldfiles(path_prefix, path_format, use_env) abort
     endif
 
     let absolute_path = fnamemodify(resolve(fname), ":p")
-
     " filter duplicates, bookmarks and entries from the skiplist
     if has_key(entries, absolute_path)
           \ || !filereadable(absolute_path)
@@ -507,7 +506,10 @@ function! s:filter_oldfiles(path_prefix, path_format, use_env) abort
 
     let entries[absolute_path]  = 1
     let counter                -= 1
-    let oldfiles               += [[fnameescape(absolute_path), entry_path]]
+    if !has('win32')
+      let absolute_path = fnameescape(absolute_path)
+    endif
+    let oldfiles += [[absolute_path, entry_path]]
   endfor
 
   if a:use_env
