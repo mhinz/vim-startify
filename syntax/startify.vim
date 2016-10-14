@@ -34,7 +34,7 @@ if exists('g:startify_custom_footer')
 endif
 
 if exists('b:startify_section_header_lines')
-  for line in b:startify_section_header_lines
+  for line in b:startify.section_header_lines
     execute 'syntax region StartifySection start=/\%'. line .'l/ end=/$/'
   endfor
 endif

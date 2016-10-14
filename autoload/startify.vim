@@ -35,7 +35,7 @@ let s:sep = startify#get_separator()
 
 " Function: #get_lastline {{{1
 function! startify#get_lastline() abort
-  return s:lastline + 1
+  return b:startify.lastline + 1
 endfunction
 
 " Function: #insane_in_the_membrane {{{1
@@ -82,8 +82,7 @@ function! startify#insane_in_the_membrane() abort
   endif
   call append('$', g:startify_header)
 
-  let s:tick = 0
-  let s:entries = {}
+  let b:startify = { 'tick': 0, 'entries': {} }
 
   if s:show_special
     call append('$', ['   [e]  <empty buffer>', ''])
@@ -106,7 +105,7 @@ function! startify#insane_in_the_membrane() abort
     echohl NONE
   endif
 
-  let b:startify_section_header_lines = []
+  let b:startify.section_header_lines = []
   let s:lists = get(g:, 'startify_list_order', [
         \ ['   MRU'],            'files',
         \ ['   MRU '. getcwd()], 'dir',
@@ -135,14 +134,14 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   " compute first line offset
-  let s:firstline = 2
-  let s:firstline += len(g:startify_header)
+  let b:startify.firstline = 2
+  let b:startify.firstline += len(g:startify_header)
   " no special, no local Session.vim, but a section header
   if !s:show_special && !exists('l:show_session') && type(s:lists[0]) == type([])
-    let s:firstline += len(s:lists[0]) + 1
+    let b:startify.firstline += len(s:lists[0]) + 1
   endif
 
-  let s:lastline = line('$')
+  let b:startify.lastline = line('$')
 
   if exists('g:startify_custom_footer')
     call append('$', g:startify_custom_footer)
@@ -151,7 +150,7 @@ function! startify#insane_in_the_membrane() abort
   setlocal nomodifiable nomodified
 
   call s:set_mappings()
-  call cursor(s:firstline, 5)
+  call cursor(b:startify.firstline, 5)
   autocmd startify CursorMoved <buffer> call s:set_cursor()
 
   silent! file Startify
@@ -394,9 +393,9 @@ endfunction
 
 " Function: #debug {{{1
 function! startify#debug()
-  if exists('s:entries')
-    for k in sort(keys(s:entries))
-      echomsg '['. k .'] = '. string(s:entries[k])
+  if exists('b:startify.entries')
+    for k in sort(keys(b:startify.entries))
+      echomsg '['. k .'] = '. string(b:startify.entries[k])
     endfor
   endif
 endfunction
@@ -404,13 +403,13 @@ endfunction
 " Function: #open_buffers {{{1
 function! startify#open_buffers(...) abort
   if exists('a:1')  " used in mappings
-    call s:open_buffer(s:entries[a:1])
+    call s:open_buffer(b:startify.entries[a:1])
     return
   endif
 
-  let marked = filter(copy(s:entries), 'v:val.marked')
+  let marked = filter(copy(b:startify.entries), 'v:val.marked')
   if empty(marked)  " open current entry
-    call s:open_buffer(s:entries[line('.')])
+    call s:open_buffer(b:startify.entries[line('.')])
     return
   endif
 
@@ -695,7 +694,7 @@ function! s:set_cursor() abort
   let movement = 2 * (s:newline > s:oldline) - 1
 
   " skip section headers lines until an entry is found
-  while index(b:startify_section_header_lines, s:newline) != -1
+  while index(b:startify.section_header_lines, s:newline) != -1
     let s:newline += movement
   endwhile
 
@@ -705,7 +704,7 @@ function! s:set_cursor() abort
   endif
 
   " don't go beyond first or last entry
-  let s:newline = max([s:firstline, min([s:lastline, s:newline])])
+  let s:newline = max([b:startify.firstline, min([b:startify.lastline, s:newline])])
 
   call cursor(s:newline, 5)
 endfunction
@@ -726,8 +725,8 @@ function! s:set_mappings() abort
   nnoremap <buffer><expr> n ' j'[v:searchforward].'n'
   nnoremap <buffer><expr> N 'j '[v:searchforward].'N'
 
-  for k in keys(s:entries)
-    execute 'nnoremap <buffer><silent>'. s:entries[k].nowait s:entries[k].index
+  for k in keys(b:startify.entries)
+    execute 'nnoremap <buffer><silent>'. b:startify.entries[k].nowait b:startify.entries[k].index
           \ ':call startify#open_buffers('. string(k) .')<cr>'
   endfor
 
@@ -745,7 +744,7 @@ endfunction
 function! s:set_mark(type, ...) abort
   let index = expand('<cword>')
   let line  = exists('a:1') ? a:1 : line('.')
-  let entry = s:entries[line]
+  let entry = b:startify.entries[line]
 
   if entry.type != 'file'
     return
@@ -767,8 +766,8 @@ function! s:set_mark(type, ...) abort
   else
     let entry.cmd = default_cmds[a:type]
     let entry.marked = 1
-    let entry.tick = s:tick
-    let s:tick += 1
+    let entry.tick = b:startify.tick
+    let b:startify.tick += 1
     execute 'normal! ci]'. repeat(a:type, len(index))
   endif
 
@@ -837,7 +836,7 @@ function! s:print_section_header() abort
   let curline = line('.')
 
   for lnum in range(curline, curline + len(s:last_message) + 1)
-    call add(b:startify_section_header_lines, lnum)
+    call add(b:startify.section_header_lines, lnum)
   endfor
 
   call append('$', s:last_message + [''])
@@ -846,7 +845,7 @@ endfunction
 
 " Function: s:register {{{1
 function! s:register(line, index, type, cmd, path, wait)
-  let s:entries[a:line] = {
+  let b:startify.entries[a:line] = {
         \ 'index':  a:index,
         \ 'type':   a:type,
         \ 'cmd':    a:cmd,
