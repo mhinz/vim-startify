@@ -89,13 +89,13 @@ function! startify#insane_in_the_membrane() abort
   endif
   call s:register(line('$')-1, 'e', 'special', 'enew', '', s:nowait_string)
 
-  let s:entry_number = 0
+  let b:startify.entry_number = 0
   if filereadable('Session.vim')
     call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
     call s:register(line('$')-1, '0', 'session',
           \ 'call startify#session_delete_buffers() | source', 'Session.vim',
           \ s:nowait)
-    let s:entry_number = 1
+    let b:startify.entry_number = 1
     let l:show_session = 1
   endif
 
@@ -461,13 +461,13 @@ function! s:display_by_path(path_prefix, path_format, use_env) abort
     endif
 
     for [absolute_path, entry_path] in oldfiles
-      let index = s:get_index_as_string(s:entry_number)
+      let index = s:get_index_as_string(b:startify.entry_number)
       call append('$', eval(entry_format))
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
       call s:register(line('$'), index, 'file', 'edit', absolute_path, s:nowait)
-      let s:entry_number += 1
+      let b:startify.entry_number += 1
     endfor
 
     call append('$', '')
@@ -589,14 +589,14 @@ function! s:show_sessions() abort
   endif
 
   for i in range(len(sfiles))
-    let index = s:get_index_as_string(s:entry_number)
+    let index = s:get_index_as_string(b:startify.entry_number)
     let fname = fnamemodify(sfiles[i], ':t')
     call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
     call s:register(line('$'), index, 'session', 'SLoad', fname, s:nowait)
-    let s:entry_number += 1
+    let b:startify.entry_number += 1
   endfor
 
   call append('$', '')
@@ -616,8 +616,8 @@ function! s:show_bookmarks() abort
     if type(bookmark) == type({})
       let [index, path] = items(bookmark)[0]
     else  " string
-      let [index, path] = [s:get_index_as_string(s:entry_number), bookmark]
-      let s:entry_number += 1
+      let [index, path] = [s:get_index_as_string(b:startify.entry_number), bookmark]
+      let b:startify.entry_number += 1
     endif
 
     let entry_path = ''
@@ -655,8 +655,8 @@ function! s:show_commands() abort
       let [index, command] = items(entry)[0]
     else
       let command = entry
-      let index = s:get_index_as_string(s:entry_number)
-      let s:entry_number += 1
+      let index = s:get_index_as_string(b:startify.entry_number)
+      let b:startify.entry_number += 1
     endif
     " If no list is given, the description is the command itself.
     let [desc, cmd] = type(command) == type([]) ? command : [command, command]
