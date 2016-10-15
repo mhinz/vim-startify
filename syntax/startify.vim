@@ -33,7 +33,7 @@ if exists('g:startify_custom_footer')
   execute 'syntax region StartifyFooter start=/\%'. startify#get_lastline() .'l/ end=/*/'
 endif
 
-if exists('b:startify_section_header_lines')
+if exists('b:startify.section_header_lines')
   for line in b:startify.section_header_lines
     execute 'syntax region StartifySection start=/\%'. line .'l/ end=/$/'
   endfor
