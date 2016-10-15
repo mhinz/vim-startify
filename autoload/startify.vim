@@ -687,26 +687,26 @@ endfunction
 
 " Function: s:set_cursor {{{1
 function! s:set_cursor() abort
-  let s:oldline = exists('s:newline') ? s:newline : 5
-  let s:newline = line('.')
+  let b:startify.oldline = exists('b:startify.newline') ? b:startify.newline : 5
+  let b:startify.newline = line('.')
 
   " going up (-1) or down (1)
-  let movement = 2 * (s:newline > s:oldline) - 1
+  let movement = 2 * (b:startify.newline > b:startify.oldline) - 1
 
   " skip section headers lines until an entry is found
-  while index(b:startify.section_header_lines, s:newline) != -1
-    let s:newline += movement
+  while index(b:startify.section_header_lines, b:startify.newline) != -1
+    let b:startify.newline += movement
   endwhile
 
   " skip blank lines between lists
-  if empty(getline(s:newline))
-    let s:newline += movement
+  if empty(getline(b:startify.newline))
+    let b:startify.newline += movement
   endif
 
   " don't go beyond first or last entry
-  let s:newline = max([b:startify.firstline, min([b:startify.lastline, s:newline])])
+  let b:startify.newline = max([b:startify.firstline, min([b:startify.lastline, b:startify.newline])])
 
-  call cursor(s:newline, 5)
+  call cursor(b:startify.newline, 5)
 endfunction
 
 " Function: s:set_mappings {{{1
