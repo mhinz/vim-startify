@@ -533,6 +533,7 @@ function! s:filter_oldfiles_unsafe(path_prefix, path_format, use_env) abort
   let counter     = s:numfiles
   let entries     = {}
   let oldfiles    = []
+  let is_dir      = escape(s:sep, '\') . '$'
 
   for fname in v:oldfiles
     if counter <= 0
@@ -542,8 +543,9 @@ function! s:filter_oldfiles_unsafe(path_prefix, path_format, use_env) abort
     let absolute_path = glob(fnamemodify(fname, ":p"))
     if empty(absolute_path)
           \ || has_key(entries, absolute_path)
-          \ || s:is_in_skiplist(absolute_path)
+          \ || (absolute_path =~ is_dir)
           \ || match(absolute_path, path_prefix)
+          \ || s:is_in_skiplist(absolute_path)
       continue
     endif
 
