@@ -864,9 +864,6 @@ function! s:create_last_session_link(spath)
           \ shellescape(fnamemodify(a:spath, ':t')),
           \ shellescape(s:session_dir .'/__LAST__'))
     silent! call system(cmd)
-    if v:shell_error
-      echomsg "startify: Can't create 'last used session' symlink."
-    endif
   endif
 endfunction
 
