@@ -863,7 +863,7 @@ function! s:create_last_session_link(spath)
     let cmd = printf('ln -sf %s %s',
           \ shellescape(fnamemodify(a:spath, ':t')),
           \ shellescape(s:session_dir .'/__LAST__'))
-    silent! call system(cmd)
+    call system(cmd)
     if v:shell_error
       echomsg "startify: Can't create 'last used session' symlink."
     endif
