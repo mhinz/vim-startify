@@ -591,16 +591,12 @@ $PWD and $OLDPWD are ignored.
 -----------------------------------------------------------------------------
                                                     *g:startify_mapping_nowait*
 >
-    let g:startify_mapping_nowait = 0
+    let g:startify_mapping_nowait = 1
 <
 Force the usage of |<nowait>| in all mappings.
 
 This helps guarding against global mappings that start with the same
-characters as a Startify index, but might break local mappings, e.g. when you
-have indexes "1" and "11", the "11" won't be accessable anymore, since "1"
-will be opened right way.
-
-Only use this when you know what you're doing.
+characters as the Startify indexes.
 
 NOTE: This option needs at least Vim 7.3.1261. It gets ignored otherwise.
 

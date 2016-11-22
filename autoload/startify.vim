@@ -11,7 +11,7 @@ let g:autoloaded_startify = 1
 
 " Init: values {{{1
 let s:nowait_string  = v:version >= 704 || (v:version == 703 && has('patch1261')) ? '<nowait>' : ''
-let s:nowait         = get(g:, 'startify_mapping_nowait') ? s:nowait_string : ''
+let s:nowait         = get(g:, 'startify_mapping_nowait', 1) ? s:nowait_string : ''
 let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
 let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
