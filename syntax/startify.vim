@@ -9,7 +9,7 @@ if exists("b:current_syntax")
 endif
 
 let s:sep = startify#get_separator()
-let s:padding_left = get(g:, 'startify_padding_left', '   ')
+let s:padding_left = repeat(' ', get(g:, 'startify_padding_left', 3))
 
 syntax sync fromstart
 
