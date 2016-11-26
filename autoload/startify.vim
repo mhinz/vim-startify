@@ -12,6 +12,7 @@ let g:autoloaded_startify = 1
 " Init: values {{{1
 let s:nowait_string  = v:version >= 704 || (v:version == 703 && has('patch1261')) ? '<nowait>' : ''
 let s:nowait         = get(g:, 'startify_mapping_nowait', 1) ? s:nowait_string : ''
+let s:padding_left   = get(g:, 'startify_padding_left', '   ')
 let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
 let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
@@ -85,13 +86,13 @@ function! startify#insane_in_the_membrane() abort
   let b:startify = { 'tick': 0, 'entries': {} }
 
   if s:show_special
-    call append('$', ['   [e]  <empty buffer>', ''])
+    call append('$', [s:padding_left .'[e]  <empty buffer>', ''])
   endif
   call s:register(line('$')-1, 'e', 'special', 'enew', '', s:nowait_string)
 
   let b:startify.entry_number = 0
   if filereadable('Session.vim')
-    call append('$', ['   [0]  '. getcwd() . s:sep .'Session.vim', ''])
+    call append('$', [s:padding_left .'[0]  '. getcwd() . s:sep .'Session.vim', ''])
     call s:register(line('$')-1, '0', 'session',
           \ 'call startify#session_delete_buffers() | source', 'Session.vim',
           \ s:nowait)
@@ -107,11 +108,11 @@ function! startify#insane_in_the_membrane() abort
 
   let b:startify.section_header_lines = []
   let s:lists = get(g:, 'startify_list_order', [
-        \ ['   MRU'],            'files',
-        \ ['   MRU '. getcwd()], 'dir',
-        \ ['   Sessions'],       'sessions',
-        \ ['   Bookmarks'],      'bookmarks',
-        \ ['   Commands'],       'commands',
+        \ [s:padding_left .'MRU'],            'files',
+        \ [s:padding_left .'MRU '. getcwd()], 'dir',
+        \ [s:padding_left .'Sessions'],       'sessions',
+        \ [s:padding_left .'Bookmarks'],      'bookmarks',
+        \ [s:padding_left .'Commands'],       'commands',
         \ ])
 
   for item in s:lists
@@ -126,7 +127,7 @@ function! startify#insane_in_the_membrane() abort
   silent $delete _
 
   if s:show_special
-    call append('$', ['', '   [q]  <quit>'])
+    call append('$', ['', s:padding_left .'[q]  <quit>'])
     call s:register(line('$'), 'q', 'special', 'call s:close()', '', s:nowait_string)
   else
     " Don't overwrite the last regular entry, thus +1
@@ -448,7 +449,7 @@ function! s:display_by_path(path_prefix, path_format, use_env) abort
   let oldfiles = call(get(g:, 'startify_enable_unsafe') ? 's:filter_oldfiles_unsafe' : 's:filter_oldfiles',
         \ [a:path_prefix, a:path_format, a:use_env])
 
-  let entry_format = "'   ['. index .']'. repeat(' ', (3 - strlen(index)))"
+  let entry_format = "s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index)))"
   if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
     let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
   else
@@ -593,7 +594,7 @@ function! s:show_sessions() abort
   for i in range(len(sfiles))
     let index = s:get_index_as_string(b:startify.entry_number)
     let fname = fnamemodify(sfiles[i], ':t')
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+    call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
@@ -629,7 +630,7 @@ function! s:show_bookmarks() abort
     if empty(entry_path)
       let entry_path = path
     endif
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
+    call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
 
     if has('win32')
       let path = substitute(path, '\[', '\[[]', 'g')
@@ -663,7 +664,7 @@ function! s:show_commands() abort
     " If no list is given, the description is the command itself.
     let [desc, cmd] = type(command) == type([]) ? command : [command, command]
 
-    call append('$', '   ['. index .']'. repeat(' ', (3 - strlen(index))) . desc)
+    call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . desc)
     call s:register(line('$'), index, 'special', cmd, '', s:nowait_string)
 
     unlet entry command
@@ -689,7 +690,7 @@ endfunction
 
 " Function: s:set_cursor {{{1
 function! s:set_cursor() abort
-  let b:startify.oldline = exists('b:startify.newline') ? b:startify.newline : 5
+  let b:startify.oldline = exists('b:startify.newline') ? b:startify.newline : 2 + len(s:padding_left)
   let b:startify.newline = line('.')
 
   " going up (-1) or down (1)
@@ -708,7 +709,7 @@ function! s:set_cursor() abort
   " don't go beyond first or last entry
   let b:startify.newline = max([b:startify.firstline, min([b:startify.lastline, b:startify.newline])])
 
-  call cursor(b:startify.newline, 5)
+  call cursor(b:startify.newline, 2 + len(s:padding_left))
 endfunction
 
 " Function: s:set_mappings {{{1
