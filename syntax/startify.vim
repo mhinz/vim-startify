@@ -9,12 +9,13 @@ if exists("b:current_syntax")
 endif
 
 let s:sep = startify#get_separator()
+let s:padding_left = repeat(' ', get(g:, 'startify_padding_left', 3))
 
 syntax sync fromstart
 
-syntax match StartifyBracket /.*\%9c/ contains=
+execute 'syntax match StartifyBracket /.*\%'. (len(s:padding_left) + 6) .'c/ contains=
       \ StartifyNumber,
-      \ StartifySelect,
+      \ StartifySelect'
 syntax match StartifySpecial /\V<empty buffer>\|<quit>/
 syntax match StartifyNumber  /^\s*\[\zs[^BSVT]\{-}\ze\]/
 syntax match StartifySelect  /^\s*\[\zs[BSVT]\{-}\ze\]/
@@ -25,7 +26,7 @@ syntax match StartifyFile    /.*/ contains=
       \ StartifySpecial,
 
 execute 'syntax match StartifySlash /\'. s:sep .'/'
-execute 'syntax match StartifyPath /\%9c.*\'. s:sep .'/ contains=StartifySlash,StartifyVar'
+execute 'syntax match StartifyPath /\%'. (len(s:padding_left) + 6) .'c.*\'. s:sep .'/ contains=StartifySlash,StartifyVar'
 
 execute 'syntax region StartifyHeader start=/\%1l/ end=/\%'. (len(g:startify_header) + 2) .'l/'
 
