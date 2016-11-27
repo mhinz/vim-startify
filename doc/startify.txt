@@ -105,6 +105,7 @@ default values.
     |g:startify_enable_unsafe|
     |g:startify_files_number|
     |g:startify_mapping_nowait|
+    |g:startify_padding_left|
     |g:startify_skiplist_server|
     |g:startify_use_env|
 
@@ -329,6 +330,13 @@ Example:
            \ escape(fnamemodify($HOME, ':p'), '\') .'mysecret.txt',
            \ ]
 <
+------------------------------------------------------------------------------
+                                                       *g:startify_padding_left*
+>
+    let g:startify_padding_left = 3
+<
+The number of spaces used for left padding.
+
 ------------------------------------------------------------------------------
                                                     *g:startify_skiplist_server*
 >
