@@ -728,9 +728,13 @@ function! s:set_mappings() abort
   nnoremap <buffer><expr> n ' j'[v:searchforward].'n'
   nnoremap <buffer><expr> N 'j '[v:searchforward].'N'
 
-  for k in keys(b:startify.entries)
-    execute 'nnoremap <buffer><silent>'. b:startify.entries[k].nowait b:startify.entries[k].index
-          \ ':call startify#open_buffers('. string(k) .')<cr>'
+  function! s:compare_by_index(foo, bar)
+    return a:foo.index - a:bar.index
+  endfunction
+
+  for entry in sort(values(b:startify.entries), 's:compare_by_index')
+    execute 'nnoremap <buffer><silent>'. entry.nowait entry.index
+          \ ':call startify#open_buffers('. string(entry.line) .')<cr>'
   endfor
 
   " Prevent 'nnoremap j gj' mappings, since they would break navigation.
@@ -851,6 +855,7 @@ function! s:register(line, index, type, cmd, path, wait)
   let b:startify.entries[a:line] = {
         \ 'index':  a:index,
         \ 'type':   a:type,
+        \ 'line':   a:line,
         \ 'cmd':    a:cmd,
         \ 'path':   a:path,
         \ 'nowait': a:wait,
