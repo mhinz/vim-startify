@@ -10,8 +10,7 @@ endif
 let g:autoloaded_startify = 1
 
 " Init: values {{{1
-let s:nowait_string  = v:version >= 704 || (v:version == 703 && has('patch1261')) ? '<nowait>' : ''
-let s:nowait         = get(g:, 'startify_mapping_nowait', 1) ? s:nowait_string : ''
+let s:nowait         = v:version >= 704 || (v:version == 703 && has('patch1261')) ? '<nowait>' : ''
 let s:padding_left   = repeat(' ', get(g:, 'startify_padding_left', 3))
 let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
@@ -88,7 +87,7 @@ function! startify#insane_in_the_membrane() abort
   if s:show_special
     call append('$', [s:padding_left .'[e]  <empty buffer>', ''])
   endif
-  call s:register(line('$')-1, 'e', 'special', 'enew', '', s:nowait_string)
+  call s:register(line('$')-1, 'e', 'special', 'enew', '', s:nowait)
 
   let b:startify.entry_number = 0
   if filereadable('Session.vim')
@@ -128,10 +127,10 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', s:padding_left .'[q]  <quit>'])
-    call s:register(line('$'), 'q', 'special', 'call s:close()', '', s:nowait_string)
+    call s:register(line('$'), 'q', 'special', 'call s:close()', '', s:nowait)
   else
     " Don't overwrite the last regular entry, thus +1
-    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '', s:nowait_string)
+    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '', s:nowait)
   endif
 
   " compute first line offset
@@ -665,7 +664,7 @@ function! s:show_commands() abort
     let [desc, cmd] = type(command) == type([]) ? command : [command, command]
 
     call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . desc)
-    call s:register(line('$'), index, 'special', cmd, '', s:nowait_string)
+    call s:register(line('$'), index, 'special', cmd, '', s:nowait)
 
     unlet entry command
   endfor
@@ -714,14 +713,14 @@ endfunction
 
 " Function: s:set_mappings {{{1
 function! s:set_mappings() abort
-  execute "nnoremap <buffer>". s:nowait_string ."<silent> i             :enew <bar> startinsert<cr>"
-  execute "nnoremap <buffer>". s:nowait_string ."<silent> <insert>      :enew <bar> startinsert<cr>"
-  execute "nnoremap <buffer>". s:nowait_string ."<silent> b             :call <sid>set_mark('B')<cr>"
-  execute "nnoremap <buffer>". s:nowait_string ."<silent> s             :call <sid>set_mark('S')<cr>"
-  execute "nnoremap <buffer>". s:nowait_string ."<silent> t             :call <sid>set_mark('T')<cr>"
-  execute "nnoremap <buffer>". s:nowait_string ."<silent> v             :call <sid>set_mark('V')<cr>"
-  execute "nnoremap <buffer>". s:nowait_string ."<silent> <cr>          :call startify#open_buffers()<cr>"
-  execute "nnoremap <buffer>". s:nowait_string ."<silent> <2-LeftMouse> :call startify#open_buffers()<cr>"
+  execute "nnoremap <buffer>". s:nowait ."<silent> i             :enew <bar> startinsert<cr>"
+  execute "nnoremap <buffer>". s:nowait ."<silent> <insert>      :enew <bar> startinsert<cr>"
+  execute "nnoremap <buffer>". s:nowait ."<silent> b             :call <sid>set_mark('B')<cr>"
+  execute "nnoremap <buffer>". s:nowait ."<silent> s             :call <sid>set_mark('S')<cr>"
+  execute "nnoremap <buffer>". s:nowait ."<silent> t             :call <sid>set_mark('T')<cr>"
+  execute "nnoremap <buffer>". s:nowait ."<silent> v             :call <sid>set_mark('V')<cr>"
+  execute "nnoremap <buffer>". s:nowait ."<silent> <cr>          :call startify#open_buffers()<cr>"
+  execute "nnoremap <buffer>". s:nowait ."<silent> <2-LeftMouse> :call startify#open_buffers()<cr>"
 
   " Without these mappings n/N wouldn't work properly, since autocmds always
   " force the cursor back on the index.

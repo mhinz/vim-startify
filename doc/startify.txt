@@ -104,7 +104,6 @@ default values.
     |g:startify_disable_at_vimenter|
     |g:startify_enable_unsafe|
     |g:startify_files_number|
-    |g:startify_mapping_nowait|
     |g:startify_padding_left|
     |g:startify_skiplist_server|
     |g:startify_use_env|
@@ -595,18 +594,6 @@ Show environment variables in path, if their name is shorter than their value.
 See |startify-colors| for highlighting them.
 
 $PWD and $OLDPWD are ignored.
-
------------------------------------------------------------------------------
-                                                    *g:startify_mapping_nowait*
->
-    let g:startify_mapping_nowait = 1
-<
-Force the usage of |<nowait>| in all mappings.
-
-This helps guarding against global mappings that start with the same
-characters as the Startify indexes.
-
-NOTE: This option needs at least Vim 7.3.1261. It gets ignored otherwise.
 
 ==============================================================================
 AUTOCMD                                                       *startify-autocmd*
