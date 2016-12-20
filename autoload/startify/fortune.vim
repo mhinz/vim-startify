@@ -11,6 +11,7 @@ let s:cow = [
 let s:quotes = exists('g:startify_custom_header_quotes')
       \ ? g:startify_custom_header_quotes
       \ : [
+      \ ['There is nothing quite so useless as doing with great efficiency something that should not be done at all.', '', '- Peter Drucker'],
       \ ["If you don't fail at least 90% of the time, you're not aiming high enough.", '', '- Alan Kay'],
       \ ['I think a lot of new programmers like to use advanced data structures and advanced language features as a way of demonstrating their ability. I call it the lion-tamer syndrome. Such demonstrations are impressive, but unless they actually translate into real wins for the project, avoid them.', '', '- Glyn Williams'],
       \ ['I would rather die of passion than of boredom.', '', '- Vincent Van Gogh'],
@@ -108,7 +109,7 @@ let s:quotes = exists('g:startify_custom_header_quotes')
       \ ['Test early. Test often. Test automatically.', '', 'Tests that run with every build are much more effective than test plans that sit on a shelf.'],
       \ ['Use saboteurs to test your testing.', '', 'Introduce bugs on purpose in a separate copy of the source to verify that testing will catch them.'],
       \ ['Find bugs once.', '', 'Once a human tester finds a bug, it should be the last time a human tester finds that bug. Automatic tests should check for it from then on.'],
-      \ ['Sign your work.', '', 'Craftsmen of an earlier age were proud to sign their work. You should be, too.']
+      \ ['Sign your work.', '', 'Craftsmen of an earlier age were proud to sign their work. You should be, too.'],
       \ ]
 
 " Function: s:get_random_offset {{{1
