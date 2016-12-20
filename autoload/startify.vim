@@ -738,10 +738,10 @@ function! s:set_mappings() abort
   " Prevent 'nnoremap j gj' mappings, since they would break navigation.
   " (One can't leave the [x].)
   if !empty(maparg('j', 'n'))
-    nnoremap <buffer> j j
+    execute 'nnoremap <buffer>'. s:nowait 'j j'
   endif
   if !empty(maparg('k', 'n'))
-    nnoremap <buffer> k k
+    execute 'nnoremap <buffer>'. s:nowait 'k k'
   endif
 endfunction
 
