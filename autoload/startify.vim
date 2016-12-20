@@ -87,14 +87,13 @@ function! startify#insane_in_the_membrane() abort
   if s:show_special
     call append('$', [s:padding_left .'[e]  <empty buffer>', ''])
   endif
-  call s:register(line('$')-1, 'e', 'special', 'enew', '', s:nowait)
+  call s:register(line('$')-1, 'e', 'special', 'enew', '')
 
   let b:startify.entry_number = 0
   if filereadable('Session.vim')
     call append('$', [s:padding_left .'[0]  '. getcwd() . s:sep .'Session.vim', ''])
     call s:register(line('$')-1, '0', 'session',
-          \ 'call startify#session_delete_buffers() | source', 'Session.vim',
-          \ s:nowait)
+          \ 'call startify#session_delete_buffers() | source', 'Session.vim')
     let b:startify.entry_number = 1
     let l:show_session = 1
   endif
@@ -127,10 +126,10 @@ function! startify#insane_in_the_membrane() abort
 
   if s:show_special
     call append('$', ['', s:padding_left .'[q]  <quit>'])
-    call s:register(line('$'), 'q', 'special', 'call s:close()', '', s:nowait)
+    call s:register(line('$'), 'q', 'special', 'call s:close()', '')
   else
     " Don't overwrite the last regular entry, thus +1
-    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '', s:nowait)
+    call s:register(line('$')+1, 'q', 'special', 'call s:close()', '')
   endif
 
   " compute first line offset
@@ -466,7 +465,7 @@ function! s:display_by_path(path_prefix, path_format, use_env) abort
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
-      call s:register(line('$'), index, 'file', 'edit', absolute_path, s:nowait)
+      call s:register(line('$'), index, 'file', 'edit', absolute_path)
       let b:startify.entry_number += 1
     endfor
 
@@ -597,7 +596,7 @@ function! s:show_sessions() abort
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
-    call s:register(line('$'), index, 'session', 'SLoad', fname, s:nowait)
+    call s:register(line('$'), index, 'session', 'SLoad', fname)
     let b:startify.entry_number += 1
   endfor
 
@@ -634,7 +633,7 @@ function! s:show_bookmarks() abort
     if has('win32')
       let path = substitute(path, '\[', '\[[]', 'g')
     endif
-    call s:register(line('$'), index, 'file', 'edit', fnameescape(path), s:nowait)
+    call s:register(line('$'), index, 'file', 'edit', fnameescape(path))
 
     unlet bookmark  " avoid type mismatch for heterogeneous lists
   endfor
@@ -664,7 +663,7 @@ function! s:show_commands() abort
     let [desc, cmd] = type(command) == type([]) ? command : [command, command]
 
     call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . desc)
-    call s:register(line('$'), index, 'special', cmd, '', s:nowait)
+    call s:register(line('$'), index, 'special', cmd, '')
 
     unlet entry command
   endfor
@@ -732,7 +731,7 @@ function! s:set_mappings() abort
   endfunction
 
   for entry in sort(values(b:startify.entries), 's:compare_by_index')
-    execute 'nnoremap <buffer><silent>'. entry.nowait entry.index
+    execute 'nnoremap <buffer><silent>'. s:nowait entry.index
           \ ':call startify#open_buffers('. string(entry.line) .')<cr>'
   endfor
 
@@ -850,14 +849,13 @@ function! s:print_section_header() abort
 endfunction
 
 " Function: s:register {{{1
-function! s:register(line, index, type, cmd, path, wait)
+function! s:register(line, index, type, cmd, path)
   let b:startify.entries[a:line] = {
         \ 'index':  a:index,
         \ 'type':   a:type,
         \ 'line':   a:line,
         \ 'cmd':    a:cmd,
         \ 'path':   a:path,
-        \ 'nowait': a:wait,
         \ 'marked': 0,
         \ }
 endfunction
