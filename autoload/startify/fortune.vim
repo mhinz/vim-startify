@@ -11,6 +11,13 @@ let s:cow = [
 let s:quotes = exists('g:startify_custom_header_quotes')
       \ ? g:startify_custom_header_quotes
       \ : [
+      \ ['Adapting old programs to fit new machines usually means adapting new machines to behave like old ones.', '', '- Alan Perlis'],
+      \ ['Fools ignore complexity. Pragmatists suffer it. Some can avoid it. Geniuses remove it.', '', '- Alan Perlis'],
+      \ ['It is easier to change the specification to fit the program than vice versa.', '', '- Alan Perlis'],
+      \ ['Simplicity does not precede complexity, but follows it.', '', '- Alan Perlis'],
+      \ ['Optimization hinders evolution.', '', '- Alan Perlis'],
+      \ ['Recursion is the root of computation since it trades description for time.', '', '- Alan Perlis'],
+      \ ['It is better to have 100 functions operate on one data structure than 10 functions on 10 data structures.', '', '- Alan Perlis'],
       \ ['There is nothing quite so useless as doing with great efficiency something that should not be done at all.', '', '- Peter Drucker'],
       \ ["If you don't fail at least 90% of the time, you're not aiming high enough.", '', '- Alan Kay'],
       \ ['I think a lot of new programmers like to use advanced data structures and advanced language features as a way of demonstrating their ability. I call it the lion-tamer syndrome. Such demonstrations are impressive, but unless they actually translate into real wins for the project, avoid them.', '', '- Glyn Williams'],
