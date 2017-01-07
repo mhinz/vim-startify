@@ -586,7 +586,9 @@ function! s:show_sessions() abort
 
   if get(g:, 'startify_session_sort')
     function! s:sort_by_mtime(foo, bar)
-      return getftime(a:foo) <= getftime(a:bar)
+      let foo = getftime(a:foo)
+      let bar = getftime(a:bar)
+      return foo == bar ? 0 : (foo < bar ? 1 : -1)
     endfunction
     call sort(sfiles, 's:sort_by_mtime')
   endif
