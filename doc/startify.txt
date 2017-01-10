@@ -92,7 +92,6 @@ default values.
     |g:startify_custom_header|
     |g:startify_enable_special|
     |g:startify_list_order|
-    |g:startify_relative_path|
     |g:startify_skiplist|
     |g:startify_update_oldfiles|
 
@@ -104,7 +103,9 @@ default values.
     |g:startify_disable_at_vimenter|
     |g:startify_enable_unsafe|
     |g:startify_files_number|
+    |g:startify_fortune_use_unicode|
     |g:startify_padding_left|
+    |g:startify_relative_path|
     |g:startify_skiplist_server|
     |g:startify_use_env|
 
@@ -329,6 +330,21 @@ Example:
            \ escape(fnamemodify($HOME, ':p'), '\') .'mysecret.txt',
            \ ]
 <
+------------------------------------------------------------------------------
+                                                *g:startify_fortune_use_unicode*
+>
+    let g:startify_fortune_use_unicode = 0
+<
+By default, the fortune header uses ASCII characters, because they work for
+everyone. If you set this option to 1 and your 'encoding' is "utf-8", Unicode
+box-drawing characters will be used instead.
+
+This is not the default, because users of East Asian languages often set
+'ambiwidth' to "double" or make their terminal emulator treat characters of
+ambiguous width as double width. Both would make the drawed box look funny.
+
+For more information: http://unicode.org/reports/tr11
+
 ------------------------------------------------------------------------------
                                                        *g:startify_padding_left*
 >

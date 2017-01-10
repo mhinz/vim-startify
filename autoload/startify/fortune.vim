@@ -127,7 +127,7 @@ endfunction
 " Function: s:draw_box {{{1
 function! s:draw_box(lines) abort
   let longest_line = max(map(copy(a:lines), 'len(v:val)'))
-  if &encoding == 'utf-8'
+  if &encoding == 'utf-8' && get(g:, 'startify_fortune_use_unicode')
       let top_left_corner = '╭'
       let top_right_corner = '╮'
       let bottom_left_corner = '╰'
