@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 " Variables {{{1
 let s:cow = [
       \ '       o',
