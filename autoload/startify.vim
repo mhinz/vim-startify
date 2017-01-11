@@ -14,7 +14,6 @@ let s:nowait         = v:version >= 704 || (v:version == 703 && has('patch1261')
 let s:padding_left   = repeat(' ', get(g:, 'startify_padding_left', 3))
 let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
-let s:delete_buffers = get(g:, 'startify_session_delete_buffers')
 let s:relative_path  = get(g:, 'startify_relative_path') ? ':.:~' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
       \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
@@ -362,7 +361,7 @@ endfunction
 
 " Function: #session_delete_buffers {{{1
 function! startify#session_delete_buffers()
-  if !s:delete_buffers
+  if !get(g:, 'startify_session_delete_buffers', 1)
     return
   endif
   let n = 1
