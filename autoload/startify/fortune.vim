@@ -8,6 +8,15 @@ let s:cow = [
       \ '                ||     ||',
       \ ]
 
+let s:unicode = &encoding == 'utf-8' && get(g:, 'startify_fortune_use_unicode')
+
+let s:char_top_bottom   = ['-', '─'][s:unicode]
+let s:char_sides        = ['|', '│'][s:unicode]
+let s:char_top_left     = ['*', '╭'][s:unicode]
+let s:char_top_right    = ['*', '╮'][s:unicode]
+let s:char_bottom_right = ['*', '╯'][s:unicode]
+let s:char_bottom_left  = ['*', '╰'][s:unicode]
+
 let s:quotes = exists('g:startify_custom_header_quotes')
       \ ? g:startify_custom_header_quotes
       \ : [
@@ -127,27 +136,13 @@ endfunction
 " Function: s:draw_box {{{1
 function! s:draw_box(lines) abort
   let longest_line = max(map(copy(a:lines), 'strwidth(v:val)'))
-  if &encoding == 'utf-8' && get(g:, 'startify_fortune_use_unicode')
-      let top_left_corner = '╭'
-      let top_right_corner = '╮'
-      let bottom_left_corner = '╰'
-      let bottom_right_corner = '╯'
-      let side = '│'
-      let top_bottom_side = '─'
-  else
-      let top_left_corner = '*'
-      let top_right_corner = '*'
-      let bottom_left_corner = '*'
-      let bottom_right_corner = '*'
-      let side = '|'
-      let top_bottom_side = '-'
-  endif
-  let top = top_left_corner . repeat(top_bottom_side, longest_line + 2) . top_right_corner
-  let bottom = bottom_left_corner . repeat(top_bottom_side, longest_line + 2) . bottom_right_corner
+  let top_bottom_without_corners = repeat(s:char_top_bottom, longest_line + 2)
+  let top = s:char_top_left . top_bottom_without_corners . s:char_top_right
+  let bottom = s:char_bottom_left . top_bottom_without_corners . s:char_bottom_right
   let lines = [top]
   for l in a:lines
     let offset = longest_line - strwidth(l)
-    let lines += [side . ' '. l . repeat(' ', offset) .' ' . side]
+    let lines += [s:char_sides . ' '. l . repeat(' ', offset) .' ' . s:char_sides]
   endfor
   let lines += [bottom]
   return lines
@@ -170,7 +165,15 @@ function! startify#fortune#boxed() abort
 endfunction
 
 " Function: #cowsay {{{1
-function! startify#fortune#cowsay() abort
+function! startify#fortune#cowsay(...) abort
+  if a:0
+    let s:char_top_bottom   = get(a:000, 0, s:char_top_bottom)
+    let s:char_sides        = get(a:000, 1, s:char_sides)
+    let s:char_top_left     = get(a:000, 2, s:char_top_left)
+    let s:char_top_right    = get(a:000, 3, s:char_top_right)
+    let s:char_bottom_right = get(a:000, 4, s:char_bottom_right)
+    let s:char_bottom_left  = get(a:000, 5, s:char_bottom_left)
+  endif
   let boxed_quote = startify#fortune#boxed()
   let boxed_quote += s:cow
   return map(boxed_quote, '"   ". v:val')
