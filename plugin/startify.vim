@@ -17,6 +17,8 @@ augroup startify
     autocmd VimLeave * call s:extinction()
   endif
 
+  autocmd VimLeave * call s:cleanhome()
+
   autocmd QuickFixCmdPre  *vimgrep* let g:startify_locked = 1
   autocmd QuickFixCmdPost *vimgrep* let g:startify_locked = 0
 augroup END
@@ -51,6 +53,12 @@ endfunction
 function! s:extinction()
   if exists('v:this_session') && filewritable(v:this_session)
     call startify#session_write(fnameescape(v:this_session))
+  endif
+endfunction
+
+function! s:cleanhome()
+  if filereadable("Startify")
+    silent ! rm Startify
   endif
 endfunction
 
