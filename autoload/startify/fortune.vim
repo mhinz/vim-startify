@@ -22,6 +22,8 @@ let s:char_bottom_left  = ['*', '╰'][s:unicode]
 let s:quotes = exists('g:startify_custom_header_quotes')
       \ ? g:startify_custom_header_quotes
       \ : [
+      \ ["Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.", '', '- Brian Kernighan'],
+      \ ["If you don't finish then you're just busy, not productive."],
       \ ['Adapting old programs to fit new machines usually means adapting new machines to behave like old ones.', '', '- Alan Perlis'],
       \ ['Fools ignore complexity. Pragmatists suffer it. Some can avoid it. Geniuses remove it.', '', '- Alan Perlis'],
       \ ['It is easier to change the specification to fit the program than vice versa.', '', '- Alan Perlis'],
