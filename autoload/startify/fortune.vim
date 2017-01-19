@@ -58,7 +58,6 @@ let s:quotes = exists('g:startify_custom_header_quotes')
       \ ['Computers are harder to maintain at high altitude. Thinner air means less cushion between disk heads and platters. Also more radiation.'],
       \ ['Almost every programming language is overrated by its practitioners.', '', '- Larry Wall'],
       \ ['Fancy algorithms are slow when n is small, and n is usually small.', '', '- Rob Pike'],
-      \ ['If C++ and Java are about type hierarchies and the taxonomy of types, Go is about composition.', '', '- Rob Pike'],
       \ ['Methods are just functions with a special first argument.', '', '- Andrew Gerrand'],
       \
       \ ['Care about your craft.', '', 'Why spend your life developing software unless you care about doing it well?'],
