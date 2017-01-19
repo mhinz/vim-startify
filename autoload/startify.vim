@@ -53,6 +53,7 @@ function! startify#insane_in_the_membrane() abort
 
   silent! setlocal
         \ bufhidden=wipe
+        \ colorcolumn=
         \ nobuflisted
         \ nocursorcolumn
         \ nocursorline
@@ -61,7 +62,7 @@ function! startify#insane_in_the_membrane() abort
         \ norelativenumber
         \ nospell
         \ noswapfile
-        \ colorcolumn=
+        \ readonly
   if empty(&statusline)
     setlocal statusline=\ startify
   endif
@@ -765,7 +766,7 @@ function! s:set_mark(type, ...) abort
         \ 'T': 'tabnew',
         \ }
 
-  setlocal modifiable
+  setlocal noreadonly modifiable
 
   if entry.marked && index[0] == a:type
     let entry.cmd = 'edit'
@@ -779,7 +780,7 @@ function! s:set_mark(type, ...) abort
     execute 'normal! ci]'. repeat(a:type, len(index))
   endif
 
-  setlocal nomodifiable nomodified
+  setlocal readonly nomodifiable nomodified
 endfunction
 
 " Function: s:sort_by_tick {{{1
