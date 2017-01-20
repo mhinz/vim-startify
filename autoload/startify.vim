@@ -568,6 +568,11 @@ endfunction
 
 " Function: s:show_sessions {{{1
 function! s:show_sessions() abort
+  let limit = get(g:, 'startify_session_number', 999) - 1
+  if limit <= -1
+    return
+  endif
+
   let sfiles = split(globpath(s:session_dir, '*'), '\n')
   let sfiles = filter(sfiles, 'v:val !~# "__LAST__$"')
   let sfiles = filter(sfiles,
@@ -601,6 +606,9 @@ function! s:show_sessions() abort
     endif
     call s:register(line('$'), index, 'session', 'SLoad', fname)
     let b:startify.entry_number += 1
+    if i == limit
+      break
+    endif
   endfor
 
   call append('$', '')

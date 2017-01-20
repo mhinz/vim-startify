@@ -114,6 +114,7 @@ default values.
     |g:startify_session_before_save|
     |g:startify_session_delete_buffers|
     |g:startify_session_dir|
+    |g:startify_session_number|
     |g:startify_session_persistence|
     |g:startify_session_remove_lines|
     |g:startify_session_savecmds|
@@ -460,6 +461,14 @@ Example:
            \ 'silent !pdfreader ~/latexproject/main.pdf &'
            \ ]
 <
+------------------------------------------------------------------------------
+                                                     *g:startify_session_number*
+>
+    let g:startify_session_number = 999
+<
+The maximum number of sessions to display. Makes the most sense together with
+|g:startify_session_sort|.
+
 ------------------------------------------------------------------------------
                                                        *g:startify_session_sort*
 >
