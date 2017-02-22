@@ -731,6 +731,7 @@ function! s:set_mappings() abort
   execute "nnoremap <buffer>". s:nowait ."<silent> v             :call <sid>set_mark('V')<cr>"
   execute "nnoremap <buffer>". s:nowait ."<silent> <cr>          :call startify#open_buffers()<cr>"
   execute "nnoremap <buffer>". s:nowait ."<silent> <2-LeftMouse> :call startify#open_buffers()<cr>"
+  execute "nnoremap <buffer>". s:nowait ."<silent> <MiddleMouse> :enew <bar> normal! gp<cr>"
 
   " Without these mappings n/N wouldn't work properly, since autocmds always
   " force the cursor back on the index.
