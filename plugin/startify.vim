@@ -12,11 +12,7 @@ let g:startify_locked = 0
 
 augroup startify
   autocmd VimEnter * nested call s:genesis()
-
-  if get(g:, 'startify_session_persistence')
-    autocmd VimLeave * call s:extinction()
-  endif
-
+  autocmd VimLeave * call s:extinction()
   autocmd QuickFixCmdPre  *vimgrep* let g:startify_locked = 1
   autocmd QuickFixCmdPost *vimgrep* let g:startify_locked = 0
 augroup END
@@ -49,7 +45,9 @@ function! s:genesis()
 endfunction
 
 function! s:extinction()
-  if exists('v:this_session') && filewritable(v:this_session)
+  if get(g:, 'startify_session_persistence')
+        \ && exists('v:this_session')
+        \ && filewritable(v:this_session)
     call startify#session_write(fnameescape(v:this_session))
   endif
 endfunction
