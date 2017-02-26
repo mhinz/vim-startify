@@ -10,6 +10,10 @@ endif
 let g:loaded_startify = 1
 let g:startify_locked = 0
 
+if !get(g:, 'startify_disable_at_vimenter')
+  set shortmess+=I
+endif
+
 augroup startify
   autocmd VimEnter * nested call s:genesis()
   autocmd VimLeave * call s:extinction()
