@@ -807,7 +807,7 @@ function! s:check_user_options(path) abort
   elseif get(g:, 'startify_change_to_vcs_root')
     call s:cd_to_vcs_root(a:path)
   elseif get(g:, 'startify_change_to_dir', 1)
-    execute 'lcd' isdirectory(a:path) ? a:path : fnamemodify(a:path, ':h')
+    execute 'lcd' isdirectory(expand(a:path)) ? a:path : fnamemodify(a:path, ':h')
   endif
 endfunction
 
