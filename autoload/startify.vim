@@ -644,7 +644,7 @@ function! s:show_bookmarks() abort
     if has('win32')
       let path = substitute(path, '\[', '\[[]', 'g')
     endif
-    call s:register(line('$'), index, 'file', 'edit', fnameescape(path))
+    call s:register(line('$'), index, 'file', 'edit', fnameescape(expand(path)))
 
     unlet bookmark  " avoid type mismatch for heterogeneous lists
   endfor
