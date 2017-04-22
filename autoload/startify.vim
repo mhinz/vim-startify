@@ -447,7 +447,8 @@ function! s:display_by_path(path_prefix, path_format, use_env) abort
         \ [a:path_prefix, a:path_format, a:use_env])
 
   let entry_format = "s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index)))"
-  if exists('*WebDevIconsGetFileTypeSymbol')  " support for vim-devicons
+  if exists('*WebDevIconsGetFileTypeSymbol') && get(g:, 'webdevicons_enable')
+    " support for vim-devicons
     let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
   else
     let entry_format .= '. entry_path'
