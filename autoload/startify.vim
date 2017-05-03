@@ -559,7 +559,7 @@ endfun
 
 " Function: s:show_dir {{{1
 function! s:show_dir() abort
-  return s:display_by_path(getcwd(), ':.', 0)
+  return s:display_by_path(getcwd() . s:sep, ':.', 0)
 endfunction
 
 " Function: s:show_files {{{1
