@@ -808,7 +808,16 @@ function! s:check_user_options(path) abort
   elseif get(g:, 'startify_change_to_vcs_root')
     call s:cd_to_vcs_root(a:path)
   elseif get(g:, 'startify_change_to_dir', 1)
-    execute 'lcd' isdirectory(a:path) ? a:path : fnamemodify(a:path, ':h')
+    if isdirectory(a:path)
+      execute 'lcd' a:path
+    else
+      let dir = fnamemodify(a:path, ':h')
+      if isdirectory(dir)
+        execute 'lcd' dir
+      else
+        " Do nothing. E.g. a:path == `scp://foo/bar`
+      endif
+    endif
   endif
 endfunction
 
