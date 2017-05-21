@@ -27,9 +27,26 @@ options for fine-grained customization.
 
 Use your favorite plugin manager.
 
+***
+
 Using [vim-plug](https://github.com/junegunn/vim-plug):
 
     Plug 'mhinz/vim-startify'
+
+***
+
+Using [Vundle](https://github.com/gmarik/vundle):
+
+1. Add this to vimrc
+
+		Plugin 'mhinz/vim-startify'
+
+2. Run:
+
+		:so ~/.vimrc
+		:PluginInstall
+
+***
 
 It works without any configuration, but you might want to look into the
 documentation for further customization:
