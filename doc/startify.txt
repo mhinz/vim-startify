@@ -285,6 +285,8 @@ This also works for sessions started with:
 >
     vim -S mysession.vim
 <
+Note startify only looks at this value when it is loaded.
+
 ------------------------------------------------------------------------------
                                              *g:startify_session_delete_buffers*
 >
