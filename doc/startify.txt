@@ -616,8 +616,11 @@ Don't run Startify at Vim startup. You can still call it anytime via
 >
     let g:startify_relative_path = 0
 <
-Show filenames relative to the current working directory instead of as
-absolute paths. This only applies to the "files" list, since the "dir" list is
+If the file is in or below the current working directory, use a relative path.
+Otherwise an absolute path is used. The latter prevents hard to grasp entries
+like `../../../../../foo`.
+
+NOTE: This only applies to the "files" list, since the "dir" list is
 relative by nature.
 
 -----------------------------------------------------------------------------
