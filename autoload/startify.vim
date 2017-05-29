@@ -898,7 +898,11 @@ endfunction
 " Function: s:init_env {{{1
 function! s:init_env()
   let s:env = []
-  let ignore = { 'PWD': 1, 'OLDPWD': 1 }
+  let ignore = {
+        \ 'HOME':   1,
+        \ 'OLDPWD': 1,
+        \ 'PWD':    1,
+        \ }
 
   function! s:get_env()
     redir => s
