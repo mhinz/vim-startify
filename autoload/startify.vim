@@ -514,7 +514,7 @@ function! s:filter_oldfiles(path_prefix, path_format, use_env) abort
     call s:init_env()
     for i in range(len(oldfiles))
       for [k,v] in s:env
-        let p = oldfiles[i][1]
+        let p = oldfiles[i][0]
         if !stridx(tolower(p), tolower(v))
           let oldfiles[i][1] = printf('$%s%s', k, p[len(v):])
           break
