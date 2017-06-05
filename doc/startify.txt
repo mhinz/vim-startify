@@ -542,9 +542,9 @@ Dynamic example:~
 <
 If you go for a dynamic header, you might find the following functions useful:
 
-    startify#fortune#quote()    raw random quote
-    startify#fortune#boxed()    formatted random quote in a box
-    startify#fortune#cowsay()   formatted random quote in a box + cow
+    startify#fortune#quote()     raw random quote
+    startify#fortune#boxed(...)  opt list or formatted random quote in a box
+    startify#fortune#cowsay()    formatted random quote in a box + cow
 
 Try them like this:
 >
