@@ -589,11 +589,15 @@ Also have a look at |startify-faq-08|.
 If you don't set |g:startify_custom_header|, the internal cowsay implementation
 with shipped random quotes will be used.
 
-If you want to use your own quotes, add a list of lists, like this:
+To use your own quotes, set this option to a list of quotes. Each quote is
+either another list or a |Funcref| (see |expr-lambda|) that returns a list.
+
+Each element of the inner lists is put on an own line in the custom header.
 >
     let g:startify_custom_header_quotes = [
-        \ ['line 1', '', 'line 3'],
-        \ ['quote #2']
+        \ ['quote #1'],
+        \ ['quote #2', 'using', 'three lines'],
+        \ {-> systemlist('echo quote #3')}
         \ ]
 <
 ------------------------------------------------------------------------------

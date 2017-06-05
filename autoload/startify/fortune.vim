@@ -159,7 +159,8 @@ endfunction
 " Function: #boxed {{{1
 function! startify#fortune#boxed(...) abort
   let wrapped_quote = []
-  let quote = a:0 && type(a:1) == type([]) ? a:1 : startify#fortune#quote()
+  let Quote = a:0 && type(a:1) == type([]) ? a:1 : startify#fortune#quote()
+  let quote = type(Quote) == type(function('tr')) ? Quote() : Quote
   for line in quote
     let wrapped_quote += split(line, '\%50c.\{-}\zs\s', 1)
   endfor
