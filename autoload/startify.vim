@@ -104,9 +104,15 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   let b:startify.section_header_lines = []
+  if !exists('g:startify_mru_files_header')
+    let g:startify_mru_files_header = 'MRU'
+  endif
+  if !exists('g:startify_mru_dir_header')
+    let g:startify_mru_dir_header = 'MRU'
+  endif
   let s:lists = get(g:, 'startify_list_order', [
-        \ [s:padding_left .'MRU'],            'files',
-        \ [s:padding_left .'MRU '. getcwd()], 'dir',
+        \ [s:padding_left .g:startify_mru_files_header],            'files',
+        \ [s:padding_left .g:startify_mru_dir_header. getcwd()],    'dir',
         \ [s:padding_left .'Sessions'],       'sessions',
         \ [s:padding_left .'Bookmarks'],      'bookmarks',
         \ [s:padding_left .'Commands'],       'commands',
