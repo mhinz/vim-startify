@@ -15,8 +15,8 @@ if !get(g:, 'startify_disable_at_vimenter')
 endif
 
 augroup startify
-  autocmd VimEnter * nested call s:genesis()
-  autocmd VimLeave * call s:extinction()
+  autocmd VimEnter    * nested call s:genesis()
+  autocmd VimLeavePre * nested call s:extinction()
   autocmd QuickFixCmdPre  *vimgrep* let g:startify_locked = 1
   autocmd QuickFixCmdPost *vimgrep* let g:startify_locked = 0
 augroup END
