@@ -395,6 +395,8 @@ function! startify#debug()
     for k in sort(keys(b:startify.entries))
       echomsg '['. k .'] = '. string(b:startify.entries[k])
     endfor
+  else
+    echomsg 'This is no Startify buffer!'
   endif
 endfunction
 
