@@ -98,9 +98,7 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   if empty(v:oldfiles)
-    echohl WarningMsg
-    echomsg "startify: Can't read viminfo file.  Read :help startify-faq-02"
-    echohl NONE
+    call s:warn("startify: Can't read viminfo file. Read :help startify-faq-02")
   endif
 
   let b:startify.section_header_lines = []
@@ -396,7 +394,7 @@ function! startify#debug()
       echomsg '['. k .'] = '. string(b:startify.entries[k])
     endfor
   else
-    echomsg 'This is no Startify buffer!'
+    call s:warn('This is no Startify buffer!')
   endif
 endfunction
 
@@ -693,9 +691,7 @@ function! s:is_in_skiplist(arg) abort
         return 1
       endif
     catch
-      echohl WarningMsg
-      echomsg 'startify: Pattern '. string(regexp) .' threw an exception. Read :help g:startify_skiplist'
-      echohl NONE
+      call s:warn('startify: Pattern '. string(regexp) .' threw an exception. Read :help g:startify_skiplist')
     endtry
   endfor
 endfunction
@@ -944,4 +940,11 @@ function s:transform(absolute_path)
     unlet V
   endfor
   return ''
+endfunction
+
+" Function: s:warn {{{1
+function! s:warn(msg) abort
+  echohl WarningMsg
+  echomsg a:msg
+  echohl NONE
 endfunction
