@@ -200,7 +200,7 @@ function! startify#session_load(...) abort
 endfunction
 
 " Function: #session_save {{{1
-function! startify#session_save(...) abort
+function! startify#session_save(bang, ...) abort
   if !isdirectory(s:session_dir)
     if exists('*mkdir')
       echo 'The session directory does not exist: '. s:session_dir .'. Create it?  [y/n]'
@@ -240,7 +240,7 @@ function! startify#session_save(...) abort
   endif
 
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
-  if nr2char(getchar()) == 'y'
+  if a:bang || nr2char(getchar()) == 'y'
     call startify#session_write(fnameescape(spath))
     echo 'Session saved under: '. spath
   else
