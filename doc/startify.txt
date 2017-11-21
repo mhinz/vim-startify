@@ -658,11 +658,14 @@ Open the startify buffer.
                                                                *startify-:SSave*
                                                              *startify-:SDelete*
 >
-    :SSave [session]
-    :SDelete [session]
+    :SSave[!] [session]
+    :SDelete[!] [session]
 <
 Save or delete a session. If you don't specify a session name, it will prompt
 you for one.
+
+Use `:SSave!` or `:SDelete!` to always overwrite or delete an existing session.
+
                                                                *startify-:SLoad*
 >
     :SLoad [session]
