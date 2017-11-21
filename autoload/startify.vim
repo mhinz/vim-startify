@@ -11,7 +11,6 @@ let g:autoloaded_startify = 1
 
 " Init: values {{{1
 let s:nowait         = v:version >= 704 || (v:version == 703 && has('patch1261')) ? '<nowait>' : ''
-let s:padding_left   = repeat(' ', get(g:, 'startify_padding_left', 3))
 let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
 let s:relative_path  = get(g:, 'startify_relative_path') ? ':~:.' : ':p:~'
@@ -24,6 +23,9 @@ let s:skiplist = get(g:, 'startify_skiplist', [
       \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
       \ 'bundle/.*/doc',
       \ ])
+
+let s:padding_left = repeat(' ', get(g:, 'startify_padding_left', 3))
+let s:fixed_column = len(s:padding_left) + 2
 
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
@@ -702,7 +704,12 @@ function! s:set_cursor() abort
   let b:startify.newline = line('.')
 
   " going up (-1) or down (1)
+  if b:startify.oldline == b:startify.newline && col('.') != s:fixed_column
+    let movement = 2 * (col('.') > s:fixed_column) - 1
+    let b:startify.newline += movement
+  else
   let movement = 2 * (b:startify.newline > b:startify.oldline) - 1
+  endif
 
   " skip section headers lines until an entry is found
   while index(b:startify.section_header_lines, b:startify.newline) != -1
@@ -717,7 +724,7 @@ function! s:set_cursor() abort
   " don't go beyond first or last entry
   let b:startify.newline = max([b:startify.firstline, min([b:startify.lastline, b:startify.newline])])
 
-  call cursor(b:startify.newline, 2 + len(s:padding_left))
+  call cursor(b:startify.newline, s:fixed_column)
 endfunction
 
 " Function: s:set_mappings {{{1
@@ -745,15 +752,6 @@ function! s:set_mappings() abort
     execute 'nnoremap <buffer><silent>'. s:nowait entry.index
           \ ':call startify#open_buffers('. string(entry.line) .')<cr>'
   endfor
-
-  " Prevent 'nnoremap j gj' mappings, since they would break navigation.
-  " (One can't leave the [x].)
-  if !empty(maparg('j', 'n'))
-    execute 'nnoremap <buffer>'. s:nowait 'j j'
-  endif
-  if !empty(maparg('k', 'n'))
-    execute 'nnoremap <buffer>'. s:nowait 'k k'
-  endif
 endfunction
 
 " Function: s:set_mark {{{1
@@ -786,6 +784,9 @@ function! s:set_mark(type, ...) abort
     let b:startify.tick += 1
     execute 'normal! ci]'. repeat(a:type, len(index))
   endif
+
+  " Reset cursor to fixed column, which is important for s:set_cursor().
+  call cursor(line('.'), s:fixed_column)
 
   setlocal readonly nomodifiable nomodified
 endfunction
