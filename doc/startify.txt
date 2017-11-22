@@ -778,6 +778,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-11|  How to use the output of a command as header?
     |startify-faq-12|  There is an empty window with vim-plug!
     |startify-faq-13|  How to disable random quotes header?
+    |startify-faq-14|  NERDTree with NERDTreeTabs does not work in gvim!
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -959,6 +960,17 @@ How to disable random quotes header?~
     let g:startify_custom_header = []
 <
 See |g:startify_custom_header|.
+
+------------------------------------------------------------------------------
+                                                               *startify-faq-14*
+NERDTree with NERDTreeTabs does not work in gvim!~
+
+Mind that `https://github.com/jistr/vim-nerdtree-tabs` is no longer maintained
+and has quite some issues.
+
+Anyway, this particular issue can be resolved in different ways. See:
+
+    https://github.com/mhinz/vim-startify/issues/24
 
 ==============================================================================
 EXAMPLE                                                       *startify-example*
