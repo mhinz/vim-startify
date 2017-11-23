@@ -64,6 +64,7 @@ function! startify#insane_in_the_membrane() abort
         \ norelativenumber
         \ nospell
         \ noswapfile
+        \ matchpairs=
   if empty(&statusline)
     setlocal statusline=\ startify
   endif
