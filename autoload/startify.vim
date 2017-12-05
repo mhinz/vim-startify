@@ -22,6 +22,7 @@ let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'COMMIT_EDITMSG',
       \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc',
       \ 'bundle/.*/doc',
+      \ 'plugged/.*/doc',
       \ ])
 
 let s:padding_left = repeat(' ', get(g:, 'startify_padding_left', 3))
