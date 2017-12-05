@@ -19,9 +19,7 @@ let s:char_top_right    = ['*', '╮'][s:unicode]
 let s:char_bottom_right = ['*', '╯'][s:unicode]
 let s:char_bottom_left  = ['*', '╰'][s:unicode]
 
-let s:quotes = exists('g:startify_custom_header_quotes')
-      \ ? g:startify_custom_header_quotes
-      \ : [
+let s:predefined_quotes = [
       \ ["Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.", '', '- Brian Kernighan'],
       \ ["If you don't finish then you're just busy, not productive."],
       \ ['Adapting old programs to fit new machines usually means adapting new machines to behave like old ones.', '', '- Alan Perlis'],
@@ -130,6 +128,15 @@ let s:quotes = exists('g:startify_custom_header_quotes')
       \ ['Find bugs once.', '', 'Once a human tester finds a bug, it should be the last time a human tester finds that bug. Automatic tests should check for it from then on.'],
       \ ['Sign your work.', '', 'Craftsmen of an earlier age were proud to sign their work. You should be, too.'],
       \ ]
+
+" Function: #predefined_quotes {{{1
+function! startify#fortune#predefined_quotes() abort
+  return s:predefined_quotes
+endfunction
+
+let s:quotes = exists('g:startify_custom_header_quotes')
+      \ ? g:startify_custom_header_quotes
+      \ : startify#fortune#predefined_quotes()
 
 " Function: s:get_random_offset {{{1
 function! s:get_random_offset(max) abort
