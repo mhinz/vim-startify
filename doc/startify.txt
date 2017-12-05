@@ -779,6 +779,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-12|  There is an empty window with vim-plug!
     |startify-faq-13|  How to disable random quotes header?
     |startify-faq-14|  NERDTree with NERDTreeTabs does not work in gvim!
+    |startify-faq-15|  Startify is cluttered with help files!
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -971,6 +972,20 @@ and has quite some issues.
 Anyway, this particular issue can be resolved in different ways. See:
 
     https://github.com/mhinz/vim-startify/issues/24
+
+------------------------------------------------------------------------------
+                                                               *startify-faq-15*
+Startify is cluttered with help files!~
+
+Everytime you use |:h|, you open a file from the Vim runtime directory or of
+an installed plugin. By default, Startify hides these by skipping the
+directories under `$VIMRUNTIME/doc` and `(bundle|plugged)/.*/doc`.
+
+This works for most use cases, but not for all. E.g. GUIs embed Vim and both
+processes could have a different |$VIMRUNTIME|.
+
+If the default fails for you and the Startify buffer is cluttered with help
+files, add that path to the skiplist yourself: |g:startify_skiplist|.
 
 ==============================================================================
 EXAMPLE                                                       *startify-example*
