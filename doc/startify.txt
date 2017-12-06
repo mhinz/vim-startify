@@ -978,11 +978,9 @@ Anyway, this particular issue can be resolved in different ways. See:
 Startify is cluttered with help files!~
 
 Everytime you use |:h|, you open a file from the Vim runtime directory or of
-an installed plugin. By default, Startify hides these by skipping the
-directories under `$VIMRUNTIME/doc` and `(bundle|plugged)/.*/doc`.
+an installed plugin. By default, Startify detects these files and skips them.
 
-This works for most use cases, but not for all. E.g. GUIs embed Vim and both
-processes could have a different |$VIMRUNTIME|.
+This works for most use cases, but not for all.
 
 If the default fails for you and the Startify buffer is cluttered with help
 files, add that path to the skiplist yourself: |g:startify_skiplist|.
