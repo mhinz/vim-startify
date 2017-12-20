@@ -69,15 +69,18 @@ Startify basically provides two things:
 
    And you can define your own custom ascii art header now!
 
-2) It eases handling of loading and saving sessions by only working with a
-   certain directory. These commands are used for convenience:
+2) The plugin eases the handling of loading and saving sessions by putting
+   sessions in a central directory.
 
-      :SLoad       load a session
-      :SSave       save a session
-      :SDelete[!]  delete a session
-      :SClose      close a session
+      :SLoad       load a session    |startify-:SLoad|
+      :SSave[!]    save a session    |startify-:SSave|
+      :SDelete[!]  delete a session  |startify-:SDelete|
+      :SClose      close a session   |startify-:SClose|
 
-    If ! is given, you won't get prompted.
+   If ! is given, you won't get prompted.
+
+   It also supports session persistence, so once a session is loaded, it gets
+   saved automatically when Vim is quit: |g:startify_session_persistence|
 
 ==============================================================================
 OPTIONS                                                       *startify-options*
