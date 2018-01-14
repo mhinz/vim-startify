@@ -1,5 +1,62 @@
 scriptencoding utf-8
 
+" Function: s:get_random_offset {{{1
+function! s:get_random_offset(max) abort
+  return str2nr(matchstr(reltimestr(reltime()), '\.\zs\d\+')[1:]) % a:max
+endfunction
+
+" Function: s:draw_box {{{1
+function! s:draw_box(lines) abort
+  let longest_line = max(map(copy(a:lines), 'strwidth(v:val)'))
+  let top_bottom_without_corners = repeat(s:char_top_bottom, longest_line + 2)
+  let top = s:char_top_left . top_bottom_without_corners . s:char_top_right
+  let bottom = s:char_bottom_left . top_bottom_without_corners . s:char_bottom_right
+  let lines = [top]
+  for l in a:lines
+    let offset = longest_line - strwidth(l)
+    let lines += [s:char_sides . ' '. l . repeat(' ', offset) .' ' . s:char_sides]
+  endfor
+  let lines += [bottom]
+  return lines
+endfunction
+
+" Function: #quote {{{1
+function! startify#fortune#quote() abort
+  return s:quotes[s:get_random_offset(len(s:quotes))]
+endfunction
+
+" Function: #boxed {{{1
+function! startify#fortune#boxed(...) abort
+  let wrapped_quote = []
+  let Quote = a:0 && type(a:1) == type([]) ? a:1 : startify#fortune#quote()
+  let quote = type(Quote) == type(function('tr')) ? Quote() : Quote
+  for line in quote
+    let wrapped_quote += split(line, '\%50c.\{-}\zs\s', 1)
+  endfor
+  let wrapped_quote = s:draw_box(wrapped_quote)
+  return wrapped_quote
+endfunction
+
+" Function: #cowsay {{{1
+function! startify#fortune#cowsay(...) abort
+  if a:0
+    let s:char_top_bottom   = get(a:000, 0, s:char_top_bottom)
+    let s:char_sides        = get(a:000, 1, s:char_sides)
+    let s:char_top_left     = get(a:000, 2, s:char_top_left)
+    let s:char_top_right    = get(a:000, 3, s:char_top_right)
+    let s:char_bottom_right = get(a:000, 4, s:char_bottom_right)
+    let s:char_bottom_left  = get(a:000, 5, s:char_bottom_left)
+  endif
+  let boxed_quote = startify#fortune#boxed()
+  let boxed_quote += s:cow
+  return map(boxed_quote, '"   ". v:val')
+endfunction
+
+" Function: #predefined_quotes {{{1
+function! startify#fortune#predefined_quotes() abort
+  return s:predefined_quotes
+endfunction
+
 " Variables {{{1
 let s:cow = [
       \ '       o',
@@ -129,63 +186,6 @@ let s:predefined_quotes = [
       \ ['Sign your work.', '', 'Craftsmen of an earlier age were proud to sign their work. You should be, too.'],
       \ ]
 
-" Function: #predefined_quotes {{{1
-function! startify#fortune#predefined_quotes() abort
-  return s:predefined_quotes
-endfunction
-
 let s:quotes = exists('g:startify_custom_header_quotes')
       \ ? g:startify_custom_header_quotes
       \ : startify#fortune#predefined_quotes()
-
-" Function: s:get_random_offset {{{1
-function! s:get_random_offset(max) abort
-  return str2nr(matchstr(reltimestr(reltime()), '\.\zs\d\+')[1:]) % a:max
-endfunction
-
-" Function: s:draw_box {{{1
-function! s:draw_box(lines) abort
-  let longest_line = max(map(copy(a:lines), 'strwidth(v:val)'))
-  let top_bottom_without_corners = repeat(s:char_top_bottom, longest_line + 2)
-  let top = s:char_top_left . top_bottom_without_corners . s:char_top_right
-  let bottom = s:char_bottom_left . top_bottom_without_corners . s:char_bottom_right
-  let lines = [top]
-  for l in a:lines
-    let offset = longest_line - strwidth(l)
-    let lines += [s:char_sides . ' '. l . repeat(' ', offset) .' ' . s:char_sides]
-  endfor
-  let lines += [bottom]
-  return lines
-endfunction
-
-" Function: #quote {{{1
-function! startify#fortune#quote() abort
-  return s:quotes[s:get_random_offset(len(s:quotes))]
-endfunction
-
-" Function: #boxed {{{1
-function! startify#fortune#boxed(...) abort
-  let wrapped_quote = []
-  let Quote = a:0 && type(a:1) == type([]) ? a:1 : startify#fortune#quote()
-  let quote = type(Quote) == type(function('tr')) ? Quote() : Quote
-  for line in quote
-    let wrapped_quote += split(line, '\%50c.\{-}\zs\s', 1)
-  endfor
-  let wrapped_quote = s:draw_box(wrapped_quote)
-  return wrapped_quote
-endfunction
-
-" Function: #cowsay {{{1
-function! startify#fortune#cowsay(...) abort
-  if a:0
-    let s:char_top_bottom   = get(a:000, 0, s:char_top_bottom)
-    let s:char_sides        = get(a:000, 1, s:char_sides)
-    let s:char_top_left     = get(a:000, 2, s:char_top_left)
-    let s:char_top_right    = get(a:000, 3, s:char_top_right)
-    let s:char_bottom_right = get(a:000, 4, s:char_bottom_right)
-    let s:char_bottom_left  = get(a:000, 5, s:char_bottom_left)
-  endif
-  let boxed_quote = startify#fortune#boxed()
-  let boxed_quote += s:cow
-  return map(boxed_quote, '"   ". v:val')
-endfunction
