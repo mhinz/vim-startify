@@ -516,7 +516,7 @@ NOTE: There is no sanitizing going on, so you should know what you're doing!
 ------------------------------------------------------------------------------
                                                       *g:startify_custom_header*
 >
-    let g:startify_custom_header = startify#fortune#get_random_quote()
+    let g:startify_custom_header = startify#fortune#cowsay()
 <
 This is a list of strings to be shown before everything else. Every string
 will be written on its own line, hence you can use empty strings for blank
