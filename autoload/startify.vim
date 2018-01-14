@@ -75,8 +75,11 @@ function! startify#insane_in_the_membrane() abort
   if exists('g:startify_custom_header')
     if type(g:startify_custom_header) == type([])
       let g:startify_header = copy(g:startify_custom_header)
-    else
+    elseif type(g:startify_custom_header) == type('')
       let g:startify_header = eval(g:startify_custom_header)
+    else
+      echomsg 'startify: wrong type of value for g:startify_custom_header'
+      let g:startify_header = startify#fortune#cowsay()
     endif
   else
     let g:startify_header = startify#fortune#cowsay()

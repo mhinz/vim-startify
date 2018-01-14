@@ -28,8 +28,7 @@ endfunction
 " Function: #boxed {{{1
 function! startify#fortune#boxed(...) abort
   let wrapped_quote = []
-  let Quote = a:0 && type(a:1) == type([]) ? a:1 : startify#fortune#quote()
-  let quote = type(Quote) == type(function('tr')) ? Quote() : Quote
+  let quote = a:0 && type(a:1) == type([]) ? a:1 : startify#fortune#quote()
   for line in quote
     let wrapped_quote += split(line, '\%50c.\{-}\zs\s', 1)
   endfor
@@ -40,14 +39,17 @@ endfunction
 " Function: #cowsay {{{1
 function! startify#fortune#cowsay(...) abort
   if a:0
-    let s:char_top_bottom   = get(a:000, 0, s:char_top_bottom)
-    let s:char_sides        = get(a:000, 1, s:char_sides)
-    let s:char_top_left     = get(a:000, 2, s:char_top_left)
-    let s:char_top_right    = get(a:000, 3, s:char_top_right)
-    let s:char_bottom_right = get(a:000, 4, s:char_bottom_right)
-    let s:char_bottom_left  = get(a:000, 5, s:char_bottom_left)
+    let quote = a:0 && type(a:1) == type([]) ? a:1 : startify#fortune#quote()
+    let s:char_top_bottom   = get(a:000, 1, s:char_top_bottom)
+    let s:char_sides        = get(a:000, 2, s:char_sides)
+    let s:char_top_left     = get(a:000, 3, s:char_top_left)
+    let s:char_top_right    = get(a:000, 4, s:char_top_right)
+    let s:char_bottom_right = get(a:000, 5, s:char_bottom_right)
+    let s:char_bottom_left  = get(a:000, 6, s:char_bottom_left)
+  else
+    let quote = startify#fortune#quote()
   endif
-  let boxed_quote = startify#fortune#boxed()
+  let boxed_quote = startify#fortune#boxed(quote)
   let boxed_quote += s:cow
   return map(boxed_quote, '"   ". v:val')
 endfunction

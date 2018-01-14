@@ -516,17 +516,23 @@ NOTE: There is no sanitizing going on, so you should know what you're doing!
 ------------------------------------------------------------------------------
                                                       *g:startify_custom_header*
 >
-    let g:startify_custom_header = startify#fortune#cowsay()
+    let g:startify_custom_header = 'startify#fortune#cowsay()'
 <
-This is a list of strings to be shown before everything else. Every string
-will be written on its own line, hence you can use empty strings for blank
-lines.
+Define your own header.
 
-Static example:~
->
-    let g:startify_custom_header = ['line 1', '', 'line 3']
-<
-Static example #2:~
+This option takes a `list of strings`, whereas each string will be put on its
+own line. If it is a simple `string`, it should evaluate to a list of strings.
+
+Helper functions:~
+
+    startify#fortune#quote()       random quote
+    startify#fortune#boxed(...)    random quote in a box
+    startify#fortune#cowsay(...)   random quote in a box + cow
+
+The last two functions optionally take a quote in the list of strings format.
+They also return a list of strings, suitable for this option.
+
+Example #1:~
 >
     let g:startify_custom_header = [
             \ '                                 ________  __ __        ',
@@ -538,21 +544,13 @@ Static example #2:~
             \ '     \/__/    \/_/\/_/\/_/\/_/    \//  \/_/     \/_/    ',
             \ ]
 <
-Dynamic example:~
+Example #2:~
 >
     let g:startify_custom_header =
             \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val')
 <
-If you go for a dynamic header, you might find the following functions useful:
+Example #3:~
 
-    startify#fortune#quote()     raw random quote
-    startify#fortune#boxed(...)  opt list or formatted random quote in a box
-    startify#fortune#cowsay()    formatted random quote in a box + cow
-
-Try them like this:
->
-    :echo join(startify#fortune#cowsay(), "\n")
-<
 Let's assume you like the default boxed random quote, but not the ASCII art
 cow. You'd rather have another small ASCII art come before the quote. No
 problem!
