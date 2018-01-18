@@ -456,12 +456,11 @@ function! s:display_by_path(path_prefix, path_format, use_env) abort
   let oldfiles = call(get(g:, 'startify_enable_unsafe') ? 's:filter_oldfiles_unsafe' : 's:filter_oldfiles',
         \ [a:path_prefix, a:path_format, a:use_env])
 
-  let entry_format = "s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index)))"
-  if exists('*WebDevIconsGetFileTypeSymbol') && get(g:, 'webdevicons_enable')
-    " support for vim-devicons
-    let entry_format .= ". WebDevIconsGetFileTypeSymbol(entry_path) .' '.  entry_path"
+  let entry_format = "s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) ."
+  if exists('*StartifyEntryFormat')
+    let entry_format .= StartifyEntryFormat()
   else
-    let entry_format .= '. entry_path'
+    let entry_format .= 'entry_path'
   endif
 
   if !empty(oldfiles)
