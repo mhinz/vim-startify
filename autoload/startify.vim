@@ -157,8 +157,10 @@ function! startify#insane_in_the_membrane() abort
   call cursor(b:startify.firstline, 5)
   autocmd startify CursorMoved <buffer> call s:set_cursor()
 
+  silent! %foldopen!
   silent! file Startify
   set filetype=startify readonly
+
   if exists('#User#Startified')
     if v:version > 703 || v:version == 703 && has('patch442')
       doautocmd <nomodeline> User Startified
