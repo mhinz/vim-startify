@@ -780,12 +780,12 @@ will be replaced by their respective values.
 `absolute_path` is self-explaining and `entry_path` is the same path but
 potentially shortened, depending on options like |g:startify_relative_path|.
 
-So, let us assume there is a function `GetLogo(path)` that returns a unicode
-logo depending on the filetype of a given file. Then you could prepend the
-logo to each Startify entry by putting this in your vimrc:
+Let us assume you have vim-devicons installed. That plugin has a function
+`WebDevIconsGetFileTypeSymbol()` which returns an icon depending on the given
+file. Prepend the logo to each Startify entry by putting this in your vimrc:
 >
     function! StartifyEntryFormat()
-        return 'GetLogo(absolute_path) ." ". entry_path'
+        return 'WebDevIconsGetFileTypeSymbol(absolute_path) ." ". entry_path'
     endfunction
 <
 ==============================================================================
