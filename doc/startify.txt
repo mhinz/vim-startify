@@ -30,6 +30,7 @@ CONTENTS                                                     *startify-contents*
     COMMANDS ....................................... |startify-commands|
     MAPPINGS ....................................... |startify-mappings|
     COLORS ......................................... |startify-colors|
+    MISC ........................................... |startify-misc|
     FAQ ............................................ |startify-faq|
     EXAMPLE ........................................ |startify-example|
 
@@ -766,6 +767,26 @@ Example: (my terminal emulator supports 256 colors)
     highlight StartifyPath    ctermfg=245
     highlight StartifySlash   ctermfg=240
     highlight StartifySpecial ctermfg=240
+<
+==============================================================================
+MISC                                                             *startify-misc*
+
+Changing the entry format:~
+
+You can create a function `StartifyEntryFormat()` which returns a string that
+gets evaluated in Startify. In that string, `entry_path` and `absolute_path`
+will be replaced by their respective values.
+
+`absolute_path` is self-explaining and `entry_path` is the same path but
+potentially shortened, depending on options like |g:startify_relative_path|.
+
+So, let us assume there is a function `GetLogo(path)` that returns a unicode
+logo depending on the filetype of a given file. Then you could prepend the
+logo to each Startify entry by putting this in your vimrc:
+>
+    function! StartifyEntryFormat()
+        return 'GetLogo(absolute_path) ." ". entry_path'
+    endfunction
 <
 ==============================================================================
 FAQ                                                               *startify-faq*
