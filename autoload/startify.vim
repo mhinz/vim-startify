@@ -127,6 +127,55 @@ function! startify#insane_in_the_membrane() abort
     unlet item
   endfor
 
+  let s:lists = exists('g:startify_lists')
+        \ ? deepcopy('g:startify_lists')
+        \ : [
+        \     { 'header': [s:padding_left .'MRU'],            'type': 'files' },
+        \     { 'header': [s:padding_left .'MRU '. getcwd()], 'type': 'dir' },
+        \     { 'header': [s:padding_left .'Sessions'],       'type': 'sessions' },
+        \     { 'header': [s:padding_left .'Bookmarks'],      'type': 'bookmarks' },
+        \     { 'header': [s:padding_left .'Commands'],       'type': 'commands' },
+        \ ]
+
+  for list in g:startify_lists
+    if !has_key(list, 'type')
+      continue
+    endif
+
+    if type(list.type) == type('')
+      if has_key(list, 'header')
+        let s:last_message = list.header
+      endif
+      call s:show_{list.type}()
+    elseif type(list.type) == type(function('tr'))
+      try
+        let entries = list.type()
+      catch
+        call s:warn(v:exception)
+        continue
+      endtry
+      if empty(entries)
+        unlet s:last_message
+        continue
+      endif
+
+      if has_key(list, 'header')
+        let s:last_message = list.header
+        call s:print_section_header()
+      endif
+
+      for entry in entries
+        let index = s:get_index_as_string(b:startify.entry_number)
+        call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . entry.line)
+        call s:register(line('$'), index, 'special', entry.cmd, '')
+        let b:startify.entry_number += 1
+      endfor
+      call append('$', '')
+    else
+      call s:warn('Wrong format for g:startify_lists: '. string(list))
+    endif
+  endfor
+
   silent $delete _
 
   if s:show_special
