@@ -110,34 +110,35 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   let b:startify.section_header_lines = []
-  let s:lists = get(g:, 'startify_list_order', [
-        \ [s:padding_left .'MRU'],            'files',
-        \ [s:padding_left .'MRU '. getcwd()], 'dir',
-        \ [s:padding_left .'Sessions'],       'sessions',
-        \ [s:padding_left .'Bookmarks'],      'bookmarks',
-        \ [s:padding_left .'Commands'],       'commands',
-        \ ])
 
-  for item in s:lists
-    if type(item) == type('')
-      call s:show_{item}()
-    else
-      let s:last_message = item
-    endif
-    unlet item
-  endfor
+  if exists('g:startify_lists')
+    let s:lists = deepcopy(g:startify_lists)
+  elseif exists('g:startify_list_order')
+    " Convert old g:startify_list_order format to newer g:startify_lists format.
+    let s:lists = []
+    for item in g:startify_list_order
+      if type(item) == type([])
+        let header = item
+      else
+        if exists('header')
+          let s:lists += [{ 'type': item, 'header': header }]
+          unlet header
+        else
+          let s:lists += [{ 'type': item }]
+        endif
+      endif
+    endfor
+  else
+    let s:lists = [
+          \ { 'header': [s:padding_left .'MRU'],            'type': 'files' },
+          \ { 'header': [s:padding_left .'MRU '. getcwd()], 'type': 'dir' },
+          \ { 'header': [s:padding_left .'Sessions'],       'type': 'sessions' },
+          \ { 'header': [s:padding_left .'Bookmarks'],      'type': 'bookmarks' },
+          \ { 'header': [s:padding_left .'Commands'],       'type': 'commands' },
+          \ ]
+  endif
 
-  let s:lists = exists('g:startify_lists')
-        \ ? deepcopy('g:startify_lists')
-        \ : [
-        \     { 'header': [s:padding_left .'MRU'],            'type': 'files' },
-        \     { 'header': [s:padding_left .'MRU '. getcwd()], 'type': 'dir' },
-        \     { 'header': [s:padding_left .'Sessions'],       'type': 'sessions' },
-        \     { 'header': [s:padding_left .'Bookmarks'],      'type': 'bookmarks' },
-        \     { 'header': [s:padding_left .'Commands'],       'type': 'commands' },
-        \ ]
-
-  for list in g:startify_lists
+  for list in s:lists
     if !has_key(list, 'type')
       continue
     endif
