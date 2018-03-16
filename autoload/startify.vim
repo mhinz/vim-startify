@@ -119,7 +119,7 @@ function! startify#insane_in_the_membrane() abort
         \ ])
 
   for item in s:lists
-    if type(item) == 1
+    if type(item) == type('')
       call s:show_{item}()
     else
       let s:last_message = item
