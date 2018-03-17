@@ -441,6 +441,7 @@ function! s:get_lists() abort
           let lists += [{ 'type': item }]
         endif
       endif
+      unlet item
     endfor
     return lists
   else
