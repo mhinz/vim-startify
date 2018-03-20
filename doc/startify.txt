@@ -96,6 +96,7 @@ default values.
     |g:startify_custom_header|
     |g:startify_enable_special|
     |g:startify_list_order|
+    |g:startify_lists|
     |g:startify_skiplist|
     |g:startify_update_oldfiles|
 
@@ -136,63 +137,97 @@ The default for Windows systems is '$HOME\vimfiles\session'.
 
 ------------------------------------------------------------------------------
                                                          *g:startify_list_order*
+
+This option is DEPRECATED in favor of |g:startify_lists|.
+
+------------------------------------------------------------------------------
+                                                              *g:startify_lists*
 >
-    let g:startify_list_order = ['files', 'dir', 'bookmarks', 'sessions',
-        \ 'commands']
+    let g:startify_lists = [
+          \ { 'type': 'files',     'header': [   'MRU']            },
+          \ { 'type': 'dir',       'header': [   'MRU '. getcwd()] },
+          \ { 'type': 'sessions',  'header': [   'Sessions']       },
+          \ { 'type': 'bookmarks', 'header': [   'Bookmarks']      },
+          \ { 'type': 'commands',  'header': [   'Commands']       },
+          \ ]
 <
-At the moment startify supports these lists:~
+Startify displays lists. Each list consists of a type and an optional header.
 
-1) "files"
+The 'type' is either a string of a built-in type or a |Funcref|.
 
-   This lists the most recently used files using viminfo. The number of files
-   is limited by |g:startify_files_number|.
+The 'header' is a list of strings, whereas each string will be put on its own
+line in the header.
 
-2) "dir"
+Built-in types:~
 
-   This lists the files from the current directory sorted by modification
-   time. The number of files is limited by |g:startify_files_number|.
+'files'
 
-3) "bookmarks"
+    This lists the most recently used files using viminfo. The number of files
+    is limited by |g:startify_files_number|.
 
-   This lists bookmarks, thus hardcoded files or directories that will always
-   be shown. Have a look at |g:startify_bookmarks|.
+'dir'
 
-4) "sessions"
+    This lists the files from the current directory sorted by modification
+    time. The number of files is limited by |g:startify_files_number|.
 
-   This lists all the sessions saved in the directory |g:startify_session_dir|.
+'bookmarks'
 
-5) "commands"
+    This lists bookmarks, thus hardcoded files or directories that will always
+    be shown. Have a look at |g:startify_bookmarks|.
+
+'sessions'
+
+    This lists all the sessions saved in the directory |g:startify_session_dir|.
+
+'commands'
 
     This lists commands defined in |g:startify_commands|.
 
-Section headers:~
+Funcref type:~
 
-Additionally you can add lists of strings to that list. These will be shown
-above the following item in |g:startify_list_order|.
+The referenced function must return a list of dictionaries. Each dictionary
+is an entry and consists of two keys: 'line' and 'cmd'.
 
-NOTE: Section headers are context-senstive. This means that if the following
-item is a startify list ("dir", "bookmarks", ...) and empty (no files in the
-current directory, no bookmarks defined, ...), the section header won't be
-shown as well.
+'line' is the actual entry to display and 'cmd' is a Vim command to execute
+when this entry gets chosen.
 
-NOTE: The section header use the StartifySection highlight group.
-
-Section headers example:~
+Example #1:~
 >
-    let g:startify_list_order = [
-            \ ['   My most recently', '   used files'],
-            \ 'files',
-            \ ['   My most recently used files in the current directory:'],
-            \ 'dir',
-            \ ['   These are my sessions:'],
-            \ 'sessions',
-            \ ['   These are my bookmarks:'],
-            \ 'bookmarks',
-            \ ['   These are my commands:'],
-            \ 'commands',
-            \ ]
+  function s:foobar()
+    return [
+          \ { 'line': 'foo', 'cmd': 'echo "FOO!"' },
+          \ { 'line': 'bar', 'cmd': 'echo "BAR!"' },
+          \ ]
+  endfunction
+
+  let g:startify_lists = [
+        \ { 'type': 'files', 'header': ['   MRU:'] },
+        \ { 'type': function('s:foobar'), 'header': ['foo', ' and', '  bar'] },
+        \ ]
 <
-Feel free to add some cool ASCII action!
+Example #2:~
+
+This more practical example assumes a git repo at ~/repo and vim-fugitive
+installed (for `:Git`).
+>
+  function! s:list_commits()
+    let git = 'git -C ~/repo'
+    let commits = systemlist(git .' log --oneline | head -n10')
+    let git = 'G'. git[1:]
+    return map(commits, '{"line": matchstr(v:val, "\\s\\zs.*"), "cmd": "'. git .' show ". matchstr(v:val, "^\\x\\+") }')
+  endfunction
+
+  let g:startify_lists = [
+        \ { 'header': ['   MRU'],            'type': 'files' },
+        \ { 'header': ['   MRU '. getcwd()], 'type': 'dir' },
+        \ { 'header': ['   Sessions'],       'type': 'sessions' },
+        \ { 'header': ['   Commits'],        'type': function('s:list_commits') },
+        \ ]
+<
+NOTE: Headers are context-senstive: If the list for a type is empty, the
+header won't be shown.
+
+NOTE: Headers use the StartifySection highlight group. See |startify-colors|.
 
 ------------------------------------------------------------------------------
                                                           *g:startify_bookmarks*
