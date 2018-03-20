@@ -47,6 +47,10 @@ function! startify#insane_in_the_membrane() abort
     return
   endif
 
+  if &modified
+    return
+  endif
+
   if !empty(v:servername) && exists('g:startify_skiplist_server')
     for servname in g:startify_skiplist_server
       if servname == v:servername
