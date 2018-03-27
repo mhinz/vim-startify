@@ -115,8 +115,8 @@ function! startify#insane_in_the_membrane() abort
 
   let b:startify.section_header_lines = []
 
-  let s:lists = s:get_lists()
-  call s:show_lists(s:lists)
+  let lists = s:get_lists()
+  call s:show_lists(lists)
 
   silent $delete _
 
@@ -132,8 +132,8 @@ function! startify#insane_in_the_membrane() abort
   let b:startify.firstline = 2
   let b:startify.firstline += len(g:startify_header)
   " no special, no local Session.vim, but a section header
-  if !s:show_special && !exists('l:show_session') && has_key(s:lists[0], 'header')
-    let b:startify.firstline += len(s:lists[0].header) + 1
+  if !s:show_special && !exists('l:show_session') && has_key(lists[0], 'header')
+    let b:startify.firstline += len(lists[0].header) + 1
   endif
 
   let b:startify.lastline = line('$')
