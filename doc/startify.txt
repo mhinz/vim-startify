@@ -845,6 +845,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-14|  NERDTree with NERDTreeTabs does not work in gvim!
     |startify-faq-15|  Startify is cluttered with help files!
     |startify-faq-16|  How to disable single mappings?
+    |startify-faq-17|  Run Startify for each new tab!
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -1058,6 +1059,21 @@ Use |startify-autocmd|:
 >
     autocmd User Startified for key in ['b','s','t','v'] |
           \ execute 'nunmap <buffer>' key | endfor
+<
+------------------------------------------------------------------------------
+                                                               *startify-faq-17*
+Run Startify for each new tab!~
+>
+    if has('nvim')
+      autocmd TabNewEntered * Startify
+    else
+      autocmd VimEnter * let t:startify_new_tab = 1
+      autocmd BufEnter *
+            \ if !exists('t:startify_new_tab') && empty(expand('%')) |
+            \   let t:startify_new_tab = 1 |
+            \   Startify |
+            \ endif
+    endif
 <
 ==============================================================================
 EXAMPLE                                                       *startify-example*
