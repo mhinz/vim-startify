@@ -15,8 +15,8 @@ if !get(g:, 'startify_disable_at_vimenter')
 endif
 
 augroup startify
-  autocmd VimEnter    * nested call s:genesis()
-  autocmd VimLeavePre * nested call s:extinction()
+  autocmd VimEnter    * nested call s:on_vimenter()
+  autocmd VimLeavePre * nested call s:on_vimleavepre()
   autocmd QuickFixCmdPre  *vimgrep* let g:startify_locked = 1
   autocmd QuickFixCmdPost *vimgrep* let g:startify_locked = 0
 augroup END
@@ -32,7 +32,7 @@ function! s:update_oldfiles(file)
   call insert(v:oldfiles, a:file, 0)
 endfunction
 
-function! s:genesis()
+function! s:on_vimenter()
   if !argc()
     if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
       source Session.vim
@@ -48,7 +48,7 @@ function! s:genesis()
   autocmd! startify VimEnter
 endfunction
 
-function! s:extinction()
+function! s:on_vimleavepre()
   if get(g:, 'startify_session_persistence')
         \ && exists('v:this_session')
         \ && filewritable(v:this_session)
