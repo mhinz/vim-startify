@@ -43,11 +43,8 @@ endfunction
 
 " Function: #insane_in_the_membrane {{{1
 function! startify#insane_in_the_membrane() abort
-  if &insertmode
-    return
-  endif
-
-  if &modified
+  " Handle vim -y, vim -M.
+  if &insertmode || !&modifiable
     return
   endif
 
@@ -58,6 +55,8 @@ function! startify#insane_in_the_membrane() abort
       endif
     endfor
   endif
+
+  noautocmd enew
 
   silent! setlocal
         \ bufhidden=wipe
