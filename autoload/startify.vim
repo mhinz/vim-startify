@@ -61,7 +61,9 @@ function! startify#insane_in_the_membrane() abort
     endfor
   endif
 
-  noautocmd enew
+  if line2byte('$') != -1
+    noautocmd enew
+  endif
 
   silent! setlocal
         \ bufhidden=wipe
