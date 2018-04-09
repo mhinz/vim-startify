@@ -20,4 +20,4 @@ fi
 cp viminfo viminfo.tmp
 trap "{ rm viminfo.tmp; }" EXIT
 
-HOME=/dev/null vim -XNu vimrc -i viminfo.tmp -c 'Vader! feature/*.vader'
+TERM=ansi HOME=/dev/null vim -XNu vimrc -i viminfo.tmp -c 'Vader! feature/*.vader'

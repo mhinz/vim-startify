@@ -1,3 +1,6 @@
+Before:
+  enew!
+
 Execute (:SSave foo | SClose):
   edit include/testfile.txt
   SSave foo

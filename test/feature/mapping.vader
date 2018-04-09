@@ -1,4 +1,5 @@
 Before:
+  enew!
   Startify
 
 Do (Open new buffer in insert "foo"):
