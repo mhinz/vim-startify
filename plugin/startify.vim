@@ -33,7 +33,7 @@ function! s:update_oldfiles(file)
 endfunction
 
 function! s:on_vimenter()
-  if !argc()
+  if !argc() && line2byte('$') == -1
     if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
       source Session.vim
     elseif !get(g:, 'startify_disable_at_vimenter')
