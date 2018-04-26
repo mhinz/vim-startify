@@ -225,6 +225,7 @@ let s:predefined_quotes = [
       \ ["In software, we rarely have meaningful requirements. Even if we do, the only measure of success that matters is whether our solution solves the customer's shifting idea of what their problem is.", '', '- Jeff Atwood'],
       \ ['If debugging is the process of removing bugs, then programming must be the process of putting them in.', '', '- Edsger W. Dijkstra'],
       \ ['640K ought to be enough for anybody.', '', '- Bill Gates, 1981'],
+      \ ['To understand recursion, one must first understand recursion.', '', '- Stephen Hawking'],
       \ ]
 
 let s:quotes = exists('g:startify_custom_header_quotes')
