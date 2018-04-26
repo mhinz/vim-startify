@@ -82,20 +82,9 @@ function! startify#insane_in_the_membrane() abort
   endif
 
   " Must be global so that it can be read by syntax/startify.vim.
-  if exists('g:startify_custom_header')
-    if type(g:startify_custom_header) == type([])
-      let g:startify_header = copy(g:startify_custom_header)
-    elseif type(g:startify_custom_header) == type('')
-      let g:startify_header = empty(g:startify_custom_header)
-            \ ? []
-            \ : eval(g:startify_custom_header)
-    else
-      echomsg 'startify: wrong type of value for g:startify_custom_header'
-      let g:startify_header = startify#fortune#cowsay()
-    endif
-  else
-    let g:startify_header = startify#fortune#cowsay()
-  endif
+  let g:startify_header = exists('g:startify_custom_header')
+        \ ? s:set_custom_section(g:startify_custom_header)
+        \ : startify#fortune#cowsay()
   if !empty(g:startify_header)
     let g:startify_header += ['']  " add blank line
   endif
@@ -146,9 +135,13 @@ function! startify#insane_in_the_membrane() abort
 
   let b:startify.lastline = line('$')
 
-  if exists('g:startify_custom_footer')
-    call append('$', g:startify_custom_footer)
+  let footer = exists('g:startify_custom_footer')
+        \ ? s:set_custom_section(g:startify_custom_footer)
+        \ : []
+  if !empty(footer)
+    let footer = [''] + footer
   endif
+  call append('$', footer)
 
   setlocal nomodifiable nomodified
 
@@ -526,6 +519,16 @@ function! s:open_buffer(entry)
     endif
     call s:check_user_options(a:entry.path)
   endif
+endfunction
+
+" Function: s:set_custom_section {{{1
+function! s:set_custom_section(section) abort
+  if type(a:section) == type([])
+    return a:section
+  elseif type(a:section) == type('')
+    return empty(a:section) ? [] : eval(a:section)
+  endif
+  return []
 endfunction
 
 " Function: s:display_by_path {{{1
