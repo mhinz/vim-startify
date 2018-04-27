@@ -31,7 +31,7 @@ execute 'syntax match StartifyPath /\%'. (len(s:padding_left) + 6) .'c.*\'. s:se
 execute 'syntax region StartifyHeader start=/\%1l/ end=/\%'. (len(g:startify_header) + 2) .'l/'
 
 if exists('g:startify_custom_footer')
-  execute 'syntax region StartifyFooter start=/\%'. startify#get_lastline() .'l/ end=/*/'
+  execute 'syntax region StartifyFooter start=/\%'. startify#get_lastline() .'l/ end=/\_.*/'
 endif
 
 if exists('b:startify.section_header_lines')
