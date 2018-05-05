@@ -365,22 +365,9 @@ endfunction
 
 " Function: #session_delete_buffers {{{1
 function! startify#session_delete_buffers()
-  if !get(g:, 'startify_session_delete_buffers', 1)
-    return
+  if get(g:, 'startify_session_delete_buffers', 1)
+    silent %bdelete
   endif
-  let n = 1
-  while n <= bufnr('$')
-    if buflisted(n)
-      try
-        silent execute 'bdelete' n
-      catch
-        echohl ErrorMsg
-        echomsg v:exception
-        echohl NONE
-      endtry
-    endif
-    let n += 1
-  endwhile
 endfunction
 
 " Function: #session_list {{{1

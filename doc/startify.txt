@@ -317,8 +317,8 @@ Example:
 <
 Automatically update sessions in two cases:
 
-    1) Before leaving Vim
-    2) Before loading a new session via :SLoad
+    - Before leaving Vim
+    - Before loading a new session via :SLoad
 
 This also works for sessions started with:
 >
@@ -329,12 +329,12 @@ This also works for sessions started with:
 >
     let g:startify_session_delete_buffers = 1
 <
-Delete all listed buffers when loading or closing a session.
+Delete all buffers when loading or closing a session:
 
-    1. When using |startify-:SLoad|.
-    2. When using |startify-:SClose|.
-    3. When using |g:startify_session_autoload|.
-    4. When choosing a session from the Startify buffer.
+    - When using |startify-:SLoad|.
+    - When using |startify-:SClose|.
+    - When using |g:startify_session_autoload|.
+    - When choosing a session from the Startify buffer.
 
 ------------------------------------------------------------------------------
                                                       *g:startify_change_to_dir*
