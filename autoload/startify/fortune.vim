@@ -226,6 +226,12 @@ let s:predefined_quotes = [
       \ ['If debugging is the process of removing bugs, then programming must be the process of putting them in.', '', '- Edsger W. Dijkstra'],
       \ ['640K ought to be enough for anybody.', '', '- Bill Gates, 1981'],
       \ ['To understand recursion, one must first understand recursion.', '', '- Stephen Hawking'],
+      \ ['Developing tolerance for imperfection is the key factor in turning chronic starters into consistent finishers.', '', '- Jon Acuff'],
+      \ ['Every great developer you know got there by solving problems they were unqualified to solve until they actually did it.', '', '- Patrick McKenzie'],
+      \ ["The average user doesn't give a damn what happens, as long as (1) it works and (2) it's fast.", '', '- Daniel J. Bernstein'],
+      \ ['Walking on water and developing software from a specification are easy if both are frozen.', '', '- Edward V. Berard'],
+      \ ['Be curious. Read widely. Try new things. I think a lot of what people call intelligence boils down to curiosity.', '', '- Aaron Swartz'],
+      \ ['What one programmer can do in one month, two programmers can do in two months.', '', '- Frederick P. Brooks'],
       \ ]
 
 let s:quotes = exists('g:startify_custom_header_quotes')
