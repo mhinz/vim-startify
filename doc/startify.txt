@@ -336,6 +336,8 @@ Delete all buffers when loading or closing a session:
     - When using |g:startify_session_autoload|.
     - When choosing a session from the Startify buffer.
 
+NOTE: Buffers with unsaved changes are silently ignored.
+
 ------------------------------------------------------------------------------
                                                       *g:startify_change_to_dir*
 >
