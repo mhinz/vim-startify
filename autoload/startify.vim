@@ -151,7 +151,7 @@ function! startify#insane_in_the_membrane() abort
 
   silent! %foldopen!
   silent! file Startify
-  set filetype=startify readonly
+  set filetype=startify readonly buftype=nofile
 
   if exists('##DirChanged')
     autocmd startify DirChanged <buffer> Startify

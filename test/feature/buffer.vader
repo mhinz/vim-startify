@@ -5,7 +5,7 @@ Before:
 Execute (Check buffer options):
   AssertEqual 'startify', &filetype
   AssertEqual 'wipe',     &bufhidden
-  AssertEqual '',         &buftype
+  AssertEqual 'nofile',   &buftype
   AssertEqual 0,          &buflisted
   AssertEqual 0,          &cursorcolumn
   AssertEqual 0,          &cursorline
