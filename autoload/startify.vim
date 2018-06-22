@@ -478,9 +478,12 @@ function! s:show_lists(lists) abort
       endif
 
       for entry in entries
+        let cmd  = get(entry, 'cmd', 'edit')
+        let path = get(entry, 'path', '')
+        let type = get(entry, 'type', empty(path) ? 'special' : 'file')
         let index = s:get_index_as_string(b:startify.entry_number)
         call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . entry.line)
-        call s:register(line('$'), index, 'special', entry.cmd, '')
+        call s:register(line('$'), index, type, cmd, path)
         let b:startify.entry_number += 1
       endfor
       call append('$', '')
