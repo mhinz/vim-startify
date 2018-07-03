@@ -186,10 +186,16 @@ Built-in types:~
 Funcref type:~
 
 The referenced function must return a list of dictionaries. Each dictionary
-is an entry and consists of two keys: 'line' and 'cmd'.
+is an entry that consists of these keys:
 
-'line' is the actual entry to display and 'cmd' is a Vim command to execute
-when this entry gets chosen.
+    'line'  The text to display for this entry. (required)
+
+    'cmd'   The Vim command to execute when the entry gets chosen.
+            (required unless 'path' is given)
+
+    'path'  Points to a file. This way you can even use the standard markers
+            like `s` or `v` etc. to open multiple entries at once.
+            (required unless 'cmd' is given)
 
 Example #1:~
 >
