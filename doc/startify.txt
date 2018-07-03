@@ -144,11 +144,11 @@ This option is DEPRECATED in favor of |g:startify_lists|.
                                                               *g:startify_lists*
 >
     let g:startify_lists = [
-          \ { 'type': 'files',     'header': [   'MRU']            },
-          \ { 'type': 'dir',       'header': [   'MRU '. getcwd()] },
-          \ { 'type': 'sessions',  'header': [   'Sessions']       },
-          \ { 'type': 'bookmarks', 'header': [   'Bookmarks']      },
-          \ { 'type': 'commands',  'header': [   'Commands']       },
+          \ { 'type': 'files',     'header': ['   MRU']            },
+          \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+          \ { 'type': 'sessions',  'header': ['   Sessions']       },
+          \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+          \ { 'type': 'commands',  'header': ['   Commands']       },
           \ ]
 <
 Startify displays lists. Each list consists of a type and an optional header.
