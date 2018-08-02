@@ -151,8 +151,7 @@ function! startify#insane_in_the_membrane() abort
   autocmd startify CursorMoved <buffer> call s:set_cursor()
 
   silent! %foldopen!
-  silent! file Startify
-  set filetype=startify readonly
+  set filetype=startify
 
   if exists('##DirChanged')
     autocmd startify DirChanged <buffer> Startify
@@ -849,7 +848,7 @@ function! s:set_mark(type, ...) abort
         \ 'T': 'tabnew',
         \ }
 
-  setlocal noreadonly modifiable
+  setlocal modifiable
 
   if entry.marked && index[0] == a:type
     let entry.cmd = 'edit'
@@ -866,7 +865,7 @@ function! s:set_mark(type, ...) abort
   " Reset cursor to fixed column, which is important for s:set_cursor().
   call cursor(line('.'), s:fixed_column)
 
-  setlocal readonly nomodifiable nomodified
+  setlocal nomodifiable nomodified
 endfunction
 
 " Function: s:sort_by_tick {{{1
