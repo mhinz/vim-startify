@@ -514,7 +514,7 @@ endfunction
 " Function: s:set_custom_section {{{1
 function! s:set_custom_section(section) abort
   if type(a:section) == type([])
-    return a:section
+    return copy(a:section)
   elseif type(a:section) == type('')
     return empty(a:section) ? [] : eval(a:section)
   endif
