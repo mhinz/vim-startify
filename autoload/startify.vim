@@ -482,10 +482,9 @@ function! s:show_lists(lists) abort
         let cmd  = get(entry, 'cmd', 'edit')
         let path = get(entry, 'path', '')
         let type = get(entry, 'type', empty(path) ? 'special' : 'file')
-        let index = s:get_index_as_string(b:startify.entry_number)
+        let index = s:get_index_as_string()
         call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . entry.line)
         call s:register(line('$'), index, type, cmd, path)
-        let b:startify.entry_number += 1
       endfor
       call append('$', '')
     else
@@ -541,13 +540,12 @@ function! s:display_by_path(path_prefix, path_format, use_env) abort
     endif
 
     for [absolute_path, entry_path] in oldfiles
-      let index = s:get_index_as_string(b:startify.entry_number)
+      let index = s:get_index_as_string()
       call append('$', eval(entry_format))
       if has('win32')
         let absolute_path = substitute(absolute_path, '\[', '\[[]', 'g')
       endif
       call s:register(line('$'), index, 'file', 'edit', absolute_path)
-      let b:startify.entry_number += 1
     endfor
 
     call append('$', '')
@@ -680,14 +678,13 @@ function! s:show_sessions() abort
   endif
 
   for i in range(len(sfiles))
-    let index = s:get_index_as_string(b:startify.entry_number)
+    let index = s:get_index_as_string()
     let fname = fnamemodify(sfiles[i], ':t')
     call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
     call s:register(line('$'), index, 'session', 'SLoad', fname)
-    let b:startify.entry_number += 1
     if i == limit
       break
     endif
@@ -710,8 +707,7 @@ function! s:show_bookmarks() abort
     if type(bookmark) == type({})
       let [index, path] = items(bookmark)[0]
     else  " string
-      let [index, path] = [s:get_index_as_string(b:startify.entry_number), bookmark]
-      let b:startify.entry_number += 1
+      let [index, path] = [s:get_index_as_string(), bookmark]
     endif
 
     let entry_path = ''
@@ -749,8 +745,7 @@ function! s:show_commands() abort
       let [index, command] = items(entry)[0]
     else
       let command = entry
-      let index = s:get_index_as_string(b:startify.entry_number)
-      let b:startify.entry_number += 1
+      let index = s:get_index_as_string()
     endif
     " If no list is given, the description is the command itself.
     let [desc, cmd] = type(command) == type([]) ? command : [command, command]
@@ -925,17 +920,24 @@ function! s:close() abort
 endfunction
 
 " Function: s:get_index_as_string {{{1
-function! s:get_index_as_string(idx) abort
+function! s:get_index_as_string() abort
   if !empty(b:startify.indices)
     return remove(b:startify.indices, 0)
   elseif exists('g:startify_custom_indices')
     let listlen = len(g:startify_custom_indices)
-    return (a:idx < listlen) ? g:startify_custom_indices[a:idx] : string(a:idx - listlen)
+    if b:startify.entry_number < listlen
+      let idx = g:startify_custom_indices[b:startify.entry_number]
+    else
+      let idx = string(b:startify.entry_number - listlen)
+    endif
   else
-    return string(a:idx)
+    let idx = string(b:startify.entry_number)
   endif
-endfunction
 
+  let b:startify.entry_number += 1
+
+  return idx
+endfunction
 
 " Function: s:print_section_header {{{1
 function! s:print_section_header() abort
