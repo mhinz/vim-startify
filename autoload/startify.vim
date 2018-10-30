@@ -91,7 +91,7 @@ function! startify#insane_in_the_membrane() abort
   endif
   call append('$', g:startify_header)
 
-  let b:startify = { 'tick': 0, 'entries': {} }
+  let b:startify = { 'tick': 0, 'entries': {}, 'indices': [] }
 
   if s:show_special
     call append('$', [s:padding_left .'[e]  <empty buffer>', ''])
@@ -453,6 +453,8 @@ function! s:show_lists(lists) abort
     if !has_key(list, 'type')
       continue
     endif
+
+    let b:startify.indices = copy(get(list, 'indices', []))
 
     if type(list.type) == type('')
       if has_key(list, 'header')
@@ -924,7 +926,9 @@ endfunction
 
 " Function: s:get_index_as_string {{{1
 function! s:get_index_as_string(idx) abort
-  if exists('g:startify_custom_indices')
+  if !empty(b:startify.indices)
+    return remove(b:startify.indices, 0)
+  elseif exists('g:startify_custom_indices')
     let listlen = len(g:startify_custom_indices)
     return (a:idx < listlen) ? g:startify_custom_indices[a:idx] : string(a:idx - listlen)
   else

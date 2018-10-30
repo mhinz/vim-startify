@@ -151,12 +151,17 @@ This option is DEPRECATED in favor of |g:startify_lists|.
           \ { 'type': 'commands',  'header': ['   Commands']       },
           \ ]
 <
-Startify displays lists. Each list consists of a type and an optional header.
+Startify displays lists. Each list consists of a `type` and optionally a `header`
+and custom `indices`.
 
 The 'type' is either a string of a built-in type or a |Funcref|.
 
 The 'header' is a list of strings, whereas each string will be put on its own
 line in the header.
+
+The 'indices' is a list of strings, which act as indices for the current list.
+Opposed to the global |g:startify_custom_indices|, this is limited to the
+current list.
 
 Built-in types:~
 
