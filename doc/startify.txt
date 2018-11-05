@@ -695,10 +695,10 @@ $PWD and $OLDPWD are ignored.
 ==============================================================================
 AUTOCMD                                                       *startify-autocmd*
 
-When the Startify buffer is fully set up, it emits an User event. You can hook
-into that to customize Startify even further:
+When the Startify buffer is ready, it emits an User event. You can hook into
+that to customize Startify even further:
 >
-    autocmd User Startified let &l:stl = ' This statusline rocks!'
+    autocmd User StartifyReady let &l:stl = ' This statusline rocks!'
 <
 Or use it to disable single mappings: |startify-faq-16|.
 

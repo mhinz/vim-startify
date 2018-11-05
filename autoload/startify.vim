@@ -155,9 +155,11 @@ function! startify#insane_in_the_membrane() abort
   if exists('##DirChanged')
     autocmd startify DirChanged <buffer> Startify
   endif
-
   if exists('#User#Startified')
     doautocmd <nomodeline> User Startified
+  endif
+  if exists('#User#StartifyReady')
+    doautocmd <nomodeline> User StartifyReady
   endif
 endfunction
 
