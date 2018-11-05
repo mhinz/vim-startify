@@ -410,6 +410,10 @@ function! startify#open_buffers(...) abort
   endfor
 
   wincmd =
+
+  if exists('#User#StartifyAllBuffersOpened')
+    autocmd <nomodeline> User StartifyAllBuffersOpened
+  endif
 endfunction
 
 " Function: s:get_lists {{{1
@@ -506,6 +510,9 @@ function! s:open_buffer(entry)
       execute a:entry.cmd a:entry.path
     endif
     call s:check_user_options(a:entry.path)
+  endif
+  if exists('#User#StartifyBufferOpened')
+    autocmd <nomodeline> User StartifyBufferOpened
   endif
 endfunction
 

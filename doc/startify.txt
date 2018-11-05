@@ -695,8 +695,24 @@ $PWD and $OLDPWD are ignored.
 ==============================================================================
 AUTOCMD                                                       *startify-autocmd*
 
-When the Startify buffer is ready, it emits an User event. You can hook into
-that to customize Startify even further:
+In certain situations Startify emits events which can be hooked into via
+|autocmd|s. Those can be used for further customization.
+
+StartifyReady~
+
+  When the Startify buffer is ready.
+
+StartifyBufferOpened~
+
+  For each buffer that got opened by Startify. When you open multiple files at
+  once (see |startify-usage|), this event fires multiple times as well.
+
+StartifyAllBuffersOpened~
+
+  No matter how many buffers you open, this event fires only once after the
+  last buffer was opened.
+
+Example:
 >
     autocmd User StartifyReady let &l:stl = ' This statusline rocks!'
 <
