@@ -314,7 +314,7 @@ function! startify#session_write(spath)
     endif
 
     " put variables from savevars into session file
-    if !empty(savevars)
+    if exists('savevars') && !empty(savevars)
       call append(line('$')-3, savevars)
     endif
 
