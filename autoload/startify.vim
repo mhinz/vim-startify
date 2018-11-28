@@ -263,6 +263,11 @@ endfunction
 
 " Function: #session_write {{{1
 function! startify#session_write(spath)
+  " preserve existing variables from savevars
+  if exists('g:startify_session_savevars')
+    let savevars = map(filter(copy(g:startify_session_savevars), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))')
+  endif
+
   " if this function is called while being in the Startify buffer
   " (by loading another session or running :SSave/:SLoad directly)
   " switch back to the previous buffer before saving the session
@@ -308,9 +313,9 @@ function! startify#session_write(spath)
       endfor
     endif
 
-    " put existing variables from savevars into session file
-    if exists('g:startify_session_savevars')
-      call append(line('$')-3, map(filter(copy(g:startify_session_savevars), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))'))
+    " put variables from savevars into session file
+    if !empty(savevars)
+      call append(line('$')-3, savevars)
     endif
 
     " put commands from savecmds into session file
