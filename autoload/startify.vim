@@ -592,10 +592,7 @@ function! s:filter_oldfiles(path_prefix, path_format, use_env) abort
 
     let entries[absolute_path]  = 1
     let counter                -= 1
-    if !has('win32')
-      let absolute_path = fnameescape(absolute_path)
-    endif
-    let oldfiles += [[absolute_path, entry_path]]
+    let oldfiles += [[fnameescape(absolute_path), entry_path]]
   endfor
 
   if a:use_env
