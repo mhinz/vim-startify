@@ -153,7 +153,8 @@ function! startify#insane_in_the_membrane() abort
   set filetype=startify
 
   if exists('##DirChanged')
-    autocmd startify DirChanged <buffer> Startify
+    let b:startify.cwd = getcwd()
+    autocmd startify DirChanged <buffer> if getcwd() !=# get(get(b:, 'startify', {}), 'cwd') | Startify | endif
   endif
   if exists('#User#Startified')
     doautocmd <nomodeline> User Startified
