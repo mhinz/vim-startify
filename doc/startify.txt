@@ -57,7 +57,8 @@ Startify basically provides two things:
    can even double-click anywhere on the line now.
 
    In addition, 'e' creates an empty buffer, 'i' creates an empty buffer and
-   jumps into insert mode, 'q' quits.
+   jumps into insert mode, 'q' quits either the buffer or, if there is no
+   other listed buffer left, Vim itself.
 
    Moreover, you can open several files at one go. Navigate to an entry and
    hit either 'b' (open in same window), 's' (open in split), 'v' (open in
