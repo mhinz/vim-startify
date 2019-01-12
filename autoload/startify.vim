@@ -41,10 +41,9 @@ function! startify#get_lastline() abort
 endfunction
 
 " Function: #insane_in_the_membrane {{{1
-function! startify#insane_in_the_membrane() abort
+function! startify#insane_in_the_membrane(on_vimenter) abort
   " Handle vim -y, vim -M.
-  if &insertmode
-        \ || (!&modifiable && &buftype != 'terminal' && &filetype != 'startify')
+  if a:on_vimenter && (&insertmode || !&modifiable)
     return
   endif
 

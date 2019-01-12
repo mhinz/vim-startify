@@ -37,7 +37,7 @@ function! s:on_vimenter()
     if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
       source Session.vim
     elseif !get(g:, 'startify_disable_at_vimenter')
-      call startify#insane_in_the_membrane()
+      call startify#insane_in_the_membrane(1)
     endif
   endif
   if get(g:, 'startify_update_oldfiles')
@@ -60,7 +60,7 @@ command! -nargs=? -bar       -complete=customlist,startify#session_list SLoad   
 command! -nargs=? -bar -bang -complete=customlist,startify#session_list SSave   call startify#session_save(<bang>0, <f-args>)
 command! -nargs=? -bar -bang -complete=customlist,startify#session_list SDelete call startify#session_delete(<bang>0, <f-args>)
 command! -nargs=0 -bar SClose call startify#session_close()
-command! -nargs=0 -bar Startify call startify#insane_in_the_membrane()
+command! -nargs=0 -bar Startify call startify#insane_in_the_membrane(0)
 command! -nargs=0 -bar StartifyDebug call startify#debug()
 
 nnoremap <silent><plug>(startify-open-buffers) :<c-u>call startify#open_buffers()<cr>
