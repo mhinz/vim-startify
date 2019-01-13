@@ -1097,9 +1097,11 @@ Run Startify for each new tab!~
     if has('nvim')
       autocmd TabNewEntered * Startify
     else
-      autocmd VimEnter * let t:startify_new_tab = 1
-      autocmd BufEnter *
-            \ if !exists('t:startify_new_tab') && empty(expand('%')) |
+      autocmd BufWinEnter *
+            \ if !exists('t:startify_new_tab')
+            \     && empty(expand('%'))
+            \     && empty(&l:buftype)
+            \     && &l:modifiable |
             \   let t:startify_new_tab = 1 |
             \   Startify |
             \ endif
