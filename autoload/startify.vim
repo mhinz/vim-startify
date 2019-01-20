@@ -14,7 +14,8 @@ let s:numfiles       = get(g:, 'startify_files_number', 10)
 let s:show_special   = get(g:, 'startify_enable_special', 1)
 let s:relative_path  = get(g:, 'startify_relative_path') ? ':~:.' : ':p:~'
 let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
-      \ has('win32') ? '$HOME\vimfiles\session' : '~/.vim/session')))
+      \ has('win32') ? '$HOME\vimfiles\session' :
+      \ has('nvim') ? stdpath('data') . '/session' : '~/.vim/session')))
 let s:tf             = exists('g:startify_transformations')
 
 let s:skiplist = get(g:, 'startify_skiplist', [
