@@ -742,10 +742,12 @@ Use `:SSave!` or `:SDelete!` to always overwrite or delete an existing session.
 
                                                                *startify-:SLoad*
 >
-    :SLoad [session]
+    :SLoad[!] [session]
 <
-Load a session. If you don't specify a session name, it will either prompt you
-for one (Windows) or load the last used session (Unix).
+Load a session. If you don't specify a session name, it will prompt you for
+one.
+
+If the `!` is given, it tries to source the last used session (only Unix).
 
 Providing only a part of the session name works too, if you complete the
 argument with either <c-d> or <tab> afterwards.

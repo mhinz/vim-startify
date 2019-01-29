@@ -164,7 +164,7 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
 endfunction
 
 " Function: #session_load {{{1
-function! startify#session_load(...) abort
+function! startify#session_load(source_last_session, ...) abort
   if !isdirectory(s:session_dir)
     echomsg 'The session directory does not exist: '. s:session_dir
     return
@@ -177,17 +177,15 @@ function! startify#session_load(...) abort
 
   if a:0
     let spath .= a:1
+  elseif a:source_last_session && !has('win32')
+    let spath .= '__LAST__'
   else
-    if has('win32')
-      call inputsave()
-      let spath .= input(
-            \ 'Load this session: ',
-            \ fnamemodify(v:this_session, ':t'),
-            \ 'custom,startify#session_list_as_string') | redraw
-      call inputrestore()
-    else
-      let spath .= '__LAST__'
-    endif
+    call inputsave()
+    let spath .= input(
+          \ 'Load this session: ',
+          \ fnamemodify(v:this_session, ':t'),
+          \ 'custom,startify#session_list_as_string') | redraw
+    call inputrestore()
   endif
 
   if filereadable(spath)
