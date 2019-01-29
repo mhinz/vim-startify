@@ -9,36 +9,14 @@ if exists('g:autoloaded_startify') || &compatible
 endif
 let g:autoloaded_startify = 1
 
-" Init: values {{{1
-let s:numfiles       = get(g:, 'startify_files_number', 10)
-let s:show_special   = get(g:, 'startify_enable_special', 1)
-let s:relative_path  = get(g:, 'startify_relative_path') ? ':~:.' : ':p:~'
-let s:session_dir    = resolve(expand(get(g:, 'startify_session_dir',
-      \ has('win32') ? '$HOME\vimfiles\session' :
-      \ has('nvim') ? stdpath('data') . '/session' : '~/.vim/session')))
-let s:tf             = exists('g:startify_transformations')
-
-let s:skiplist = get(g:, 'startify_skiplist', [
-      \ 'COMMIT_EDITMSG',
-      \ 'runtime/doc/.*\.txt',
-      \ 'bundle/.*/doc/.*\.txt',
-      \ 'plugged/.*/doc/.*\.txt',
-      \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc/.*\.txt',
-      \ ])
-
-let s:padding_left = repeat(' ', get(g:, 'startify_padding_left', 3))
-let s:fixed_column = len(s:padding_left) + 2
+" Function: #get_lastline {{{1
+function! startify#get_lastline() abort
+  return b:startify.lastline + 1
+endfunction
 
 " Function: #get_separator {{{1
 function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
-endfunction
-
-let s:sep = startify#get_separator()
-
-" Function: #get_lastline {{{1
-function! startify#get_lastline() abort
-  return b:startify.lastline + 1
 endfunction
 
 " Function: #insane_in_the_membrane {{{1
@@ -1037,3 +1015,25 @@ function! s:warn(msg) abort
   echomsg 'startify: '. a:msg
   echohl NONE
 endfunction
+
+" Init: values {{{1
+let s:sep = startify#get_separator()
+
+let s:numfiles = get(g:, 'startify_files_number', 10)
+let s:show_special = get(g:, 'startify_enable_special', 1)
+let s:relative_path = get(g:, 'startify_relative_path') ? ':~:.' : ':p:~'
+let s:tf = exists('g:startify_transformations')
+let s:session_dir = resolve(expand(get(g:, 'startify_session_dir',
+      \ has('win32') ? '$HOME\vimfiles\session' :
+      \ has('nvim') ? stdpath('data') . '/session' : '~/.vim/session')))
+
+let s:skiplist = get(g:, 'startify_skiplist', [
+      \ 'COMMIT_EDITMSG',
+      \ 'runtime/doc/.*\.txt',
+      \ 'bundle/.*/doc/.*\.txt',
+      \ 'plugged/.*/doc/.*\.txt',
+      \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc/.*\.txt',
+      \ ])
+
+let s:padding_left = repeat(' ', get(g:, 'startify_padding_left', 3))
+let s:fixed_column = len(s:padding_left) + 2
