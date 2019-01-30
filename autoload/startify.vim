@@ -1016,6 +1016,23 @@ function! s:warn(msg) abort
   echohl NONE
 endfunction
 
+" Function: s:get_session_path {{{1
+function! s:get_session_path() abort
+  if exists('g:startify_session_dir')
+    let path = g:startify_session_dir
+  elseif has('nvim')
+    let path = stdpath('data') . s:sep . 'session'
+  else
+    if has('win32')
+      let path = '$HOME\vimfiles\session'
+    else
+      let path = '~/.vim/session'
+    endif
+  endif
+
+  return resolve(expand(path))
+endfunction
+
 " Init: values {{{1
 let s:sep = startify#get_separator()
 
@@ -1023,9 +1040,7 @@ let s:numfiles = get(g:, 'startify_files_number', 10)
 let s:show_special = get(g:, 'startify_enable_special', 1)
 let s:relative_path = get(g:, 'startify_relative_path') ? ':~:.' : ':p:~'
 let s:tf = exists('g:startify_transformations')
-let s:session_dir = resolve(expand(get(g:, 'startify_session_dir',
-      \ has('win32') ? '$HOME\vimfiles\session' :
-      \ has('nvim') ? stdpath('data') . '/session' : '~/.vim/session')))
+let s:session_dir = s:get_session_path()
 
 let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'COMMIT_EDITMSG',

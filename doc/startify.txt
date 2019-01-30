@@ -134,8 +134,11 @@ default values.
 <
 The directory to save/load sessions to/from.
 
-The default for Windows systems is '$HOME\vimfiles\session'. The
-default for Neovim is '$XDG_DATA_HOME/nvim/session'.
+Defaults:~
+
+  Nvim:          `$XDG_DATA_HOME/nvim/session` (`:echo stdpath('data')`)
+  Vim (Unix):    `$HOME/.vim/session`
+  Vim (Windows): `$HOME/vimfiles/session`
 
 ------------------------------------------------------------------------------
                                                          *g:startify_list_order*
