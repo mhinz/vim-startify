@@ -11,12 +11,12 @@
                                                              \/__/
   by Marco Hinz~
 >
-  If you use any of my plugins, please star them on github. It's a great way
+  If you use any of my plugins, please star them on GitHub. It's a great way
   of getting feedback and gives me the kick to put more time into their
   development.
 
-  If you encounter any bugs or have feature requests, just open an issue
-  report on Github.
+  If you encounter any bugs or have feature requests, just open an issue on
+  GitHub.
 
   Thank you for flying mhi^ airlines. Get the Vim on!
 <
