@@ -882,6 +882,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-15|  Startify is cluttered with help files!
     |startify-faq-16|  How to disable single mappings?
     |startify-faq-17|  Run Startify for each new tab!
+    |startify-faq-18|  Files from remote file system slow down startup!
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -1112,6 +1113,19 @@ Run Startify for each new tab!~
             \   Startify |
             \ endif
     endif
+<
+------------------------------------------------------------------------------
+                                                               *startify-faq-18*
+Files from remote file system slow down startup!~
+
+I/O actions like resolving symbolic links or checking if a file is readable
+can be very slow on some remote file systems (Samba, NFS, FUSE, etc.) Even
+more so when done for many files.
+
+In that case it is often better to add the mount point of the remote file
+system to |g:startify_skiplist|:
+>
+    let g:startify_skiplist = ['^/mnt/nfs']
 <
 ==============================================================================
 EXAMPLE                                                       *startify-example*
