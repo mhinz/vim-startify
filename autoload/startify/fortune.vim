@@ -232,6 +232,7 @@ let s:predefined_quotes = [
       \ ['Walking on water and developing software from a specification are easy if both are frozen.', '', '- Edward V. Berard'],
       \ ['Be curious. Read widely. Try new things. I think a lot of what people call intelligence boils down to curiosity.', '', '- Aaron Swartz'],
       \ ['What one programmer can do in one month, two programmers can do in two months.', '', '- Frederick P. Brooks'],
+      \ ['Being able to go from idea to result with the least possible delay is key to doing good research.'],
       \ ]
 
 let s:quotes = exists('g:startify_custom_header_quotes')
