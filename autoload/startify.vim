@@ -1032,11 +1032,13 @@ function! s:get_session_path() abort
     let path = g:startify_session_dir
   elseif has('nvim')
     let path = has('nvim-0.3.1')
-          \ ? stdpath('data') . s:sep . 'session'
-          \ : '~/.local/share/nvim/session'
-  else
+          \ ? stdpath('data').'/session'
+          \ : has('win32')
+          \   ? '~/AppData/Local/nvim-data/session'
+          \   : '~/.local/share/nvim/session'
+  else " Vim
     let path = has('win32')
-          \ ? '$HOME\vimfiles\session'
+          \ ? '~/vimfiles/session'
           \ : '~/.vim/session'
   endif
 
