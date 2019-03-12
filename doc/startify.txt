@@ -1114,6 +1114,12 @@ Run Startify for each new tab!~
             \ endif
     endif
 <
+NOTE: I do not recommend this. It can lead to all kinds of issues, so you
+should know exactly what the above code does. E.g. any plugin using |:tabnew|
+is probably expecting an empty buffer afterwards, but it won't be empty, it
+will be filled with the Startify buffer and fail. I suggest mapping
+`:Startify` to something convenient instead.
+
 ------------------------------------------------------------------------------
                                                                *startify-faq-18*
 Files from remote file system slow down startup!~
