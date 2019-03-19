@@ -373,7 +373,12 @@ endfunction
 " Function: #open_buffers {{{1
 function! startify#open_buffers(...) abort
   if exists('a:1')  " used in mappings
-    call s:open_buffer(b:startify.entries[a:1])
+    let entry = b:startify.entries[a:1]
+    if !empty(s:batchmode) && entry.type == 'file'
+      call s:set_mark(s:batchmode, a:1)
+    else
+      call s:open_buffer(entry)
+    endif
     return
   endif
 
@@ -806,6 +811,10 @@ function! s:set_mappings() abort
   nnoremap <buffer><nowait><silent> s             :call <sid>set_mark('S')<cr>
   nnoremap <buffer><nowait><silent> t             :call <sid>set_mark('T')<cr>
   nnoremap <buffer><nowait><silent> v             :call <sid>set_mark('V')<cr>
+  nnoremap <buffer><nowait><silent> B             :call startify#set_batchmode('B')<cr>
+  nnoremap <buffer><nowait><silent> S             :call startify#set_batchmode('S')<cr>
+  nnoremap <buffer><nowait><silent> T             :call startify#set_batchmode('T')<cr>
+  nnoremap <buffer><nowait><silent> V             :call startify#set_batchmode('V')<cr>
   nnoremap <buffer><nowait><silent> <cr>          :call startify#open_buffers()<cr>
   nnoremap <buffer><nowait><silent> <LeftMouse>   :call <sid>leftmouse()<cr>
   nnoremap <buffer><nowait><silent> <2-LeftMouse> :call startify#open_buffers()<cr>
@@ -833,11 +842,21 @@ function! s:set_mappings() abort
   endfor
 endfunction
 
+" Function: #set_batchmode {{{1
+function! startify#set_batchmode(batchmode) abort
+  let s:batchmode = a:batchmode
+  echomsg 'Batchmode: '. s:batchmode
+endfunction
+
 " Function: s:set_mark {{{1
 function! s:set_mark(type, ...) abort
-  let index = expand('<cword>')
-  let line  = exists('a:1') ? a:1 : line('.')
-  let entry = b:startify.entries[line]
+  if a:0
+    let entryline = a:1
+  else
+    call startify#set_batchmode('')
+    let entryline = line('.')
+  endif
+  let entry = b:startify.entries[entryline]
 
   if entry.type != 'file'
     return
@@ -850,6 +869,9 @@ function! s:set_mark(type, ...) abort
         \ 'T': 'tabnew',
         \ }
 
+  let origline = line('.')
+  execute entryline
+  let index = expand('<cword>')
   setlocal modifiable
 
   if entry.marked && index[0] == a:type
@@ -864,10 +886,9 @@ function! s:set_mark(type, ...) abort
     execute 'normal! ci]'. repeat(a:type, len(index))
   endif
 
-  " Reset cursor to fixed column, which is important for s:set_cursor().
-  call cursor(line('.'), s:fixed_column)
-
   setlocal nomodifiable nomodified
+  " Reset cursor to fixed column, which is important for s:set_cursor().
+  call cursor(origline, s:fixed_column)
 endfunction
 
 " Function: s:sort_by_tick {{{1
@@ -1082,3 +1103,4 @@ let s:skiplist = get(g:, 'startify_skiplist', [
 
 let s:padding_left = repeat(' ', get(g:, 'startify_padding_left', 3))
 let s:fixed_column = len(s:padding_left) + 2
+let s:batchmode = ''
