@@ -46,6 +46,8 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
   silent! setlocal
         \ bufhidden=wipe
         \ colorcolumn=
+        \ foldcolumn=0
+        \ matchpairs=
         \ nobuflisted
         \ nocursorcolumn
         \ nocursorline
@@ -54,7 +56,7 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
         \ norelativenumber
         \ nospell
         \ noswapfile
-        \ matchpairs=
+        \ signcolumn=no
   if empty(&statusline)
     setlocal statusline=\ startify
   endif
