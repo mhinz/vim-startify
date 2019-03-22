@@ -675,7 +675,8 @@ function! s:show_sessions() abort
   for i in range(len(sfiles))
     let index = s:get_index_as_string()
     let fname = fnamemodify(sfiles[i], ':t')
-    call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . fname)
+    let dname = sfiles[i] ==# v:this_session ? fname.' (*)' : fname
+    call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . dname)
     if has('win32')
       let fname = substitute(fname, '\[', '\[[]', 'g')
     endif
