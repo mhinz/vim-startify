@@ -844,8 +844,8 @@ endfunction
 
 " Function: #set_batchmode {{{1
 function! startify#set_batchmode(batchmode) abort
-  let s:batchmode = a:batchmode
-  echomsg 'Batchmode: '. s:batchmode
+  let s:batchmode = (a:batchmode == s:batchmode) ? '' : a:batchmode
+  echo empty(s:batchmode) ? 'Batchmode off' : 'Batchmode: '. s:batchmode
 endfunction
 
 " Function: s:set_mark {{{1
