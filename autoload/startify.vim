@@ -874,9 +874,14 @@ function! s:check_user_options(path) abort
     execute 'silent bwipeout' a:path
     call startify#session_delete_buffers()
     execute 'source' session
-  elseif get(g:, 'startify_change_to_vcs_root')
-    call s:cd_to_vcs_root(a:path)
-  elseif get(g:, 'startify_change_to_dir', 1)
+    return
+  endif
+
+  if get(g:, 'startify_change_to_vcs_root') && s:cd_to_vcs_root(a:path)
+    return
+  endif
+
+  if get(g:, 'startify_change_to_dir', 1)
     if isdirectory(a:path)
       execute 'lcd' a:path
     else
@@ -897,9 +902,10 @@ function! s:cd_to_vcs_root(path) abort
     let root = finddir(vcs, dir .';')
     if !empty(root)
       execute 'cd '. fnameescape(fnamemodify(root, ':h'))
-      return
+      return 1
     endif
   endfor
+  return 0
 endfunction
 
 " Function: s:close {{{1
