@@ -154,30 +154,30 @@ function! startify#session_load(source_last_session, ...) abort
     return
   endif
 
-  let spath = s:session_dir . s:sep
+  let session_path = s:session_dir . s:sep
 
   if a:0
-    let spath .= a:1
+    let session_path .= a:1
   elseif a:source_last_session && !has('win32')
-    let spath .= '__LAST__'
+    let session_path .= '__LAST__'
   else
     call inputsave()
-    let spath .= input(
+    let session_path .= input(
           \ 'Load this session: ',
           \ fnamemodify(v:this_session, ':t'),
           \ 'custom,startify#session_list_as_string') | redraw
     call inputrestore()
   endif
 
-  if filereadable(spath)
+  if filereadable(session_path)
     if get(g:, 'startify_session_persistence') && filewritable(v:this_session)
       call startify#session_write(fnameescape(v:this_session))
     endif
     call startify#session_delete_buffers()
-    execute 'source '. fnameescape(spath)
-    call s:create_last_session_link(spath)
+    execute 'source '. fnameescape(session_path)
+    call s:create_last_session_link(session_path)
   else
-    echo 'No such file: '. spath
+    echo 'No such file: '. session_path
   endif
 endfunction
 
@@ -199,32 +199,31 @@ function! startify#session_save(bang, ...) abort
   endif
 
   call inputsave()
-  let vsession = fnamemodify(v:this_session, ':t')
-  if vsession ==# '__LAST__'
-    let vsession = ''
+  let this_session = fnamemodify(v:this_session, ':t')
+  if this_session ==# '__LAST__'
+    let this_session = ''
   endif
-  let sname = exists('a:1')
+  let session_name = exists('a:1')
         \ ? a:1
-        \ : input('Save under this session name: ', vsession, 'custom,startify#session_list_as_string')
-        \ | redraw
+        \ : input('Save under this session name: ', this_session, 'custom,startify#session_list_as_string') | redraw
   call inputrestore()
 
-  if empty(sname)
+  if empty(session_name)
     echo 'You gave an empty name!'
     return
   endif
 
-  let spath = s:session_dir . s:sep . sname
-  if !filereadable(spath)
-    call startify#session_write(fnameescape(spath))
-    echo 'Session saved under: '. spath
+  let session_path = s:session_dir . s:sep . session_name
+  if !filereadable(session_path)
+    call startify#session_write(fnameescape(session_path))
+    echo 'Session saved under: '. session_path
     return
   endif
 
   echo 'Session already exists. Overwrite?  [y/n]' | redraw
   if a:bang || nr2char(getchar()) == 'y'
-    call startify#session_write(fnameescape(spath))
-    echo 'Session saved under: '. spath
+    call startify#session_write(fnameescape(session_path))
+    echo 'Session saved under: '. session_path
   else
     echo 'Did NOT save the session!'
   endif
@@ -241,7 +240,7 @@ function! startify#session_close() abort
 endfunction
 
 " Function: #session_write {{{1
-function! startify#session_write(spath)
+function! startify#session_write(session_path)
   " preserve existing variables from savevars
   if exists('g:startify_session_savevars')
     let savevars = map(filter(copy(g:startify_session_savevars), 'exists(v:val)'), '"let ". v:val ." = ". strtrans(string(eval(v:val)))')
@@ -270,7 +269,7 @@ function! startify#session_write(spath)
   let ssop = &sessionoptions
   set sessionoptions-=options
   try
-    execute 'mksession!' a:spath
+    execute 'mksession!' a:session_path
   catch
     echohl ErrorMsg
     echomsg v:exception
@@ -283,7 +282,7 @@ function! startify#session_write(spath)
   if exists('g:startify_session_remove_lines')
         \ || exists('g:startify_session_savevars')
         \ || exists('g:startify_session_savecmds')
-    silent execute 'split' a:spath
+    silent execute 'split' a:session_path
 
     " remove lines from the session file
     if exists('g:startify_session_remove_lines')
@@ -307,7 +306,7 @@ function! startify#session_write(spath)
     silent hide
   endif
 
-  call s:create_last_session_link(a:spath)
+  call s:create_last_session_link(a:session_path)
 endfunction
 
 " Function: #session_delete {{{1
@@ -321,21 +320,20 @@ function! startify#session_delete(bang, ...) abort
   endif
 
   call inputsave()
-  let spath = s:session_dir . s:sep . (exists('a:1')
+  let seesion_path = s:session_dir . s:sep . (exists('a:1')
         \ ? a:1
         \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
-        \ | redraw
   call inputrestore()
 
-  if !filereadable(spath)
-    echomsg 'No such session: '. spath
+  if !filereadable(session_path)
+    echomsg 'No such session: '. session_path
     return
   endif
 
-  echo 'Really delete '. spath .'? [y/n]' | redraw
+  echo 'Really delete '. session_path .'? [y/n]'
   if a:bang || nr2char(getchar()) == 'y'
-    if delete(spath) == 0
-      echo 'Deleted session '. spath .'!'
+    if delete(session_path) == 0
+      echo 'Deleted session '. session_path .'!'
     else
       echo 'Deletion failed!'
     endif
@@ -967,10 +965,10 @@ function! s:register(line, index, type, cmd, path)
 endfunction
 
 " Function: s:create_last_session_link {{{1
-function! s:create_last_session_link(spath)
-  if !has('win32') && a:spath !~# '__LAST__$'
+function! s:create_last_session_link(session_path)
+  if !has('win32') && a:session_path !~# '__LAST__$'
     let cmd = printf('ln -sf %s %s',
-          \ shellescape(fnamemodify(a:spath, ':t')),
+          \ shellescape(fnamemodify(a:session_path, ':t')),
           \ shellescape(s:session_dir .'/__LAST__'))
     call system(cmd)
     if v:shell_error
