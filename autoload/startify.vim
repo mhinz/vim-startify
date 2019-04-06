@@ -901,7 +901,7 @@ function! s:cd_to_vcs_root(path) abort
   for vcs in [ '.git', '.hg', '.bzr', '.svn' ]
     let root = finddir(vcs, dir .';')
     if !empty(root)
-      execute 'cd '. fnameescape(fnamemodify(root, ':h'))
+      execute 'lcd' fnameescape(fnamemodify(root, ':h'))
       return 1
     endif
   endfor
