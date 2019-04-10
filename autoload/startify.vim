@@ -320,7 +320,7 @@ function! startify#session_delete(bang, ...) abort
   endif
 
   call inputsave()
-  let seesion_path = s:session_dir . s:sep . (exists('a:1')
+  let session_path = s:session_dir . s:sep . (exists('a:1')
         \ ? a:1
         \ : input('Delete this session: ', fnamemodify(v:this_session, ':t'), 'custom,startify#session_list_as_string'))
   call inputrestore()
