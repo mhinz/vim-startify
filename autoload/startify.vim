@@ -394,7 +394,7 @@ function! startify#open_buffers(...) abort
   wincmd =
 
   if exists('#User#StartifyAllBuffersOpened')
-    autocmd <nomodeline> User StartifyAllBuffersOpened
+    doautocmd <nomodeline> User StartifyAllBuffersOpened
   endif
 endfunction
 
@@ -494,7 +494,7 @@ function! s:open_buffer(entry)
     call s:check_user_options(a:entry.path)
   endif
   if exists('#User#StartifyBufferOpened')
-    autocmd <nomodeline> User StartifyBufferOpened
+    doautocmd <nomodeline> User StartifyBufferOpened
   endif
 endfunction
 
