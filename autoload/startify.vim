@@ -772,11 +772,14 @@ function! s:set_cursor() abort
   let b:startify.newline = line('.')
 
   " going up (-1) or down (1)
-  if b:startify.oldline == b:startify.newline && col('.') != s:fixed_column
+  if b:startify.oldline == b:startify.newline
+        \ && col('.') != s:fixed_column
+        \ && !b:startify.leftmouse
     let movement = 2 * (col('.') > s:fixed_column) - 1
     let b:startify.newline += movement
   else
-  let movement = 2 * (b:startify.newline > b:startify.oldline) - 1
+    let movement = 2 * (b:startify.newline > b:startify.oldline) - 1
+    let b:startify.leftmouse = 0
   endif
 
   " skip section headers lines until an entry is found
@@ -804,6 +807,7 @@ function! s:set_mappings() abort
   nnoremap <buffer><nowait><silent> t             :call <sid>set_mark('T')<cr>
   nnoremap <buffer><nowait><silent> v             :call <sid>set_mark('V')<cr>
   nnoremap <buffer><nowait><silent> <cr>          :call startify#open_buffers()<cr>
+  nnoremap <buffer><nowait><silent> <LeftMouse>   :call <sid>leftmouse()<cr>
   nnoremap <buffer><nowait><silent> <2-LeftMouse> :call startify#open_buffers()<cr>
   nnoremap <buffer><nowait><silent> <MiddleMouse> :enew <bar> execute 'normal! "'.(v:register=='"'?'*':v:register).'gp'<cr>
 
@@ -811,6 +815,13 @@ function! s:set_mappings() abort
   " force the cursor back on the index.
   nnoremap <buffer><expr> n ' j'[v:searchforward].'n'
   nnoremap <buffer><expr> N 'j '[v:searchforward].'N'
+
+  function! s:leftmouse()
+    " feedkeys() triggers CursorMoved which calls s:set_cursor() which checks
+    " .leftmouse.
+    let b:startify.leftmouse = 1
+    call feedkeys("\<LeftMouse>", 'nt')
+  endfunction
 
   function! s:compare_by_index(foo, bar)
     return a:foo.index - a:bar.index
