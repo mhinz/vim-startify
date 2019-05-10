@@ -10,7 +10,8 @@ endif
 let g:loaded_startify = 1
 let g:startify_locked = 0
 
-if !get(g:, 'startify_disable_at_vimenter')
+if !get(g:, 'startify_disable_at_vimenter') && (!has('nvim') || has('nvim-0.3.5'))
+  " Only for Nvim v0.3.5+: https://github.com/neovim/neovim/issues/9885
   set shortmess+=I
 endif
 
