@@ -158,6 +158,7 @@ This option is DEPRECATED in favor of |g:startify_lists|.
     let g:startify_lists = [
           \ { 'type': 'files',     'header': ['   MRU']            },
           \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+          \ { 'type': 'browser',                                   },
           \ { 'type': 'sessions',  'header': ['   Sessions']       },
           \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
           \ { 'type': 'commands',  'header': ['   Commands']       },
@@ -186,6 +187,15 @@ Built-in types:~
 
     This lists the files from the current directory sorted by modification
     time. The number of files is limited by |g:startify_files_number|.
+
+'browser'
+
+    This serves as a browser for current directory. It lists all files and
+    directories from the current directory sorted by type (directories first)
+    and name. If the user chooses a directory, the list will switch one level
+    down, giving the user an option to go back (up one directory), just like
+    any file browser.
+    If |g:startify_show_dotfiles| is set to 1, it also shows the dot files.
 
 'bookmarks'
 
@@ -292,6 +302,31 @@ NOTE: Avoid using keys from |startify-mappings| if providing custom indices.
     let g:startify_files_number = 10
 <
 The number of files to list.
+
+------------------------------------------------------------------------------
+                                                      *g:startify_show_dotfiles*
+>
+    let g:startify_show_dotfiles = 1
+<
+Shows dot (hidden) files in browser list type.
+
+------------------------------------------------------------------------------
+                                        *g:startify_prevent_browser_cursor_lock*
+>
+    let g:startify_prevent_browser_cursor_lock = 1
+<
+If not set or set to 0, the browser list type will auto jump the cursor to the
+first browser entry when the user navigates down the directory. This feature
+makes navigation easier with j, k or arrows.
+If set to 1, it will not auto jump the cursor.
+
+------------------------------------------------------------------------------
+                                               *g:startify_browser_startup_jump*
+>
+    let g:startify_browser_startup_jump = 1
+<
+If set to 1, it moves the cursor to the first line of the browser list on
+startup.
 
 ------------------------------------------------------------------------------
                                                     *g:startify_update_oldfiles*
@@ -807,6 +842,10 @@ Open the entry with the given number.
 <
 Mark current entry to be opened in either the same window, in a split window,
 in a vertical split window or in a new tab.
+>
+    .
+<
+Toggle |g:startify_show_dotfiles| option.
 >
     <cr>
 <
