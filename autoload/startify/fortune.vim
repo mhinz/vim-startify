@@ -50,7 +50,10 @@ function! startify#fortune#cowsay(...) abort
     let quote = startify#fortune#quote()
   endif
   let boxed_quote = startify#fortune#boxed(quote)
-  let boxed_quote += s:cow
+  let s:mascot = exists('g:startify_tux')
+    \ ? s:tux
+    \ : s:cow
+  let boxed_quote += s:mascot
   return map(boxed_quote, '"   ". v:val')
 endfunction
 
@@ -68,6 +71,18 @@ let s:cow = [
       \ '                ||----w |',
       \ '                ||     ||',
       \ ]
+
+let s:tux = [
+			\ '       o',
+			\ '        o',
+			\ '         o  .--.',
+			\ '           |o_o |',
+			\ '           |:_/ |',
+			\ '          //   \ \',
+			\ '         (|     | )',
+			\ '        /`\_   _/`\',
+			\ '        \___)=(___/',
+			\ ]
 
 let s:unicode = &encoding == 'utf-8' && get(g:, 'startify_fortune_use_unicode')
 
