@@ -1094,10 +1094,11 @@ let s:tf = exists('g:startify_transformations')
 let s:session_dir = s:get_session_path()
 
 let s:skiplist = get(g:, 'startify_skiplist', [
-      \ 'COMMIT_EDITMSG',
       \ 'runtime/doc/.*\.txt',
       \ 'bundle/.*/doc/.*\.txt',
       \ 'plugged/.*/doc/.*\.txt',
+      \ '/.git/',
+      \ 'fugitiveblame$',
       \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc/.*\.txt',
       \ ])
 
