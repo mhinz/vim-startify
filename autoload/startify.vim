@@ -345,7 +345,7 @@ endfunction
 " Function: #session_delete_buffers {{{1
 function! startify#session_delete_buffers()
   if get(g:, 'startify_session_delete_buffers', 1)
-    silent! %bdelete
+    silent! %bdelete!
   endif
 endfunction
 
