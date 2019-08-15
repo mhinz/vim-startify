@@ -64,7 +64,7 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
   " Must be global so that it can be read by syntax/startify.vim.
   let g:startify_header = exists('g:startify_custom_header')
         \ ? s:set_custom_section(g:startify_custom_header)
-        \ : startify#fortune#cowsay()
+        \ : (exists('*strwidth') ? startify#fortune#cowsay() : [])
   if !empty(g:startify_header)
     let g:startify_header += ['']  " add blank line
   endif
