@@ -19,6 +19,25 @@ function! startify#get_separator() abort
   return !exists('+shellslash') || &shellslash ? '/' : '\'
 endfunction
 
+" Function: #get_session_path {{{1
+function! startify#get_session_path() abort
+  if exists('g:startify_session_dir')
+    let path = g:startify_session_dir
+  elseif has('nvim')
+    let path = has('nvim-0.3.1')
+          \ ? stdpath('data').'/session'
+          \ : has('win32')
+          \   ? '~/AppData/Local/nvim-data/session'
+          \   : '~/.local/share/nvim/session'
+  else " Vim
+    let path = has('win32')
+          \ ? '~/vimfiles/session'
+          \ : '~/.vim/session'
+  endif
+
+  return resolve(expand(path))
+endfunction
+
 " Function: #insane_in_the_membrane {{{1
 function! startify#insane_in_the_membrane(on_vimenter) abort
   " Handle vim -y, vim -M.
@@ -1065,25 +1084,6 @@ function! s:warn(msg) abort
   echohl NONE
 endfunction
 
-" Function: s:get_session_path {{{1
-function! s:get_session_path() abort
-  if exists('g:startify_session_dir')
-    let path = g:startify_session_dir
-  elseif has('nvim')
-    let path = has('nvim-0.3.1')
-          \ ? stdpath('data').'/session'
-          \ : has('win32')
-          \   ? '~/AppData/Local/nvim-data/session'
-          \   : '~/.local/share/nvim/session'
-  else " Vim
-    let path = has('win32')
-          \ ? '~/vimfiles/session'
-          \ : '~/.vim/session'
-  endif
-
-  return resolve(expand(path))
-endfunction
-
 " Init: values {{{1
 let s:sep = startify#get_separator()
 
@@ -1091,7 +1091,7 @@ let s:numfiles = get(g:, 'startify_files_number', 10)
 let s:show_special = get(g:, 'startify_enable_special', 1)
 let s:relative_path = get(g:, 'startify_relative_path') ? ':~:.' : ':p:~'
 let s:tf = exists('g:startify_transformations')
-let s:session_dir = s:get_session_path()
+let s:session_dir = startify#get_session_path()
 
 let s:skiplist = get(g:, 'startify_skiplist', [
       \ 'runtime/doc/.*\.txt',
