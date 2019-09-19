@@ -827,10 +827,10 @@ endfunction
 function! s:set_mappings() abort
   nnoremap <buffer><nowait><silent> i             :enew <bar> startinsert<cr>
   nnoremap <buffer><nowait><silent> <insert>      :enew <bar> startinsert<cr>
-  nnoremap <buffer><nowait><silent> b             :call <sid>set_mark('B')<cr>
-  nnoremap <buffer><nowait><silent> s             :call <sid>set_mark('S')<cr>
-  nnoremap <buffer><nowait><silent> t             :call <sid>set_mark('T')<cr>
-  nnoremap <buffer><nowait><silent> v             :call <sid>set_mark('V')<cr>
+  nnoremap <buffer><nowait><silent> b             :call startify#set_mark('B')<cr>
+  nnoremap <buffer><nowait><silent> s             :call startify#set_mark('S')<cr>
+  nnoremap <buffer><nowait><silent> t             :call startify#set_mark('T')<cr>
+  nnoremap <buffer><nowait><silent> v             :call startify#set_mark('V')<cr>
   nnoremap <buffer><nowait><silent> B             :call startify#set_batchmode('B')<cr>
   nnoremap <buffer><nowait><silent> S             :call startify#set_batchmode('S')<cr>
   nnoremap <buffer><nowait><silent> T             :call startify#set_batchmode('T')<cr>
@@ -868,8 +868,8 @@ function! startify#set_batchmode(batchmode) abort
   echo empty(s:batchmode) ? 'Batchmode off' : 'Batchmode: '. s:batchmode
 endfunction
 
-" Function: s:set_mark {{{1
-function! s:set_mark(type, ...) abort
+" Function: #set_mark {{{1
+function! startify#set_mark(type, ...) abort
   if a:0
     let entryline = a:1
   else
