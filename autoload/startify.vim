@@ -149,6 +149,7 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
   autocmd startify CursorMoved <buffer> call s:set_cursor()
 
   silent! %foldopen!
+  normal! zb
   set filetype=startify
 
   if exists('##DirChanged')
