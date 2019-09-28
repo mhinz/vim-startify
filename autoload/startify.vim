@@ -84,10 +84,14 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
   let g:startify_header = exists('g:startify_custom_header')
         \ ? s:set_custom_section(g:startify_custom_header)
         \ : (exists('*strwidth') ? startify#fortune#cowsay() : [])
-  if !empty(g:startify_header)
+  if !empty(g:startify_header) && !exists('g:startify_custom_header')
     let g:startify_header += ['']  " add blank line
   endif
-  call append('$', g:startify_header)
+  if !exists('g:startify_custom_header')
+    call append('$', g:startify_header)
+  else
+    call append(0, g:startify_header)
+  endif
 
   let b:startify = { 'tick': 0, 'entries': {}, 'indices': [] }
 
