@@ -424,6 +424,18 @@ function! startify#open_buffers(...) abort
   endif
 endfunction
 
+" Function: #pad {{{1
+function! startify#pad(lines) abort
+  return map(copy(a:lines), 's:padding_left . v:val')
+endfunction
+
+" Function: #center {{{1
+function! startify#center(lines) abort
+  let longest_line = max(map(copy(a:lines), 'strwidth(v:val)'))
+  return map(copy(a:lines),
+        \ 'repeat(" ", (&columns / 2) - (longest_line / 2) - 1) . v:val')
+endfunction
+
 " Function: s:get_lists {{{1
 function! s:get_lists() abort
   if exists('g:startify_lists')
