@@ -50,8 +50,7 @@ function! startify#fortune#cowsay(...) abort
     let quote = startify#fortune#quote()
   endif
   let boxed_quote = startify#fortune#boxed(quote)
-  let boxed_quote += s:cow
-  return map(boxed_quote, '"   ". v:val')
+  return boxed_quote + s:cow
 endfunction
 
 " Function: #predefined_quotes {{{1
