@@ -76,6 +76,7 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
         \ nospell
         \ noswapfile
         \ signcolumn=no
+        \ synmaxcol&
   if empty(&statusline)
     setlocal statusline=\ startify
   endif
