@@ -577,7 +577,7 @@ NOTE: There is no sanitizing going on, so you should know what you're doing!
 ------------------------------------------------------------------------------
                                                       *g:startify_custom_header*
 >
-    let g:startify_custom_header = 'startify#fortune#cowsay()'
+    let g:startify_custom_header = 'startify#pad(startify#fortune#cowsay())'
 <
 Define your own header.
 
@@ -592,6 +592,11 @@ Helper functions:~
 
 The last two functions optionally take a quote in the list of strings format.
 They also return a list of strings, suitable for this option.
+
+    startify#pad([strings])        pad strings in list according to
+                                   |g:startify_padding_left| or the default of 3
+    startify#center([strings])     center list of strings without removing
+                                   its strings indentations
 
 Example #1:~
 >
@@ -608,7 +613,7 @@ Example #1:~
 Example #2:~
 >
     let g:startify_custom_header =
-            \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val')
+            \ startify#pad(split(system('fortune | cowsay'), '\n'))
 <
 Example #3:~
 
@@ -629,7 +634,7 @@ Looks great! But it's not on the same column as the indices below which makes
 it look awkward. Let's indent the header by 3 spaces:
 >
     let g:startify_custom_header =
-          \ map(g:ascii + startify#fortune#boxed(), '"   ".v:val')
+          \ startify#pad(g:ascii + startify#fortune#boxed())
 <
 Ah, much better! There's only one issue left. If you set
 g:startify_custom_header this way, it will only be done once. Hence spamming
@@ -639,7 +644,7 @@ If you provide a string to it instead, Startify will evaluate it every time
 :Startify is run:
 >
     let g:startify_custom_header =
-          \ 'map(g:ascii + startify#fortune#boxed(), "\"   \".v:val")'
+          \ 'startify#pad(g:ascii + startify#fortune#boxed())'
 <
 Happy customizing!
 
@@ -982,18 +987,9 @@ Do you have NERDTree installed by any chance? If so, try this:
 ------------------------------------------------------------------------------
                                                                *startify-faq-08*
 How do I center my header/footer?~
-
-Try something along these lines:
 >
-    function! s:center(lines) abort
-      let longest_line   = max(map(copy(a:lines), 'strwidth(v:val)'))
-      let centered_lines = map(copy(a:lines),
-            \ 'repeat(" ", (&columns / 2) - (longest_line / 2)) . v:val')
-      return centered_lines
-    endfunction
-
-    let g:startify_custom_header = s:center(startify#fortune#cowsay())
-    let g:startify_custom_footer = s:center(['foo', 'bar', 'baz'])
+    let g:startify_custom_header =
+          \ 'startify#center(startify#fortune#cowsay())'
 <
 ------------------------------------------------------------------------------
                                                                *startify-faq-09*
