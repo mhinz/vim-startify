@@ -90,7 +90,12 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
   endif
   call append('$', g:startify_header)
 
-  let b:startify = { 'tick': 0, 'entries': {}, 'indices': [] }
+  let b:startify = {
+        \ 'entries':   {},
+        \ 'indices':   [],
+        \ 'leftmouse': 0,
+        \ 'tick':      0,
+        \ }
 
   if s:show_special
     call append('$', [s:padding_left .'[e]  <empty buffer>', ''])
