@@ -401,7 +401,7 @@ function! startify#open_buffers(...) abort
   if exists('a:1')  " used in mappings
     let entry = b:startify.entries[a:1]
     if !empty(s:batchmode) && entry.type == 'file'
-      call s:set_mark(s:batchmode, a:1)
+      call startify#set_mark(s:batchmode, a:1)
     else
       call s:open_buffer(entry)
     endif
