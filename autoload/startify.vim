@@ -352,11 +352,11 @@ function! startify#session_delete(bang, ...) abort
   call inputrestore()
 
   if !filereadable(session_path)
-    echomsg 'No such session: '. session_path
+    redraw | echo 'No such session: '. session_path
     return
   endif
 
-  echo 'Really delete '. session_path .'? [y/n]'
+  redraw | echo 'Really delete '. session_path .'? [y/n]' | redraw
   if a:bang || nr2char(getchar()) == 'y'
     if delete(session_path) == 0
       echo 'Deleted session '. session_path .'!'
