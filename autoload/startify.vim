@@ -1056,13 +1056,24 @@ function! s:init_env()
         \ 'PWD':    1,
         \ }
 
-  function! s:get_env()
+  if exists('*environ')
+    let env = items(environ())
+  else
     redir => s
       silent! execute "norm!:ec$\<c-a>'\<c-b>\<right>\<right>\<del>'\<cr>"
     redir END
     redraw
-    return split(s)
-  endfunction
+    let env = map(split(s), '[v:val, eval("$".v:val)]')
+  endif
+
+  for [var, val] in env
+    if has('win32') ? (val[1] != ':') : (val[0] != '/')
+          \ || has_key(ignore, var)
+          \ || len(var) > len(val)
+      continue
+    endif
+    call insert(s:env, [var, val], 0)
+  endfor
 
   function! s:compare_by_key_len(foo, bar)
     return len(a:foo[0]) - len(a:bar[0])
@@ -1070,16 +1081,6 @@ function! s:init_env()
   function! s:compare_by_val_len(foo, bar)
     return len(a:bar[1]) - len(a:foo[1])
   endfunction
-
-  for k in s:get_env()
-    silent! execute "let v = eval('$'.k)"
-    if has('win32') ? (v[1] != ':') : (v[0] != '/')
-          \ || has_key(ignore, k)
-          \ || len(k) > len(v)
-      continue
-    endif
-    call insert(s:env, [k,v], 0)
-  endfor
 
   let s:env = sort(s:env, 's:compare_by_key_len')
   let s:env = sort(s:env, 's:compare_by_val_len')
