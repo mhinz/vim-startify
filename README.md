@@ -37,6 +37,9 @@ documentation for further customization:
     :h startify
     :h startify-faq
 
+If you want to share anything with your fellow plugin users, make sure to visit
+the [wiki](https://github.com/mhinz/vim-startify/wiki).
+
 ## Screenshot
 
 ![Startify in action!](https://github.com/mhinz/vim-startify/blob/master/images/startify-menu.png)
