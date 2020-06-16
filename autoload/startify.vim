@@ -754,7 +754,16 @@ function! s:show_bookmarks() abort
     if empty(entry_path)
       let entry_path = path
     endif
-    call append('$', s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
+    
+    let absolute_path = path
+    let entry_format = "s:padding_left .'['. index .']'. repeat(' ', (3 - strlen(index))) ."
+    if exists('*StartifyEntryFormat')
+      let entry_format .= StartifyEntryFormat()
+    else
+      let entry_format .= 'entry_path'
+    endif
+
+    call append('$', eval(entry_format))
 
     if has('win32')
       let path = substitute(path, '\[', '\[[]', 'g')
