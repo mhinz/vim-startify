@@ -67,11 +67,13 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
         \ colorcolumn=
         \ foldcolumn=0
         \ matchpairs=
+        \ modifiable
         \ nobuflisted
         \ nocursorcolumn
         \ nocursorline
         \ nolist
         \ nonumber
+        \ noreadonly
         \ norelativenumber
         \ nospell
         \ noswapfile
