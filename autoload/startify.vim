@@ -1113,14 +1113,14 @@ let s:relative_path = get(g:, 'startify_relative_path') ? ':~:.' : ':p:~'
 let s:tf = exists('g:startify_transformations')
 let s:session_dir = startify#get_session_path()
 
-let s:skiplist = get(g:, 'startify_skiplist', [
-      \ 'runtime/doc/.*\.txt',
-      \ 'bundle/.*/doc/.*\.txt',
-      \ 'plugged/.*/doc/.*\.txt',
+let s:skiplist = extend(get(g:, 'startify_skiplist', []), [
+      \ 'runtime/doc/.*\.txt$',
+      \ 'bundle/.*/doc/.*\.txt$',
+      \ 'plugged/.*/doc/.*\.txt$',
       \ '/.git/',
       \ 'fugitiveblame$',
-      \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc/.*\.txt',
-      \ ])
+      \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc/.*\.txt$',
+      \ ], 'keep')
 
 let s:padding_left = repeat(' ', get(g:, 'startify_padding_left', 3))
 let s:fixed_column = len(s:padding_left) + 2
