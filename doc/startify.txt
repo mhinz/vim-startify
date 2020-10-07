@@ -101,6 +101,7 @@ default values.
     |g:startify_bookmarks|
     |g:startify_change_to_dir|
     |g:startify_change_to_vcs_root|
+    |g:startify_change_cmd|
     |g:startify_custom_header|
     |g:startify_enable_special|
     |g:startify_list_order|
@@ -377,6 +378,19 @@ When opening a file or bookmark, seek and change to the root directory of the
 VCS (if there is one).
 
 At the moment only git, hg, bzr and svn are supported.
+
+------------------------------------------------------------------------------
+                                                         *g:startify_change_cmd*
+>
+    let g:startify_change_cmd = 'lcd'
+<
+The default command for switching directories. Valid values:
+
+    'cd'  (|:cd|)
+    'lcd' (|:lcd|)
+    'tcd' (|:tcd|)
+
+Affects |g:startify_change_to_dir| and |g:startify_change_to_vcs_root|.
 
 ------------------------------------------------------------------------------
                                                            *g:startify_skiplist*
