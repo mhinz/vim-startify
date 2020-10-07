@@ -559,11 +559,7 @@ function! s:display_by_path(path_prefix, path_format, use_env) abort
         \ [a:path_prefix, a:path_format, a:use_env])
 
   let entry_format = "s:leftpad .'['. index .']'. repeat(' ', (3 - strlen(index))) ."
-  if exists('*StartifyEntryFormat')
-    let entry_format .= StartifyEntryFormat()
-  else
-    let entry_format .= 'entry_path'
-  endif
+  let entry_format .= exists('*StartifyEntryFormat') ? StartifyEntryFormat() : 'entry_path'
 
   if !empty(oldfiles)
     if exists('s:last_message')
@@ -741,13 +737,9 @@ function! s:show_bookmarks() abort
   if exists('s:last_message')
     call s:print_section_header()
   endif
-      
+
   let entry_format = "s:leftpad .'['. index .']'. repeat(' ', (3 - strlen(index))) ."
-  if exists('*StartifyEntryFormat')
-    let entry_format .= StartifyEntryFormat()
-  else
-    let entry_format .= 'entry_path'
-  endif
+  let entry_format .= exists('*StartifyEntryFormat') ? StartifyEntryFormat() : 'entry_path'
 
   for bookmark in g:startify_bookmarks
     if type(bookmark) == type({})
@@ -757,7 +749,7 @@ function! s:show_bookmarks() abort
     endif
 
     let absolute_path = path
-    
+
     let entry_path = ''
     if !empty(g:startify_transformations)
       let entry_path = s:transform(fnamemodify(resolve(expand(path)), ':p'))
