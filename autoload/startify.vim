@@ -741,6 +741,13 @@ function! s:show_bookmarks() abort
   if exists('s:last_message')
     call s:print_section_header()
   endif
+      
+  let entry_format = "s:leftpad .'['. index .']'. repeat(' ', (3 - strlen(index))) ."
+  if exists('*StartifyEntryFormat')
+    let entry_format .= StartifyEntryFormat()
+  else
+    let entry_format .= 'entry_path'
+  endif
 
   for bookmark in g:startify_bookmarks
     if type(bookmark) == type({})
@@ -749,6 +756,8 @@ function! s:show_bookmarks() abort
       let [index, path] = [s:get_index_as_string(), bookmark]
     endif
 
+    let absolute_path = path
+    
     let entry_path = ''
     if !empty(g:startify_transformations)
       let entry_path = s:transform(fnamemodify(resolve(expand(path)), ':p'))
@@ -756,7 +765,8 @@ function! s:show_bookmarks() abort
     if empty(entry_path)
       let entry_path = path
     endif
-    call append('$', s:leftpad .'['. index .']'. repeat(' ', (3 - strlen(index))) . entry_path)
+
+    call append('$', eval(entry_format))
 
     if has('win32')
       let path = substitute(path, '\[', '\[[]', 'g')
