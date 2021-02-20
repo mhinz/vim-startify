@@ -84,9 +84,15 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
   endif
 
   " Must be global so that it can be read by syntax/startify.vim.
-  let g:startify_header = exists('g:startify_custom_header')
-        \ ? s:set_custom_section(g:startify_custom_header)
-        \ : (exists('*strwidth') ? startify#pad(startify#fortune#cowsay()) : [])
+  if get(g:, 'startify_custom_header_center', 0)
+    let g:startify_header = exists('g:startify_custom_header')
+          \ ? s:set_custom_section(startify#center(g:startify_custom_header))
+          \ : (exists('*strwidth') ? startify#pad(startify#fortune#cowsay()) : [])
+  else
+    let g:startify_header = exists('g:startify_custom_header')
+          \ ? s:set_custom_section(g:startify_custom_header)
+          \ : (exists('*strwidth') ? startify#pad(startify#fortune#cowsay()) : [])
+  endif
   if !empty(g:startify_header)
     let g:startify_header += ['']  " add blank line
   endif
