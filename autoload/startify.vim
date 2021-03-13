@@ -1054,7 +1054,7 @@ function! s:create_last_session_link(session_path)
     let cmd = printf('ln -sf %s %s',
           \ shellescape(fnamemodify(a:session_path, ':t')),
           \ shellescape(s:session_dir .'/__LAST__'))
-    call system(cmd)
+    silent call system(cmd)
     if v:shell_error
       call s:warn("Can't create 'last used session' symlink.")
     endif
