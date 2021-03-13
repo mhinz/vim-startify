@@ -329,10 +329,7 @@ This is a list of commands to be executed before saving a session.
 
 Example:
 >
-    let g:startify_session_before_save = [
-        \ 'echo "Cleaning up before saving.."',
-        \ 'silent! NERDTreeTabsClose'
-        \ ]
+    let g:startify_session_before_save = [ 'silent! tabdo NERDTreeClose' ]
 <
 ------------------------------------------------------------------------------
                                                 *g:startify_session_persistence*
