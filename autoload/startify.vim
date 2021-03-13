@@ -919,13 +919,13 @@ function! startify#set_mark(type, ...) abort
   if entry.marked && index[0] == a:type
     let entry.cmd = 'edit'
     let entry.marked = 0
-    execute 'normal! ci]'. entry.index
+    execute 'normal! "_ci]'. entry.index
   else
     let entry.cmd = default_cmds[a:type]
     let entry.marked = 1
     let entry.tick = b:startify.tick
     let b:startify.tick += 1
-    execute 'normal! ci]'. repeat(a:type, len(index))
+    execute 'normal! "_ci]'. repeat(a:type, len(index))
   endif
 
   setlocal nomodifiable nomodified
