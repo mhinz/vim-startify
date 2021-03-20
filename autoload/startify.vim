@@ -953,7 +953,7 @@ function! s:check_user_options(path) abort
     return
   endif
 
-  if get(g:, 'startify_change_to_dir', 1)
+  if get(g:, 'startify_change_to_dir', &autochdir)
     if isdirectory(a:path)
       execute s:cd_cmd() a:path
     else
