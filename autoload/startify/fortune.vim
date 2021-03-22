@@ -43,7 +43,9 @@ endfunction
 
 " Function: #cowsay {{{1
 function! startify#fortune#cowsay(...) abort
-  if a:0
+  if exists("g:startify_custom_art")
+    return g:startify_custom_art
+  elseif a:0
     let quote = a:0 && type(a:1) == type([]) ? a:1 : startify#fortune#quote()
     let s:char_top_bottom   = get(a:000, 1, s:char_top_bottom)
     let s:char_sides        = get(a:000, 2, s:char_sides)
