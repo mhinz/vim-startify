@@ -152,6 +152,8 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
 
   setlocal nomodifiable nomodified
 
+  call s:hide_endofbuffer_markers()
+
   call s:set_mappings()
   call cursor(b:startify.firstline, 5)
   autocmd startify CursorMoved <buffer> call s:set_cursor()
@@ -1109,6 +1111,24 @@ function s:transform(absolute_path)
     unlet V
   endfor
   return ''
+endfunction
+
+" Function: s:hide_endofbuffer_markers {{{1
+" Use the bg color of Normal to set the fg color of EndOfBuffer, effectively
+" hiding it.
+function! s:hide_endofbuffer_markers()
+  if !exists('+winhl')
+    return
+  endif
+  let val = synIDattr(hlID('Normal'), 'bg')
+  if empty(val)
+    return
+  elseif val =~ '^\d*$'
+    execute 'highlight StartifyEndOfBuffer ctermfg='. val
+  else
+    execute 'highlight StartifyEndOfBuffer guifg='. val
+  endif
+  setlocal winhighlight=EndOfBuffer:StartifyEndOfBuffer
 endfunction
 
 " Function: s:warn {{{1
