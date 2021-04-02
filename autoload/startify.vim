@@ -918,6 +918,10 @@ function! startify#set_mark(type, ...) abort
   let index = expand('<cword>')
   setlocal modifiable
 
+  " https://github.com/vim/vim/issues/8053
+  let showmatch = &showmatch
+  let &showmatch = 0
+
   if entry.marked && index[0] == a:type
     let entry.cmd = 'edit'
     let entry.marked = 0
@@ -929,6 +933,8 @@ function! startify#set_mark(type, ...) abort
     let b:startify.tick += 1
     execute 'normal! "_ci]'. repeat(a:type, len(index))
   endif
+
+  let &showmatch = showmatch
 
   setlocal nomodifiable nomodified
   " Reset cursor to fixed column, which is important for s:set_cursor().
