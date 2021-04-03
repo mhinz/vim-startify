@@ -35,8 +35,11 @@ endfunction
 
 function! s:on_vimenter()
   if !argc() && line2byte('$') == -1
+    let session = startify#get_session_path() . startify#get_separator() . fnamemodify(getcwd(), ':t')
     if get(g:, 'startify_session_autoload') && filereadable('Session.vim')
       source Session.vim
+    elseif get(g:, 'startify_session_autoload') && filereadable(session)
+      execute 'source ' . session
     elseif !get(g:, 'startify_disable_at_vimenter')
       call startify#insane_in_the_membrane(1)
     endif
