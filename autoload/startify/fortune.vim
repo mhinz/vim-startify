@@ -28,6 +28,7 @@ endfunction
 " Function: #boxed {{{1
 function! startify#fortune#boxed(...) abort
   let wrapped_quote = []
+  let box_max_width = exists('g:startify_fortune_box_max_width') ? g:startify_fortune_box_max_width : 50
   if a:0 && type(a:1) == type([])
     let quote = a:1
   else
@@ -35,7 +36,7 @@ function! startify#fortune#boxed(...) abort
     let quote = type(Quote) == type(function('tr')) ? Quote() : Quote
   endif
   for line in quote
-    let wrapped_quote += split(line, '\%50c.\{-}\zs\s', 1)
+    let wrapped_quote += split(line, '\%' . box_max_width . 'c.\{-}\zs\s', 1)
   endfor
   let wrapped_quote = s:draw_box(wrapped_quote)
   return wrapped_quote
