@@ -366,6 +366,11 @@ NOTE: Buffers with unsaved changes are silently ignored.
 <
 When opening a file or bookmark, change to its directory.
 
+You want to disable this, if you're using |'autochdir'| as well.
+
+NOTE: It defaults to 1, because that was already the behaviour at the time
+this option was introduced.
+
 ------------------------------------------------------------------------------
                                                  *g:startify_change_to_vcs_root*
 >
