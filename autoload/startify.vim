@@ -442,7 +442,7 @@ endfunction
 function! startify#center(lines) abort
   let longest_line = max(map(copy(a:lines), 'strwidth(v:val)'))
   return map(copy(a:lines),
-        \ 'repeat(" ", (&columns / 2) - (longest_line / 2) - 1) . v:val')
+        \ 'repeat(" ", (winwidth(0) / 2) - (longest_line / 2) - 1) . v:val')
 endfunction
 
 " Function: s:get_lists {{{1
