@@ -598,7 +598,12 @@ function! s:filter_oldfiles(path_prefix, path_format, use_env) abort
       continue
     endif
 
-    let absolute_path = fnamemodify(resolve(fname), ":p")
+    try
+      let absolute_path = fnamemodify(resolve(fname), ":p")
+    catch /E655/  " Too many symbolic links (cycle?)
+      call s:warn('Symlink loop detected! Skipping: '. fname)
+      continue
+    endtry
     " filter duplicates, bookmarks and entries from the skiplist
     if has_key(entries, absolute_path)
           \ || !filereadable(absolute_path)
