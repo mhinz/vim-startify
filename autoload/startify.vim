@@ -83,6 +83,9 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
     setlocal statusline=\ startify
   endif
 
+  let s:padding_left = startify#get_padding()
+  let s:fixed_column = len(s:padding_left) + 2
+
   " Must be global so that it can be read by syntax/startify.vim.
   let g:startify_header = exists('g:startify_custom_header')
         \ ? s:set_custom_section(g:startify_custom_header)
@@ -431,6 +434,13 @@ function! startify#open_buffers(...) abort
   if exists('#User#StartifyAllBuffersOpened')
     doautocmd <nomodeline> User StartifyAllBuffersOpened
   endif
+endfunction
+
+" Function: #get_padding {{{1
+function! startify#get_padding() abort
+  return repeat(' ', exists('g:startify_center')
+        \ ? winwidth('%')/2 - g:startify_center/2
+        \ : get(g:, 'startify_padding_left', 3))
 endfunction
 
 " Function: #pad {{{1
