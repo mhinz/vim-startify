@@ -117,6 +117,7 @@ default values.
     |g:startify_disable_at_vimenter|
     |g:startify_enable_unsafe|
     |g:startify_files_number|
+    |g:startify_fortune_box_max_width|
     |g:startify_fortune_use_unicode|
     |g:startify_padding_left|
     |g:startify_relative_path|
@@ -428,6 +429,16 @@ Example:
            \ escape(fnamemodify($HOME, ':p'), '\') .'mysecret.txt',
            \ ]
 <
+------------------------------------------------------------------------------
+                                              *g:startify_fortune_box_max_width*
+>
+    let g:startify_fortune_box_max_width = 50
+<
+The maximum width of the fortune box.
+
+NOTE: This option should be set before g:startify_custom_header if present in
+your configuration file.
+
 ------------------------------------------------------------------------------
                                                 *g:startify_fortune_use_unicode*
 >
