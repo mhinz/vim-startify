@@ -20,6 +20,7 @@ augroup startify
   autocmd VimLeavePre * nested call s:on_vimleavepre()
   autocmd QuickFixCmdPre  *vimgrep* let g:startify_locked = 1
   autocmd QuickFixCmdPost *vimgrep* let g:startify_locked = 0
+  autocmd VimResized * if &filetype ==# 'startify' | call startify#insane_in_the_membrane(0) | endif
 augroup END
 
 function! s:update_oldfiles(file)
