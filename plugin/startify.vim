@@ -18,6 +18,8 @@ endif
 augroup startify
   autocmd VimEnter    * nested call s:on_vimenter()
   autocmd VimLeavePre * nested call s:on_vimleavepre()
+  autocmd FocusGained * nested call s:reload_session(0)
+  autocmd FocusLost   * nested call s:on_vimleavepre()
   autocmd QuickFixCmdPre  *vimgrep* let g:startify_locked = 1
   autocmd QuickFixCmdPost *vimgrep* let g:startify_locked = 0
 augroup END
@@ -49,11 +51,21 @@ function! s:on_vimenter()
   autocmd! startify VimEnter
 endfunction
 
+function! s:reload_session(force)
+  if get(g:, 'startify_session_persistence') && (get(g:, 'startify_reload_session_when_focused') || a:force)
+        \ && exists('v:this_session')
+        \ && filewritable(v:this_session)
+    execute ":SLoad ".fnamemodify(v:this_session, ':t').""
+    echom "session reloaded"
+  endif
+endfunction
+
 function! s:on_vimleavepre()
   if get(g:, 'startify_session_persistence')
         \ && exists('v:this_session')
         \ && filewritable(v:this_session)
     call startify#session_write(fnameescape(v:this_session))
+    echom "session saved"
   endif
 endfunction
 
@@ -61,6 +73,7 @@ command! -nargs=? -bar -bang -complete=customlist,startify#session_list SLoad   
 command! -nargs=? -bar -bang -complete=customlist,startify#session_list SSave   call startify#session_save(<bang>0, <f-args>)
 command! -nargs=? -bar -bang -complete=customlist,startify#session_list SDelete call startify#session_delete(<bang>0, <f-args>)
 command! -nargs=0 -bar SClose call startify#session_close()
+command! -nargs=0 -bar SReload call s:reload_session(1)
 command! -nargs=0 -bar Startify call startify#insane_in_the_membrane(0)
 command! -nargs=0 -bar StartifyDebug call startify#debug()
 
