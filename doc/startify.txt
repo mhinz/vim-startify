@@ -260,7 +260,7 @@ NOTE: Headers use the StartifySection highlight group. See |startify-colors|.
 <
 A list of files or directories to bookmark. The list can contain two kinds of
 types. Either a path or a dictionary whereas the key is the custom index and
-the value the path.
+the value is the path.
 
 Example:
 >
