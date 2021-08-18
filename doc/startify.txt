@@ -742,6 +742,12 @@ StartifyReady~
 
   When the Startify buffer is ready.
 
+StartifyDirChanging~
+
+  When the current-directory is changed while Startify is open, but not when
+  Startify itself changes the directory after activation. Executes before
+  `:Startify` is re-executed, so you're free to change Startify settings here.
+
 StartifyBufferOpened~
 
   For each buffer that got opened by Startify. When you open multiple files at
@@ -918,6 +924,7 @@ FAQ                                                               *startify-faq*
     |startify-faq-16|  How to disable single mappings?
     |startify-faq-17|  Run Startify for each new tab!
     |startify-faq-18|  Files from remote file system slow down startup!
+    |startify-faq-19|  Use different configs for $HOME / different directories
 
 ------------------------------------------------------------------------------
                                                                *startify-faq-01*
@@ -1160,6 +1167,42 @@ In that case it is often better to add the mount point of the remote file
 system to |g:startify_skiplist|:
 >
     let g:startify_skiplist = ['^/mnt/nfs']
+<
+
+------------------------------------------------------------------------------
+                                                               *startify-faq-19*
+Use different configs for $HOME / different directories~
+
+If you want to use different settings for new Vim windows opened in, say, your
+$HOME folder, than you use for new tabs opened in a current project, or opened
+in a specific directory from the command-line:
+
+>
+    function! s:configure_startify() abort
+       if getcwd() ==# $HOME
+          let g:startify_change_cmd = 'cd'
+          let g:startify_change_to_vcs_root = 1
+
+          let g:startify_lists = [
+           \    { 'type': 'files',      'header': ['   MRU'] },
+           \ ]
+          let g:startify_files_number = 20
+       else
+          let g:startify_change_cmd = 'lcd'
+          let g:startify_change_to_vcs_root = 0
+
+          let g:startify_lists = [
+           \    { 'type': 'dir',        'header': ['   MRU '. getcwd()] },
+           \    { 'type': 'files',      'header': ['   MRU elsewhere'] },
+           \ ]
+          let g:startify_files_number = 10
+       endif
+    endfunction
+    call s:configure_startify()
+
+    augroup startify | au!
+       autocmd User StartifyDirChanging call s:configure_startify()
+    augroup END
 <
 ==============================================================================
 EXAMPLE                                                       *startify-example*
