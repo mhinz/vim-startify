@@ -899,7 +899,7 @@ file. Prepend the logo to each Startify entry by putting this in your vimrc:
 ==============================================================================
 FAQ                                                               *startify-faq*
 
-    |startify-faq-01|  I don't want the start screen to use cursorline!
+    |startify-faq-01|  I want to use cursorline!
     |startify-faq-02|  Recent files aren't shown!
     |startify-faq-03|  I have broken colors when using sessions!
     |startify-faq-04|  How to disable common but unimportant files?
