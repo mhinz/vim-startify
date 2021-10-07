@@ -309,6 +309,39 @@ function! startify#session_write(session_path)
     let &sessionoptions = ssop
   endtry
 
+  if has("cscope")
+    " Check if there are any cscope connections
+    redir => l:cs_conns
+    silent! exec 'cs show'
+    redir END
+
+    if cs_conns !~? 'no cscope connections'
+      silent execute 'split' a:session_path
+      let match_regex = '\(\d\+\s\+\d\+\s\+\S\+\s\+\S\+\)'
+      let index = match(cs_conns, match_regex)
+
+      while index > -1
+        let cs_conn_num = matchstr(cs_conns, '^\d\+', index)
+        if strlen(cs_conn_num) > 0
+          let index = (index + strlen(cs_conn_num))
+          let cs_db_name = matchstr(cs_conns,'\s\+\d\+\s\+\zs\S\+',index)
+          let index = index + strlen(cs_conn_num) + strlen(cs_db_name)
+          let cs_db_path = matchstr(cs_conns,'\s\+\zs\S\+', index)
+          if cs_db_path =~ "<none>" || cs_db_path =~ '""'
+            let cs_db_path = ''
+          endif
+          let index = index + strlen(cs_conn_num) + strlen(cs_db_name) + strlen(cs_db_path) + 1
+          call append(line('$')-3, 'cs add ' . cs_db_name . cs_db_path)
+        endif
+        let index = index + 1
+        let index = match(cs_conns, match_regex, index)
+      endwhile
+      setlocal bufhidden=delete
+      silent update
+      silent hide
+    endif
+  endif
+
   if exists('g:startify_session_remove_lines')
         \ || exists('g:startify_session_savevars')
         \ || exists('g:startify_session_savecmds')
