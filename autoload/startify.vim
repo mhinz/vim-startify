@@ -39,7 +39,13 @@ function! startify#get_session_path() abort
 endfunction
 
 " Function: #insane_in_the_membrane {{{1
-function! startify#insane_in_the_membrane(on_vimenter) abort
+" optional second parameter is if the user wants to update Startify during
+" runtime
+function! startify#insane_in_the_membrane(on_vimenter, ...) abort
+  let update = get(a:, 1, 0)
+  if update
+    call s:update_variables()
+  endif
   " Handle vim -y, vim -M.
   if a:on_vimenter && (&insertmode || !&modifiable)
     return
@@ -1150,24 +1156,30 @@ function! s:warn(msg) abort
 endfunction
 
 " Init: values {{{1
-let s:sep = startify#get_separator()
+" Allows Startify to be updated during a vim session
+" Runs once on source, optionally runs during
+" startify#insane_in_the_membrane()
+function! s:update_variables()
+  let s:sep = startify#get_separator()
 
-let g:startify_files_number = get(g:, 'startify_files_number', 10)
-let g:startify_enable_special = get(g:, 'startify_enable_special', 1)
-let g:startify_relative_path = get(g:, 'startify_relative_path') ? ':~:.' : ':p:~'
-let s:session_dir = startify#get_session_path()
-let g:startify_transformations = get(g:, 'startify_transformations', [])
+  let g:startify_files_number = get(g:, 'startify_files_number', 10)
+  let g:startify_enable_special = get(g:, 'startify_enable_special', 1)
+  let g:startify_relative_path = get(g:, 'startify_relative_path') ? ':~:.' : ':p:~'
+  let s:session_dir = startify#get_session_path()
+  let g:startify_transformations = get(g:, 'startify_transformations', [])
 
-let g:startify_skiplist = extend(get(g:, 'startify_skiplist', []), [
-      \ 'runtime/doc/.*\.txt$',
-      \ 'bundle/.*/doc/.*\.txt$',
-      \ 'plugged/.*/doc/.*\.txt$',
-      \ '/.git/',
-      \ 'fugitiveblame$',
-      \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc/.*\.txt$',
-      \ ], 'keep')
+  let g:startify_skiplist = extend(get(g:, 'startify_skiplist', []), [
+        \ 'runtime/doc/.*\.txt$',
+        \ 'bundle/.*/doc/.*\.txt$',
+        \ 'plugged/.*/doc/.*\.txt$',
+        \ '/.git/',
+        \ 'fugitiveblame$',
+        \ escape(fnamemodify(resolve($VIMRUNTIME), ':p'), '\') .'doc/.*\.txt$',
+        \ ], 'keep')
 
-let g:startify_padding_left = get(g:, 'startify_padding_left', 3)
-let s:leftpad = repeat(' ', g:startify_padding_left)
-let s:fixed_column = g:startify_padding_left + 2
-let s:batchmode = ''
+  let g:startify_padding_left = get(g:, 'startify_padding_left', 3)
+  let s:leftpad = repeat(' ', g:startify_padding_left)
+  let s:fixed_column = g:startify_padding_left + 2
+  let s:batchmode = ''
+endfunction
+call s:update_variables()
