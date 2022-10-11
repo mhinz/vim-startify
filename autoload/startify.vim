@@ -658,8 +658,16 @@ function! s:filter_oldfiles_unsafe(path_prefix, path_format, use_env) abort
       " https://github.com/mhinz/vim-startify/issues/353
       continue
     endif
+    
+    let fname = fnamemodify(fname, ":p")
+    if exists('+shellslash') && !&shellslash
+      " win32
+      let fname = substitute(fname, '\([[\]*?]\)',   '\\[\1]', 'g')
+    else
+      let fname = substitute(fname, '\([[\]*?\\]\)', '\\\1',   'g')
+    endif
+    let absolute_path = glob(fname)
 
-    let absolute_path = glob(fnamemodify(fname, ":p"))
     if empty(absolute_path)
           \ || has_key(entries, absolute_path)
           \ || (absolute_path =~ is_dir)
