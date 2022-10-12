@@ -661,10 +661,12 @@ function! s:filter_oldfiles_unsafe(path_prefix, path_format, use_env) abort
     
     let fname = fnamemodify(fname, ":p")
     if exists('+shellslash') && !&shellslash
-      " win32
-      let fname = substitute(fname, '\([[\]*?]\)',   '\\[\1]', 'g')
+      " win32 paths can't contain '*' and '?' 
+      " though DOS device paths can contain '?', they need not be escaped
+      " see https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+      let fname = substitute(fname, '\[',        '\[[]', 'g')    
     else
-      let fname = substitute(fname, '\([[\]*?\\]\)', '\\\1',   'g')
+      let fname = substitute(fname, '[[\]*?\\]', '\\\0', 'g')
     endif
     let absolute_path = glob(fname)
 
