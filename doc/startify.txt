@@ -108,6 +108,7 @@ default values.
     |g:startify_lists|
     |g:startify_skiplist|
     |g:startify_update_oldfiles|
+    |g:startify_language|
 
     Misc options:~
     |g:startify_commands|
@@ -468,6 +469,13 @@ Example:
     let g:startify_enable_special = 1
 <
 Show <empty buffer> and <quit>.
+------------------------------------------------------------------------------
+                                                     *g:startify_language
+>
+    let g:startify_language = "pt-br"
+    let g:startify_language = "es"
+    let g:startify_language = "ch"
+<
 ------------------------------------------------------------------------------
                                                       *g:startify_enable_unsafe*
 >
