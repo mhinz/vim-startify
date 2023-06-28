@@ -531,12 +531,12 @@ function! s:open_buffer(entry)
     execute a:entry.cmd a:entry.path
   elseif a:entry.type == 'file'
     if line2byte('$') == -1
-      execute 'edit' a:entry.path
+      execute 'edit' fnameescape(a:entry.path)
     else
       if a:entry.cmd == 'tabnew'
         wincmd =
       endif
-      execute a:entry.cmd a:entry.path
+      execute a:entry.cmd fnameescape(a:entry.path)
     endif
     call s:check_user_options(a:entry.path)
   endif
@@ -770,7 +770,7 @@ function! s:show_bookmarks() abort
     if has('win32')
       let path = substitute(path, '\[', '\[[]', 'g')
     endif
-    call s:register(line('$'), index, 'file', 'edit', fnameescape(expand(path)))
+    call s:register(line('$'), index, 'file', 'edit', expand(path))
 
     unlet bookmark  " avoid type mismatch for heterogeneous lists
   endfor
@@ -968,11 +968,13 @@ function! s:check_user_options(path) abort
 
   if get(g:, 'startify_change_to_dir', 1)
     if isdirectory(a:path)
-      execute s:cd_cmd() a:path
+      echom 'path is a dir: ' .. s:cd_cmd() .. ' ' .. a:path
+      execute s:cd_cmd() fnameescape(a:path)
     else
+      echom 'path is not a dir: ' .. s:cd_cmd() .. ' ' .. a:path
       let dir = fnamemodify(a:path, ':h')
       if isdirectory(dir)
-        execute s:cd_cmd() dir
+        execute s:cd_cmd() fnameescape(dir)
       else
         " Do nothing. E.g. a:path == `scp://foo/bar`
       endif
