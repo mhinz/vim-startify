@@ -637,27 +637,37 @@ Example #2:~
 >
     let g:startify_custom_header =
             \ startify#pad(split(system('fortune | cowsay'), '\n'))
-<
+
 Example #3:~
+
+Random quote with random cow and wider speech balloon, centered (and adapted 
+to fit the current version of the `cowsay-apj` project)
+>
+    let s:header_cmd = 
+      \ 'fortune | cowsay -W 80 -f $(cowsay -l | sed "/[A-Z].*$/d" | shuf -n 1)'
+    let g:startify_custom_header =
+      \ startify#center(split(system(s:header_cmd), '\n'))
+
+Example #4:~
 
 Let's assume you like the default boxed random quote, but not the ASCII art
 cow. You'd rather have another small ASCII art come before the quote. No
 problem!
 >
-    let g:ascii = [
+    let s:ascii = [
           \ '        __',
           \ '.--.--.|__|.--------.',
           \ '|  |  ||  ||        |',
           \ ' \___/ |__||__|__|__|',
           \ ''
           \]
-    let g:startify_custom_header = g:ascii + startify#fortune#boxed()
+    let g:startify_custom_header = s:ascii + startify#fortune#boxed()
 <
 Looks great! But it's not on the same column as the indices below which makes
 it look awkward. Let's indent the header by 3 spaces:
 >
     let g:startify_custom_header =
-          \ startify#pad(g:ascii + startify#fortune#boxed())
+          \ startify#pad(s:ascii + startify#fortune#boxed())
 <
 Ah, much better! There's only one issue left. If you set
 g:startify_custom_header this way, it will only be done once. Hence spamming
@@ -667,7 +677,7 @@ If you provide a string to it instead, Startify will evaluate it every time
 :Startify is run:
 >
     let g:startify_custom_header =
-          \ 'startify#pad(g:ascii + startify#fortune#boxed())'
+          \ 'startify#pad(s:ascii + startify#fortune#boxed())'
 <
 Happy customizing!
 
