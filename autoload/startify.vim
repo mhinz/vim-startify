@@ -658,8 +658,18 @@ function! s:filter_oldfiles_unsafe(path_prefix, path_format, use_env) abort
       " https://github.com/mhinz/vim-startify/issues/353
       continue
     endif
+    
+    let fname = fnamemodify(fname, ":p")
+    if exists('+shellslash') && !&shellslash
+      " win32 paths can't contain '*' and '?' 
+      " though DOS device paths can contain '?', they need not be escaped
+      " see https://learn.microsoft.com/en-us/dotnet/standard/io/file-path-formats
+      let fname = substitute(fname, '\[',        '\[[]', 'g')    
+    else
+      let fname = substitute(fname, '[[\]*?\\]', '\\\0', 'g')
+    endif
+    let absolute_path = glob(fname)
 
-    let absolute_path = glob(fnamemodify(fname, ":p"))
     if empty(absolute_path)
           \ || has_key(entries, absolute_path)
           \ || (absolute_path =~ is_dir)
