@@ -598,6 +598,15 @@ NOTE: There is no sanitizing going on, so you should know what you're doing!
       Avoid using keys from |startify-mappings|.
 
 ------------------------------------------------------------------------------
+                                                      *g:startify_custom_header_center*
+This option allows centering the custom header by setting:
+>
+    let g:startify_custom_header_center = 1
+<
+It will be undefined until the user sets it, and the custom header will not be
+centered unless it is set to be true.
+
+------------------------------------------------------------------------------
                                                       *g:startify_custom_header*
 >
     let g:startify_custom_header = 'startify#pad(startify#fortune#cowsay())'
