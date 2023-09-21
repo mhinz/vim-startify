@@ -164,13 +164,23 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
 
   if exists('##DirChanged')
     let b:startify.cwd = getcwd()
-    autocmd startify DirChanged <buffer> if getcwd() !=# get(get(b:, 'startify', {}), 'cwd') | Startify | endif
+    autocmd startify DirChanged <buffer> call startify#handle_directory_change()
   endif
   if exists('#User#Startified')
     doautocmd <nomodeline> User Startified
   endif
   if exists('#User#StartifyReady')
     doautocmd <nomodeline> User StartifyReady
+  endif
+endfunction
+
+function! startify#handle_directory_change() abort
+  if getcwd() !=# get(get(b:, 'startify', {}), 'cwd')
+    if exists('#User#StartifyDirChanging')
+      doautocmd <nomodeline> User StartifyDirChanging
+    endif
+
+    Startify
   endif
 endfunction
 
