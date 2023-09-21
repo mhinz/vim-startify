@@ -970,7 +970,7 @@ function! s:check_user_options(path) abort
     if isdirectory(a:path)
       execute s:cd_cmd() a:path
     else
-      let dir = fnamemodify(a:path, ':h')
+      let dir = fnamemodify(expand('%'), ':h')
       if isdirectory(dir)
         execute s:cd_cmd() dir
       else
@@ -982,7 +982,7 @@ endfunction
 
 " Function: s:cd_to_vcs_root {{{1
 function! s:cd_to_vcs_root(path) abort
-  let dir = fnamemodify(a:path, ':p:h')
+  let dir = fnamemodify(expand('%'), ':p:h')
   for vcs in [ '.git', '.hg', '.bzr', '.svn' ]
     let root = finddir(vcs, dir .';')
     if !empty(root)
