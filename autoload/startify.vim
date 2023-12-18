@@ -654,6 +654,10 @@ function! s:filter_oldfiles_unsafe(path_prefix, path_format, use_env) abort
       break
     endif
 
+    if !filereadable(fname)
+      continue
+    endif
+
     if s:is_in_skiplist(fname)
       " https://github.com/mhinz/vim-startify/issues/353
       continue
