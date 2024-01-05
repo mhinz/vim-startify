@@ -174,6 +174,34 @@ function! startify#insane_in_the_membrane(on_vimenter) abort
   endif
 endfunction
 
+" Function: #session_load_previous {{{1
+function! startify#session_load_previous() abort
+  if !isdirectory(s:session_dir)
+    echomsg 'The session directory does not exist: '. s:session_dir
+    return
+  elseif empty(startify#session_list_as_string(''))
+    echomsg 'There are no sessions...'
+    return
+  endif
+
+  let cmd = printf('readlink -n %s', shellescape(s:session_dir . s:sep .'__PREV__'))
+  let previous_session_name = system(cmd)
+  let session_path = s:session_dir . s:sep . previous_session_name
+
+  if filereadable(session_path)
+    if get(g:, 'startify_session_persistence') && filewritable(v:this_session)
+      call startify#session_write(fnameescape(v:this_session))
+    endif
+    let new_previous_session = v:this_session
+    call startify#session_delete_buffers()
+    execute 'source '. fnameescape(session_path)
+    call s:create_previous_session_link(new_previous_session)
+    call s:create_last_session_link(v:this_session)
+  else
+    echo 'No such file: '. session_path
+  endif
+endfunction
+
 " Function: #session_load {{{1
 function! startify#session_load(source_last_session, ...) abort
   if !isdirectory(s:session_dir)
@@ -189,7 +217,9 @@ function! startify#session_load(source_last_session, ...) abort
   if a:0
     let session_path .= a:1
   elseif a:source_last_session && !has('win32')
-    let session_path .= '__LAST__'
+    let cmd = printf('readlink -n %s', shellescape(s:session_dir . s:sep .'__LAST__'))
+    let last_session_name = system(cmd)
+    let session_path .= last_session_name
   else
     call inputsave()
     let session_path .= input(
@@ -204,6 +234,7 @@ function! startify#session_load(source_last_session, ...) abort
       call startify#session_write(fnameescape(v:this_session))
     endif
     call startify#session_delete_buffers()
+    call s:create_previous_session_link(v:this_session)
     execute 'source '. fnameescape(session_path)
     call s:create_last_session_link(session_path)
   else
@@ -230,7 +261,7 @@ function! startify#session_save(bang, ...) abort
 
   call inputsave()
   let this_session = fnamemodify(v:this_session, ':t')
-  if this_session ==# '__LAST__'
+  if this_session ==# '__LAST__' || this_session ==# '__PREV__'
     let this_session = ''
   endif
   let session_name = exists('a:1')
@@ -381,12 +412,12 @@ endfunction
 
 " Function: #session_list {{{1
 function! startify#session_list(lead, ...) abort
-  return filter(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), 'v:val !=# "__LAST__"')
+  return filter(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), 'v:val !=# "__LAST__" && v:val !=# "__PREV__"')
 endfunction
 
 " Function: #session_list_as_string {{{1
 function! startify#session_list_as_string(lead, ...) abort
-  return join(filter(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), 'v:val !=# "__LAST__"'), "\n")
+  return join(filter(map(split(globpath(s:session_dir, '*'.a:lead.'*'), '\n'), 'fnamemodify(v:val, ":t")'), 'v:val !=# "__LAST__" && v:val !=# "__PREV__"'), "\n")
 endfunction
 
 " Function: #debug {{{1
@@ -696,6 +727,7 @@ function! s:show_sessions() abort
 
   let sfiles = split(globpath(s:session_dir, '*'), '\n')
   let sfiles = filter(sfiles, 'v:val !~# "__LAST__$"')
+  let sfiles = filter(sfiles, 'v:val !~# "__PREV__$"')
   let sfiles = filter(sfiles,
         \ '!(v:val =~# "x\.vim$" && index(sfiles, v:val[:-6].".vim") >= 0)')
   if empty(sfiles)
@@ -1061,9 +1093,22 @@ function! s:register(line, index, type, cmd, path)
         \ }
 endfunction
 
+" Function: s:create_previous_session_link {{{1
+function! s:create_previous_session_link(session_path)
+  if !has('win32') && a:session_path !~# '__PREV__$' && a:session_path !~# '__LAST__'
+    let cmd = printf('ln -sf %s %s',
+          \ shellescape(fnamemodify(a:session_path, ':t')),
+          \ shellescape(s:session_dir .'/__PREV__'))
+    silent call system(cmd)
+    if v:shell_error
+      call s:warn("Can't create 'previous used session' symlink.")
+    endif
+  endif
+endfunction
+
 " Function: s:create_last_session_link {{{1
 function! s:create_last_session_link(session_path)
-  if !has('win32') && a:session_path !~# '__LAST__$'
+  if !has('win32') && a:session_path !~# '__LAST__$' && a:session_path !~# '__PREV__'
     let cmd = printf('ln -sf %s %s',
           \ shellescape(fnamemodify(a:session_path, ':t')),
           \ shellescape(s:session_dir .'/__LAST__'))
